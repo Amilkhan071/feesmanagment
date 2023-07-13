@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+
+
 import {
   Avatar,
   Grid,
@@ -95,6 +98,7 @@ export default function UpdateOrganization() {
     if (record != null) {
       setRecord(record);
       setOrgName(record.organizationname);
+
       setOwnerName(record.ownername);
       var bd = new Date(record.birthdate);
       var tbd =
@@ -280,7 +284,7 @@ export default function UpdateOrganization() {
                 <Grid item xs={10}>
                   <div>
                     <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                      Organization
+                      Edit Organization
                     </div>
                   </div>
                 </Grid>
@@ -443,7 +447,19 @@ export default function UpdateOrganization() {
               {showState()}
             </Select>
           </FormControl>
-
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">State</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getState}
+              label="Select State"
+              onChange={(event) => handleChangeState(event)}
+            >
+              <MenuItem value={"Choose State..."}>Choose State...</MenuItem>
+              {showState()}
+            </Select>
+          </FormControl>
           {error && (
             <div
               style={{
@@ -458,6 +474,20 @@ export default function UpdateOrganization() {
         </Grid>
 
         <Grid item md={6} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">City</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getCity}
+              label="Select City"
+              onChange={(event) => setCity(event.target.value)}
+            >
+              <MenuItem value={"Choose City..."}>Choose City...</MenuItem>
+              {showCity()}
+            </Select>
+          </FormControl>
+
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">City</InputLabel>
             <Select
@@ -620,6 +650,15 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
+
+          <Button
+            onClick={handleEditOwnerPicture}
+            variant="contained"
+            color="primary"
+          >
+            Edit Picture
+          </Button>
+
           <Button
             onClick={handleEditOwnerPicture}
             variant="contained"
@@ -648,6 +687,7 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
+          =======
           <Button onClick={handleEditLogo} variant="contained" color="primary">
             Edit Logo
           </Button>
