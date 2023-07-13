@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -13,10 +14,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import "../../Stylesheet.css";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
-export default function Sidebar() {
+export default function MainSidebar() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
-  //alert(JSON.stringify(storedState))
-
 
   const [openn, setOpenn] = useState(false);
   const [two, setTwo] = useState(false);
@@ -101,10 +100,9 @@ export default function Sidebar() {
                     fontWeight: 400,
                     fontSize: 18,
                     paddingTop: 15,
-                    textTransform:'uppercase'
                   }}
                 >
-                {storedState.organizationname}
+                 LEENA
                 </div>
               </div>
             </Grid>
@@ -125,89 +123,22 @@ export default function Sidebar() {
                     display: "flex",
                     justifyContent: "flex-start",
                   }}
-                  primary="ORGANIZATION"
+                  primary="ADMIN"
                 />
               </ListItemButton>
             </Grid>
 
             <Grid item xs={12} style={{ paddingTop: 10 }}>
-              <ListItemButton onClick={handleClick}>
+              <ListItemButton onClick={()=>navigate('/maindashboard/displayOrganization')}>
                 <ListItemIcon>
                   <SettingsIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText style={{ color: "#fff" }} primary="Organization" />
-                {openn ? (
-                  <ExpandMore style={{ color: "#fff" }} />
-                ) : (
+              
                   <KeyboardArrowRightIcon style={{ color: "#fff" }} />
-                )}
+               
               </ListItemButton>
-              <Collapse in={openn} timeout="auto" unmountOnExit>
-                <List
-                  component="div"
-                  disablePadding
-                  style={{ background: "#fff", borderRadius: 5, margin: 15 }}
-                >
-               
-                  {/* <ListItemButton
-                    sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/DisplayOrganization")}
-                  >
-                    <ListItemText primary="Organization" />
-                  </ListItemButton> */}
-               
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/createstudent")}
-                    
-                  >
-                    <ListItemText primary="Student" />
-                  </ListItemButton>
-
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-
-
-                    onClick={() => navigate("/dashboard/DisplayTiming")}
-                  >
-                    <ListItemText primary="Time" />
-                  </ListItemButton>
-                 
-
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-
-
-                    onClick={() => navigate("/dashboard/createcourse")}
-                  >
-                    <ListItemText primary="Course" />
-                  </ListItemButton>
-
-                  <ListItemButton
-                    sx={{ pl: 4 }}  
-                    onClick={() => navigate("/dashboard/DisplayBatch")}
-                    >
-
-                   
-                  
-                    <ListItemText primary="Batch" />
-                  </ListItemButton>
-                 
-                 
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/displayallvendor")}
-                  >
-                    <ListItemText primary="Vendor" />
-                  </ListItemButton>
-                  {/* <ListItemButton
-                    sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/displayallbanks")}
-                  >
-                    <ListItemText primary="Bank" />
-                  </ListItemButton> */}
-                </List>
-              </Collapse>
+           
             </Grid>
 
             <Grid item xs={12} style={{ paddingTop: 10 }}>

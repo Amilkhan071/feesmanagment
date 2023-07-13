@@ -8,27 +8,15 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Grid } from "@material-ui/core";
-import Sidebar from "./Sidebar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "../../Stylesheet.css";
+import MainSidebar from "./MainSidebar";
 import CreateOrganization from "../Admin/Organization/CreateOrganization";
-
 import UpdateOrganization from "../Admin/Organization/UpdateOrganization";
-
-import CreateCourse from "../Admin/Courses/CreateCourse";
-import DisplayCourse from "../Admin/Courses/DisplayCourse";
-import UpdateCourse from "../Admin/Courses/UpdateCourse";
-
 import DisplayOrganization from "../Admin/Organization/DisplayOrganization";
-import TimeTable from "../Admin/Timing/TimeTable";
-import DisplayTiming from "../Admin/Timing/DisplayTiming";
-import UpdateTimeTable from "../Admin/Timing/UpdateTimeTable";
-import CreateBatch from "../Admin/Batch/CreateBatch";
-import DisplayBatch from "../Admin/Batch/DisplayBatch";
-import UpdateBatch from "../Admin/Batch/UpdateBatch";
 
-export default function Dashboard() {
+export default function MainDashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleStatus = () => {
     setDrawerOpen(true);
@@ -61,67 +49,28 @@ export default function Dashboard() {
       </Grid>
 
       <Grid item lg={2} md={3} className="SideBarContainer">
-        <Sidebar />
+        <MainSidebar />
       </Grid>
 
       <Grid item lg={10} md={9} xs={12} sm={12}>
         <Routes>
-          {/* <Route
+         
+      
+      <Route
             element={<CreateOrganization />}
             path={"/CreateOrganization"}
           />
           <Route
 
-            element={<UpdateOrganization />}
+            element={<UpdateOrganization/>}
             path={"/UpdateOrganization/:orgid"}
           />
       
            <Route
             element={<DisplayOrganization />}
             path={"/DisplayOrganization"}
-          /> */}
+          />
 
-
-
-<Route
-            element={<UpdateCourse />}
-            path={"/UpdateCourse/:crsid"}
-          />
-            <Route
-            element={<DisplayCourse />}
-            path={"/DisplayCourse"}
-          />
-          <Route element={<CreateCourse />} path={"/CreateCourse"} />
-
-          
-       <Route
-            element={<UpdateOrganization />}
-            path={"/UpdateOrganization/:orgid"}
-          />
-          <Route
-            element={<TimeTable />}
-            path={"/TimeTable"}
-          />
-             <Route
-            element={<DisplayTiming />}
-            path={"/DisplayTiming"}
-          />
-           <Route
-            element={<UpdateTimeTable />}
-            path={"/UpdateTimeTable/:trnsid"}
-          />
-           <Route
-            element={<CreateBatch />}
-            path={"/CreateBatch"}
-          />
-          <Route
-            element={<DisplayBatch />}
-            path={"/DisplayBatch"}
-          />
-             <Route
-            element={<UpdateBatch />}
-            path={"/UpdateBatch/:batchid"}
-          />
         </Routes>
       </Grid>
     </Grid>

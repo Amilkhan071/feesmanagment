@@ -110,6 +110,7 @@ export default function DisplayOrganization() {
                 { title: "Address", field: "address",  },
                 { title: "Phone", field: "phone" },
                 { title: "Mobile", field: "mobile" },
+                // { title: "Email", field: "email" },
                 { title: 'Logo', field: 'logo',
               render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.logo}`} style={{width:60,height:40}} variant="rounded" /> },
             
@@ -124,7 +125,7 @@ export default function DisplayOrganization() {
                   icon: "edit",
                   tooltip: "Edit",
                   onClick: (event, rowData) =>
-                    navigate("/dashboard/UpdateOrganization/" + rowData.organizationid),
+                    navigate("/maindashboard/UpdateOrganization/" + rowData.organizationid),
                   // navigate("/productbycategory/" + item.categoryid)
                 },
                 {
@@ -137,7 +138,7 @@ export default function DisplayOrganization() {
                   icon: "add",
                   tooltip: "Add Store",
                   isFreeAction: true,
-                  onClick: () => navigate("/dashboard/CreateOrganization"),
+                  onClick: () => navigate("/maindashboard/CreateOrganization"),
                 },
               ]}
             

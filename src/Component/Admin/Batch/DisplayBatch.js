@@ -19,9 +19,10 @@ export default function DisplayBatch() {
   const [timeTable, setTimeTable] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
+  const storedState = JSON.parse(localStorage.getItem("admin"));
 
   const fetchAllBatch = async () => {
-    var body = { organizationid: 7};
+    var body = { organizationid: storedState.organizationid};
     var result = await postData("batch/displayAll", body);
     //alert(JSON.stringify(result))
     setTimeTable(result);

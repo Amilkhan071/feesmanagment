@@ -16,12 +16,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
 export default function DisplayTiming() {
+const storedState = JSON.parse(localStorage.getItem("admin"));
+
   const [timeTable, setTimeTable] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
+
   const fetchAllTimeTable = async () => {
-    var body = { organizationid:7  };
+    var body = { organizationid:storedState.organizationid  };
     var result = await postData("timingtable/displayAll", body);
    //console.log(result);
     setTimeTable(result);

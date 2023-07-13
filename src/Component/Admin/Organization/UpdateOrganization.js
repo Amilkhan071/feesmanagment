@@ -52,6 +52,8 @@ export default function UpdateOrganization() {
   const [getPassword, setPassword] = useState("");
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
+  const [getStatus,setStatus]=useState('')
+
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -82,12 +84,12 @@ export default function UpdateOrganization() {
       phone: getPhone,
       email: getEmail,
       password: getPassword,
+      status: getStatus
     };
     let result = await postData("organization/updateRecord", body);
     if (result) {
       alert("success");
-
-      navigate("/dashboard/DisplayOrganization");
+      navigate('/maindashboard/displayorganization')
     } else {
       alert("failed");
     }
@@ -113,6 +115,7 @@ export default function UpdateOrganization() {
       setPhone(record.phone);
       setEmail(record.email);
       setPassword(record.password);
+      setStatus(record.status)
       setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
       setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
     } else {
@@ -180,6 +183,8 @@ export default function UpdateOrganization() {
     );
     if (result) {
       alert("update");
+      
+
     } else {
       alert("not update");
     }
@@ -290,7 +295,7 @@ export default function UpdateOrganization() {
                 </Grid>
                 <Grid item xs={2}>
                   <div
-                    onClick={() => navigate("/dashboard/DisplayOrganization")}
+                    onClick={() => navigate("/maindashboard/DisplayOrganization")}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
@@ -327,7 +332,7 @@ export default function UpdateOrganization() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Organization Name"
-            variant="standard"
+            variant="outlined"
             value={getOrgName}
             onChange={(e) => setOrgName(e.target.value.trimStart())}
             sx={(theme) => {
@@ -347,7 +352,7 @@ export default function UpdateOrganization() {
           <TextField
             id="standard-basic"
             label="Owner Name"
-            variant="standard"
+            variant="outlined"
             error={!error.getOwnerName ? false : true}
             helperText={error.getOwnerName}
             onFocus={() => handleError("getOwnerName", null)}
@@ -412,7 +417,7 @@ export default function UpdateOrganization() {
           <TextField
             id="standard-basic"
             label="Address"
-            variant="standard"
+            variant="outlined"
             error={!error.getAddress ? false : true}
             helperText={error.getAddress}
             onFocus={() => handleError("getAddress", null)}
@@ -490,12 +495,40 @@ export default function UpdateOrganization() {
             </div>
           )}
         </Grid>
+        <Grid item md={6} sm={12} xs={12}>
+        <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={getStatus}
+                                    label="Select Status"
+                                    onChange={(event)=>setStatus(event.target.value)}
+                                >
+                                    <MenuItem value={'Valid'}>Valid</MenuItem>
+                                    <MenuItem value={'Invalid'}>Invalid</MenuItem>
 
+                                   
+                                </Select>
+                            </FormControl>
+          
+          {error && (
+            <div
+              style={{
+                fontSize: 12,
+                color: "#d32f2f",
+                paddingTop: 5,
+              }}
+            >
+              {error.getStatus}
+            </div>
+          )}
+        </Grid>
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Mobile"
-            variant="standard"
+            variant="outlined"
             error={!error.getMobile ? false : true}
             helperText={error.getMobile}
             onFocus={() => handleError("getMobile", null)}
@@ -520,7 +553,7 @@ export default function UpdateOrganization() {
           <TextField
             id="standard-basic"
             label="Phone"
-            variant="standard"
+            variant="outlined"
             error={!error.getPhone ? false : true}
             helperText={error.getPhone}
             onFocus={() => handleError("getPhone", null)}
@@ -546,7 +579,7 @@ export default function UpdateOrganization() {
           <TextField
             id="standard-basic"
             label="Email Address (optional)"
-            variant="standard"
+            variant="outlined"
             error={!error.getEmail ? false : true}
             helperText={error.getEmail}
             onFocus={() => handleError("getEmail", null)}
@@ -571,7 +604,7 @@ export default function UpdateOrganization() {
           <TextField
             id="standard-basic"
             label="Password"
-            variant="standard"
+            variant="outlined"
             error={!error.getPassword ? false : true}
             helperText={error.getPassword}
             onFocus={() => handleError("getPassword", null)}

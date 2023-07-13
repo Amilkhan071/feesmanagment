@@ -95,7 +95,7 @@ export default function CreateCourse() {
         spacing={2}
       >
         <Grid item xs={12}>
-          <AppBar position="static" style={{ background: "#00b894" }}>
+          <AppBar position="static" style={{ background: "#273c75" }}>
             <Toolbar>
               <Grid container style={{ display: "flex", alignItems: "center" }}>
                 <Grid item xs={10}>

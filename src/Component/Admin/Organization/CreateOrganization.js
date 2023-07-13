@@ -37,6 +37,7 @@ export default function CreateOrganization() {
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
   const [showPassword, setShowPassword] = React.useState(false);
+  const [getStatus,setStatus]=useState('')
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
@@ -82,6 +83,7 @@ export default function CreateOrganization() {
     formData.append("picture", getOwnerPicture);
     formData.append("logo", getLogoPicture);
     formData.append("password", getPassword);
+    formData.append("status", getStatus);
 
     var config = { headers: { "content-type": "multipart/form-data" } };
     var result = await postDataAndImage(
@@ -91,6 +93,7 @@ export default function CreateOrganization() {
     );
     if (result) {
       alert("success");
+      navigate('/maindashboard/displayorganization')
       //setMessage("Record Submitted..")
       // clearValues()
     } else {
@@ -278,7 +281,7 @@ export default function CreateOrganization() {
                 </Grid>
                 <Grid item xs={2}>
                   <div
-                    onClick={() => navigate("/dashboard/DisplayOrganization")}
+                    onClick={() => navigate("/maindashboard/DisplayOrganization")}
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
@@ -315,7 +318,7 @@ export default function CreateOrganization() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Organization Name"
-            variant="standard"
+            variant="outlined"
             value={getOrgName}
             onChange={(e) => setOrgName(e.target.value.trimStart())}
             sx={(theme) => {
@@ -335,7 +338,7 @@ export default function CreateOrganization() {
           <TextField
             id="standard-basic"
             label="Owner Name"
-            variant="standard"
+            variant="outlined"
             error={!error.getOwnerName ? false : true}
             helperText={error.getOwnerName}
             onFocus={() => handleError("getOwnerName", null)}
@@ -400,7 +403,7 @@ export default function CreateOrganization() {
           <TextField
             id="standard-basic"
             label="Address"
-            variant="standard"
+            variant="outlined"
             error={!error.getAddress ? false : true}
             helperText={error.getAddress}
             onFocus={() => handleError("getAddress", null)}
@@ -431,7 +434,7 @@ export default function CreateOrganization() {
                                     label="Select State"
                                     onChange={(event)=>handleChangeState(event)}
                                 >
-                                    <MenuItem value={'Choose State...'}>Choose State...</MenuItem>
+                                    
                                     {showState()}
                                 </Select>
                             </FormControl>
@@ -461,7 +464,7 @@ export default function CreateOrganization() {
                                     label="Select City"
                                     onChange={(event)=>setCity(event.target.value)}
                                 >
-                                    <MenuItem value={'Choose City...'}>Choose City...</MenuItem>
+                                   
                                     {showCity()}
                                 </Select>
                             </FormControl>
@@ -478,12 +481,43 @@ export default function CreateOrganization() {
             </div>
           )}
         </Grid>
+        <Grid item md={6} sm={12} xs={12}>
+        <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={getStatus}
+                                    label="Select Status"
+                                    onChange={(event)=>setStatus(event.target.value)}
+                                >
+                                    <MenuItem value={'Valid'}>Valid</MenuItem>
+                                    <MenuItem value={'Invalid'}>Invalid</MenuItem>
+
+                                   
+                                </Select>
+                            </FormControl>
+          
+          {error && (
+            <div
+              style={{
+                fontSize: 12,
+                color: "#d32f2f",
+                paddingTop: 5,
+              }}
+            >
+              {error.getStatus}
+            </div>
+          )}
+        </Grid>
+
+
 
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Mobile"
-            variant="standard"
+            variant="outlined"
             error={!error.getMobile ? false : true}
             helperText={error.getMobile}
             onFocus={() => handleError("getMobile", null)}
@@ -508,7 +542,7 @@ export default function CreateOrganization() {
           <TextField
             id="standard-basic"
             label="Phone"
-            variant="standard"
+            variant="outlined"
             error={!error.getPhone ? false : true}
             helperText={error.getPhone}
             onFocus={() => handleError("getPhone", null)}
@@ -534,7 +568,7 @@ export default function CreateOrganization() {
           <TextField
             id="standard-basic"
             label="Email Address (optional)"
-            variant="standard"
+            variant="outlined"
             error={!error.getEmail ? false : true}
             helperText={error.getEmail}
             onFocus={() => handleError("getEmail", null)}
@@ -559,7 +593,7 @@ export default function CreateOrganization() {
           <TextField
             id="standard-basic"
             label="Password"
-            variant="standard"
+            variant="outlined"
             error={!error.getPassword ? false : true}
             helperText={error.getPassword}
             onFocus={() => handleError("getPassword", null)}

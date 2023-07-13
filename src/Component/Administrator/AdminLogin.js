@@ -11,11 +11,12 @@ import LockIcon from "@mui/icons-material/Lock";
 import "../../Stylesheet2.css";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { postData, postDataAndImage } from "../Services/FetchNodeServices";
+import { useNavigate } from "react-router-dom";
 export default function AdminLogin() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({});
-
+var navigate =useNavigate()
   const handleError = (inputs, value) => {
     setError((prev) => ({ ...prev, [inputs]: value }));
   };
@@ -46,6 +47,7 @@ export default function AdminLogin() {
       alert(JSON.stringify(response));
       if (response) {
         alert("Login sucessfully");
+        navigate('/maindashboard')
       } else {
         alert("error");
       }
