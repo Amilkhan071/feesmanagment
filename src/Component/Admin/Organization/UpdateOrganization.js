@@ -651,13 +651,7 @@ export default function UpdateOrganization() {
             sx={{ width: 56, height: 56 }}
           />
 
-          <Button
-            onClick={handleEditOwnerPicture}
-            variant="contained"
-            color="primary"
-          >
-            Edit Picture
-          </Button>
+         
 
           <Button
             onClick={handleEditOwnerPicture}
@@ -687,7 +681,7 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-          =======
+         
           <Button onClick={handleEditLogo} variant="contained" color="primary">
             Edit Logo
           </Button>
