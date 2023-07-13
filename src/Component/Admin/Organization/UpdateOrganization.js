@@ -447,19 +447,7 @@ export default function UpdateOrganization() {
               {showState()}
             </Select>
           </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">State</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={getState}
-              label="Select State"
-              onChange={(event) => handleChangeState(event)}
-            >
-              <MenuItem value={"Choose State..."}>Choose State...</MenuItem>
-              {showState()}
-            </Select>
-          </FormControl>
+        
           {error && (
             <div
               style={{
@@ -488,19 +476,7 @@ export default function UpdateOrganization() {
             </Select>
           </FormControl>
 
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">City</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={getCity}
-              label="Select City"
-              onChange={(event) => setCity(event.target.value)}
-            >
-              <MenuItem value={"Choose City..."}>Choose City...</MenuItem>
-              {showCity()}
-            </Select>
-          </FormControl>
+         
 
           {error && (
             <div
