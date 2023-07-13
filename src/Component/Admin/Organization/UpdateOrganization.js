@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Grid, Hidden, InputLabel, MenuItem, TextField, Select } from "@mui/material";
+
+
+
+import {
+  Avatar,
+  Grid,
+  Hidden,
+  InputLabel,
+  MenuItem,
+  TextField,
+  Select,
+} from "@mui/material";
 import "../../../Stylesheet.css";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -57,11 +68,9 @@ export default function UpdateOrganization() {
 
   const stateCityData = Object.keys(StateCity);
 
- 
-
   const handleSubmitEdit = async () => {
     let body = {
-       organizationid:params.orgid ,
+      organizationid: params.orgid,
       organizationName: getOrgName,
       ownerName: getOwnerName,
       birthDate: getDob,
@@ -76,11 +85,11 @@ export default function UpdateOrganization() {
     };
     let result = await postData("organization/updateRecord", body);
     if (result) {
-        alert('success')
-    
-      navigate('/dashboard/DisplayOrganization')
+      alert("success");
+
+      navigate("/dashboard/DisplayOrganization");
     } else {
-   alert('failed')
+      alert("failed");
     }
   };
   const searchById = async () => {
@@ -89,27 +98,26 @@ export default function UpdateOrganization() {
     if (record != null) {
       setRecord(record);
       setOrgName(record.organizationname);
-      setOwnerName(record.ownername)
-        var bd = new Date(record.birthdate);
-        var tbd =
-          bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
-        setDob(tbd);
-        setGender(record.gender);
-        setAddress(record.address);
-        setState(record.orgstate);
-        setCityData(StateCity[record.orgstate]);
-        setCity(record.orgcity);
-        setMobile(record.mobile);
-        setPhone(record.phone);
-        setEmail(record.email);
-        setPassword(record.password);
-        setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
-        setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
+
+      setOwnerName(record.ownername);
+      var bd = new Date(record.birthdate);
+      var tbd =
+        bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
+      setDob(tbd);
+      setGender(record.gender);
+      setAddress(record.address);
+      setState(record.orgstate);
+      setCityData(StateCity[record.orgstate]);
+      setCity(record.orgcity);
+      setMobile(record.mobile);
+      setPhone(record.phone);
+      setEmail(record.email);
+      setPassword(record.password);
+      setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
+      setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
     } else {
-  
     }
   };
- 
 
   useEffect(() => {
     searchById();
@@ -128,66 +136,54 @@ export default function UpdateOrganization() {
     setLogoPicture(event.target.files[0]);
   };
 
-  const showState=()=>
-  {
-   return stateCityData?.map(item=>(
-     
-   
-        <MenuItem value={item}>{item}</MenuItem>
-         
- 
-    ))
- 
-  }
+  const showState = () => {
+    return stateCityData?.map((item) => (
+      <MenuItem value={item}>{item}</MenuItem>
+    ));
+  };
 
-  const showCity=()=>
-  {
-   return cityData?.map(item=>(
-     
-   
-        <MenuItem value={item}>{item}</MenuItem>
-         
- 
-    ))
- 
-  }
+  const showCity = () => {
+    return cityData?.map((item) => <MenuItem value={item}>{item}</MenuItem>);
+  };
 
+  const handleChangeState = (event) => {
+    setState(event.target.value);
+    setCityData(StateCity[event.target.value.trim()]);
+  };
 
-  const handleChangeState=(event)=>{
-    setState(event.target.value)
-    setCityData(StateCity[event.target.value.trim()])
-    
-  }
-
-  const handleEditOwnerPicture=async()=>{
-    var formData=new FormData()
-    formData.append("organizationid",params.orgid)
-    formData.append('picture',getOwnerPicture)
-    let config={headers:{'content-type':'multipart/form-data'}}        
-    let result=await postDataAndImage('organization/updatePicture',formData,config)
-    if(result)
-    {alert('update')}
-    else
-    {
-     alert('not update')
+  const handleEditOwnerPicture = async () => {
+    var formData = new FormData();
+    formData.append("organizationid", params.orgid);
+    formData.append("picture", getOwnerPicture);
+    let config = { headers: { "content-type": "multipart/form-data" } };
+    let result = await postDataAndImage(
+      "organization/updatePicture",
+      formData,
+      config
+    );
+    if (result) {
+      alert("update");
+    } else {
+      alert("not update");
     }
-  }
+  };
 
-  const handleEditLogo=async()=>{
-    var formData=new FormData()
-    formData.append("organizationid",params.orgid)
-    formData.append('logo',getLogoPicture)
-    let config={headers:{'content-type':'multipart/form-data'}}        
-    let result=await postDataAndImage('organization/updateLogo',formData,config)
-    if(result)
-    {
-    alert('update')
+  const handleEditLogo = async () => {
+    var formData = new FormData();
+    formData.append("organizationid", params.orgid);
+    formData.append("logo", getLogoPicture);
+    let config = { headers: { "content-type": "multipart/form-data" } };
+    let result = await postDataAndImage(
+      "organization/updateLogo",
+      formData,
+      config
+    );
+    if (result) {
+      alert("update");
+    } else {
+      alert("not update");
     }
-    else
-    {
-  alert('not update')
-    }
-  }
+  };
 
   //   const validation = () => {
   //     var isValid = true;
@@ -269,7 +265,6 @@ export default function UpdateOrganization() {
   //     return isValid;
   //   };
 
-
   return (
     <div className="store_form_1">
       <Grid
@@ -289,7 +284,7 @@ export default function UpdateOrganization() {
                 <Grid item xs={10}>
                   <div>
                     <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                  Edit Organization
+                      Edit Organization
                     </div>
                   </div>
                 </Grid>
@@ -439,20 +434,32 @@ export default function UpdateOrganization() {
         </Grid>
 
         <Grid item md={6} sm={12} xs={12}>
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">State</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getState}
-                                    label="Select State"
-                                    onChange={(event)=>handleChangeState(event)}
-                                >
-                                    <MenuItem value={'Choose State...'}>Choose State...</MenuItem>
-                                    {showState()}
-                                </Select>
-                            </FormControl>
-          
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">State</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getState}
+              label="Select State"
+              onChange={(event) => handleChangeState(event)}
+            >
+              <MenuItem value={"Choose State..."}>Choose State...</MenuItem>
+              {showState()}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">State</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getState}
+              label="Select State"
+              onChange={(event) => handleChangeState(event)}
+            >
+              <MenuItem value={"Choose State..."}>Choose State...</MenuItem>
+              {showState()}
+            </Select>
+          </FormControl>
           {error && (
             <div
               style={{
@@ -467,22 +474,34 @@ export default function UpdateOrganization() {
         </Grid>
 
         <Grid item md={6} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">City</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getCity}
+              label="Select City"
+              onChange={(event) => setCity(event.target.value)}
+            >
+              <MenuItem value={"Choose City..."}>Choose City...</MenuItem>
+              {showCity()}
+            </Select>
+          </FormControl>
 
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">City</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getCity}
+              label="Select City"
+              onChange={(event) => setCity(event.target.value)}
+            >
+              <MenuItem value={"Choose City..."}>Choose City...</MenuItem>
+              {showCity()}
+            </Select>
+          </FormControl>
 
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">City</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getCity}
-                                    label="Select City"
-                                    onChange={(event)=>setCity(event.target.value)}
-                                >
-                                    <MenuItem value={'Choose City...'}>Choose City...</MenuItem>
-                                    {showCity()}
-                                </Select>
-                            </FormControl>
-         
           {error && (
             <div
               style={{
@@ -631,9 +650,22 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-           <Button onClick={handleEditOwnerPicture} variant="contained" color="primary" >
-        Edit Picture
-      </Button>
+
+          <Button
+            onClick={handleEditOwnerPicture}
+            variant="contained"
+            color="primary"
+          >
+            Edit Picture
+          </Button>
+
+          <Button
+            onClick={handleEditOwnerPicture}
+            variant="contained"
+            color="primary"
+          >
+            Edit Picture
+          </Button>
         </Grid>
 
         <Grid item md={3} lg={3} sm={12} xs={12}>
@@ -655,9 +687,10 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-        <Button onClick={handleEditLogo} variant="contained" color="primary" >
-        Edit Logo
-      </Button>
+          =======
+          <Button onClick={handleEditLogo} variant="contained" color="primary">
+            Edit Logo
+          </Button>
         </Grid>
 
         <Grid

@@ -5,18 +5,16 @@ import ListItemText from "@mui/material/ListItemText";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Collapse, Grid, List,  } from "@mui/material";
+import { Avatar, Collapse, Grid, List } from "@mui/material";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import "../../Stylesheet.css";
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 export default function Sidebar() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
- 
 
   const [openn, setOpenn] = useState(false);
   const [two, setTwo] = useState(false);
@@ -24,7 +22,7 @@ export default function Sidebar() {
   const [four, setFour] = useState(false);
   const [five, setFive] = useState(false);
   const [six, setSix] = useState(false);
- 
+
   const handleClick = () => {
     setOpenn(!openn);
     setTwo(false);
@@ -63,23 +61,22 @@ export default function Sidebar() {
     setTwo(false);
   };
   var navigate = useNavigate();
- const handleClickLogOut=()=>{
-  localStorage.removeItem("admin");
-  navigate('/')
-
- }
+  const handleClickLogOut = () => {
+    localStorage.removeItem("admin");
+    navigate("/");
+  };
   return (
     <>
-      <div className="Stylesheet_scrollitem Resposnse_Width"
-      
+      <div
+        className="Stylesheet_scrollitem Resposnse_Width"
         style={{
           background: "#273c75",
           height: "100vh",
           position: "fixed",
-        //width:"250px"
-        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-        transition: "0.3s"
-          
+          //width:"250px"
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          transition: "0.3s",
         }}
       >
         <React.Fragment>
@@ -93,7 +90,6 @@ export default function Sidebar() {
                   paddingTop: 25,
                 }}
               >
-               
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <Avatar sx={{ padding: 1 }}>AH</Avatar>
                 </div>
@@ -157,22 +153,42 @@ export default function Sidebar() {
                   </ListItemButton>
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/displaycreatecategory")}
+                    onClick={() => navigate("/dashboard/createenquiries")}
+                    
                   >
-                    <ListItemText primary="Category" />
+                    <ListItemText primary="Enquiries" />
                   </ListItemButton>
+
                   <ListItemButton
                     sx={{ pl: 4 }}
+
+
                     onClick={() => navigate("/dashboard/DisplayTiming")}
                   >
                     <ListItemText primary="Time" />
                   </ListItemButton>
+                 
+
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/DisplayBatch")}
+
+
+                    onClick={() => navigate("/dashboard/createcourse")}
                   >
+                    <ListItemText primary="Course" />
+                  </ListItemButton>
+
+                  <ListItemButton
+                    sx={{ pl: 4 }}  
+                    onClick={() => navigate("/dashboard/DisplayBatch")}
+                    >
+
+                   
+                  
                     <ListItemText primary="Batch" />
                   </ListItemButton>
+                 
+                 
                   <ListItemButton
                     sx={{ pl: 4 }}
                     onClick={() => navigate("/dashboard/displayallvendor")}
@@ -188,24 +204,15 @@ export default function Sidebar() {
                 </List>
               </Collapse>
             </Grid>
-          
-          
 
-          
-         
-
-       
-
-            <Grid item xs={12} style={{  paddingTop: 10 }}>
+            <Grid item xs={12} style={{ paddingTop: 10 }}>
               <ListItemButton onClick={handleClickLogOut}>
                 <ListItemIcon>
-                  <PowerSettingsNewIcon  style={{ color: "#fff" }} />
+                  <PowerSettingsNewIcon style={{ color: "#fff" }} />
                 </ListItemIcon>
                 <ListItemText style={{ color: "#fff" }} primary="Log Out" />
               </ListItemButton>
             </Grid>
-
-
           </Grid>
         </React.Fragment>
       </div>

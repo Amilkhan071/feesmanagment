@@ -15,20 +15,21 @@ import "../../../Stylesheet.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
-export default function DisplayTiming() {
-  const [timeTable, setTimeTable] = useState([]);
+export default function DisplayCourse() {
+  const storedState = JSON.parse(localStorage.getItem("admin"));
+  const [organization, setOrganization] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
-  const fetchAllTimeTable = async () => {
-    var body = { organizationid:7  };
-    var result = await postData("timingtable/displayAll", body);
-   //console.log(result);
-    setTimeTable(result);
-   alert(JSON.stringify(result));
+  const fetchAllOrganization = async () => {
+    var body = { organizationid: storedState.organizationid };
+    var list = await postData("course/displayAll", body);
+    console.log(list);
+    setOrganization(list);
+    // alert(JSON.parse(list))
   };
   useEffect(function () {
-    fetchAllTimeTable();
+    fetchAllOrganization();
   }, []);
 
   const handleDeletconfrim = (rowData) => {
@@ -42,37 +43,29 @@ export default function DisplayTiming() {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.value) {
-        handleDelete(rowData.transactionid);
+        handleDelete(rowData.courseid);
       }
     });
   };
-  const handleDelete=async(id)=>{
-    var body={'transactionid':id}
-    let result=await postData('timingtable/deleteRecord',body)
-    if(result)
-    {
-        Swal.fire({
-            icon: "success",
-            title: "Done",
-            text: 'deleted',
-          });
-          window.location.reload();
-      
- 
-   }
-    else
-    {
-        Swal.fire({
-            icon: "error",
-            title: "Oops....",
-            text: "Store Does Note Deleted",
-          });
-    }
-  
 
-  
-  }
- 
+  const handleDelete = async (id) => {
+    var body = { courseId: id };
+    var result = await postData("course/deleteCourse", body);
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "deleted",
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops....",
+        text: "Store Does Note Deleted",
+      });
+    }
+  };
 
   const displayCategories = () => {
     return (
@@ -88,9 +81,9 @@ export default function DisplayTiming() {
                   <Grid item xs={10}>
                     <div>
                       <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                        List Of Batch Time
+                        List Of Courses
                       </div>
-                      <div style={{ fontSize: 13 }}>List of a stores</div>
+                      <div style={{ fontSize: 13 }}>List of a Courses</div>
                     </div>
                   </Grid>
                 </Grid>
@@ -102,20 +95,31 @@ export default function DisplayTiming() {
               style={{ borderRadius: 0 }}
               title={false}
               columns={[
-                { title: "Transaction_Id", field: "transactionid" },
-                { title: "Start Time", field: "btstart" },
-                { title: "End Time", field: "btend" },
-                { title: "Organisation_Id", field: "organizationid" },
-               
+                { title: "Course ID", field: "courseid" },
+                { title: "Course Name", field: "coursename" },
+                { title: "Course Duration", field: "courseduration" },
+                { title: "Course Fees", field: "coursefees" },
+                { title: "Description", field: "description" },
+                {
+                  title: "courseLogo",
+                  field: "courseLogo",
+                  render: (rowData) => (
+                    <Avatar
+                      src={`${ServerURL}/images/${rowData.courselogo}`}
+                      style={{ width: 60, height: 40 }}
+                      variant="rounded"
+                    />
+                  ),
+                },
               ]}
-              data={timeTable}
+              data={organization}
               actions={[
                 {
                   icon: "edit",
                   tooltip: "Edit",
                   onClick: (event, rowData) =>
                     navigate(
-                      "/dashboard/UpdateTimeTable/" + rowData.transactionid
+                      "/dashboard/UpdateCourse/" + rowData.courseid
                     ),
                   // navigate("/productbycategory/" + item.categoryid)
                 },
@@ -129,39 +133,9 @@ export default function DisplayTiming() {
                   icon: "add",
                   tooltip: "Add Store",
                   isFreeAction: true,
-                  onClick: () => navigate("/dashboard/TimeTable"),
+                  onClick: () => navigate("/dashboard/CreateCourse"),
                 },
               ]}
-              // components={{
-              //   Action: (props) => (
-              //     <Button
-              //       onClick={(event) => props.action.onClick(event, props.data)}
-              //       color="primary"
-              //       variant="contained"
-              //       style={{
-              //         margin: 5,
-              //         borderRadius: 0,
-              //         textTransform: "none",
-              //         background:
-              //           props.action.icon == "edit"
-              //             ? "#00b894"
-              //             : props.action.icon == "add"
-              //             ? "#00b894"
-              //             : "red",
-              //       }}
-              //       size="small"
-              //     >
-              //       {/* {props.action.tooltip == "Delete" ? (
-              //         <IconButton aria-label="delete"  color="default">
-              //           <DeleteIcon />
-              //         </IconButton>
-              //       ) : (
-              //         props.action.tooltip
-              //       )}  */}
-              //       {props.action.tooltip}
-              //     </Button>
-              //   ),
-              // }}
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],
