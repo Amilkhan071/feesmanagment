@@ -21,7 +21,7 @@ export default function DisplayTiming() {
   const navigate = useNavigate();
 
   const fetchAllTimeTable = async () => {
-    var body = { organizationid: 1 };
+    var body = { organizationid:7  };
     var result = await postData("timingtable/displayAll", body);
    //console.log(result);
     setTimeTable(result);
