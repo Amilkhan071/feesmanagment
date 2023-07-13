@@ -1,5 +1,12 @@
 import MaterialTable from "@material-table/core";
-import { AppBar, Avatar, Button, Grid, IconButton, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  Toolbar,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ServerURL, getData, postData } from "../../Services/FetchNodeServices";
 import { useNavigate } from "react-router-dom";
@@ -8,23 +15,21 @@ import "../../../Stylesheet.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
-export default function DisplayOrganization() {
-  const [organization, setOrganization] = useState([]);
+export default function DisplayTiming() {
+  const [timeTable, setTimeTable] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
-
-
-  const fetchAllOrganization=async()=>{
-    var list = await getData('organization/displayAll')
-    console.log(list)
-     setOrganization(list)
-    // alert(JSON.parse(list))
-   }
-   useEffect(function(){
-     fetchAllOrganization()
-     
-     },[])
+  const fetchAllTimeTable = async () => {
+    var body = { organizationid: 1 };
+    var result = await postData("timingtable/displayAll", body);
+   //console.log(result);
+    setTimeTable(result);
+   alert(JSON.stringify(result));
+  };
+  useEffect(function () {
+    fetchAllTimeTable();
+  }, []);
 
   const handleDeletconfrim = (rowData) => {
     Swal.fire({
@@ -37,15 +42,13 @@ export default function DisplayOrganization() {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.value) {
-        handleDelete(rowData.organizationid);
+        handleDelete(rowData.transactionid);
       }
     });
   };
-
-
   const handleDelete=async(id)=>{
-    var body={'organizationid':id}
-    var result=await postData('organization/deleteRecord',body)
+    var body={'transactionid':id}
+    let result=await postData('timingtable/deleteRecord',body)
     if(result)
     {
         Swal.fire({
@@ -69,8 +72,7 @@ export default function DisplayOrganization() {
 
   
   }
-
-
+ 
 
   const displayCategories = () => {
     return (
@@ -86,9 +88,9 @@ export default function DisplayOrganization() {
                   <Grid item xs={10}>
                     <div>
                       <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                        List Of Organization
+                        List Of Batch Time
                       </div>
-                      <div style={{ fontSize: 13}}>List of a stores</div>
+                      <div style={{ fontSize: 13 }}>List of a stores</div>
                     </div>
                   </Grid>
                 </Grid>
@@ -100,31 +102,21 @@ export default function DisplayOrganization() {
               style={{ borderRadius: 0 }}
               title={false}
               columns={[
-                { title: "ID", field: "organizationid",},
-                { title: "Name", field: "organizationname", },
-                { title: "Owner", field: "ownername",  },
-                { title: "Birth_Date", field: "birthdate",  },
-                { title: "Gendor", field: "gender", },
-                { title: "State", field: "orgstate",  },
-                { title: "City", field: "orgcity", },
-                { title: "Address", field: "address",  },
-                { title: "Phone", field: "phone" },
-                { title: "Mobile", field: "mobile" },
-                { title: 'Logo', field: 'logo',
-              render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.logo}`} style={{width:60,height:40}} variant="rounded" /> },
-            
-              { title: 'Picture', field: 'picture',
-              render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.picture}`} style={{width:60,height:40}} variant="rounded" /> },
-            
-
+                { title: "Transaction_Id", field: "transactionid" },
+                { title: "Start Time", field: "btstart" },
+                { title: "End Time", field: "btend" },
+                { title: "Organisation_Id", field: "organizationid" },
+               
               ]}
-              data={organization}
+              data={timeTable}
               actions={[
                 {
                   icon: "edit",
                   tooltip: "Edit",
                   onClick: (event, rowData) =>
-                    navigate("/dashboard/UpdateOrganization/" + rowData.organizationid),
+                    navigate(
+                      "/dashboard/UpdateTimeTable/" + rowData.transactionid
+                    ),
                   // navigate("/productbycategory/" + item.categoryid)
                 },
                 {
@@ -137,10 +129,39 @@ export default function DisplayOrganization() {
                   icon: "add",
                   tooltip: "Add Store",
                   isFreeAction: true,
-                  onClick: () => navigate("/dashboard/CreateOrganization"),
+                  onClick: () => navigate("/dashboard/TimeTable"),
                 },
               ]}
-            
+              // components={{
+              //   Action: (props) => (
+              //     <Button
+              //       onClick={(event) => props.action.onClick(event, props.data)}
+              //       color="primary"
+              //       variant="contained"
+              //       style={{
+              //         margin: 5,
+              //         borderRadius: 0,
+              //         textTransform: "none",
+              //         background:
+              //           props.action.icon == "edit"
+              //             ? "#00b894"
+              //             : props.action.icon == "add"
+              //             ? "#00b894"
+              //             : "red",
+              //       }}
+              //       size="small"
+              //     >
+              //       {/* {props.action.tooltip == "Delete" ? (
+              //         <IconButton aria-label="delete"  color="default">
+              //           <DeleteIcon />
+              //         </IconButton>
+              //       ) : (
+              //         props.action.tooltip
+              //       )}  */}
+              //       {props.action.tooltip}
+              //     </Button>
+              //   ),
+              // }}
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],

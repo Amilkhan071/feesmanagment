@@ -13,6 +13,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "../../Stylesheet.css";
 import CreateOrganization from "../Admin/Organization/CreateOrganization";
+import DisplayOrganization from "../Admin/Organization/DisplayOrganization";
+import UpdateOrganization from "../Admin/Organization/UpdateOrganization";
+import TimeTable from "../Admin/Timing/TimeTable";
+import DisplayTiming from "../Admin/Timing/DisplayTiming";
+import UpdateTimeTable from "../Admin/Timing/UpdateTimeTable";
+import CreateBatch from "../Admin/Batch/CreateBatch";
+import DisplayBatch from "../Admin/Batch/DisplayBatch";
+import UpdateBatch from "../Admin/Batch/UpdateBatch";
 
 export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -26,7 +34,7 @@ export default function Dashboard() {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} className="menuicon">
-        <AppBar position="static" style={{ background: "#00b894" }}>
+        <AppBar position="static" style={{ background: "#273c75" }}>
           <Toolbar>
             <IconButton
               size="large"
@@ -57,10 +65,39 @@ export default function Dashboard() {
             element={<CreateOrganization />}
             path={"/CreateOrganization"}
           />
-        
+          <Route
+            element={<DisplayOrganization />}
+            path={"/DisplayOrganization"}
+          />
        
-         
-         
+       <Route
+            element={<UpdateOrganization />}
+            path={"/UpdateOrganization/:orgid"}
+          />
+          <Route
+            element={<TimeTable />}
+            path={"/TimeTable"}
+          />
+             <Route
+            element={<DisplayTiming />}
+            path={"/DisplayTiming"}
+          />
+           <Route
+            element={<UpdateTimeTable />}
+            path={"/UpdateTimeTable/:trnsid"}
+          />
+           <Route
+            element={<CreateBatch />}
+            path={"/CreateBatch"}
+          />
+          <Route
+            element={<DisplayBatch />}
+            path={"/DisplayBatch"}
+          />
+             <Route
+            element={<UpdateBatch />}
+            path={"/UpdateBatch/:batchid"}
+          />
         </Routes>
       </Grid>
     </Grid>

@@ -73,7 +73,7 @@ export default function Sidebar() {
       <div className="Stylesheet_scrollitem Resposnse_Width"
       
         style={{
-          background: "#00b894",
+          background: "#273c75",
           height: "100vh",
           position: "fixed",
         //width:"250px"
@@ -151,9 +151,9 @@ export default function Sidebar() {
                 >
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/CreateOrganization")}
+                    onClick={() => navigate("/dashboard/DisplayOrganization")}
                   >
-                    <ListItemText primary="Store" />
+                    <ListItemText primary="Organization" />
                   </ListItemButton>
                   <ListItemButton
                     sx={{ pl: 4 }}
@@ -163,15 +163,15 @@ export default function Sidebar() {
                   </ListItemButton>
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/displayallbrand")}
+                    onClick={() => navigate("/dashboard/DisplayTiming")}
                   >
-                    <ListItemText primary="Brand" />
+                    <ListItemText primary="Time" />
                   </ListItemButton>
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/displaymodel")}
+                    onClick={() => navigate("/dashboard/DisplayBatch")}
                   >
-                    <ListItemText primary="Model" />
+                    <ListItemText primary="Batch" />
                   </ListItemButton>
                   <ListItemButton
                     sx={{ pl: 4 }}
