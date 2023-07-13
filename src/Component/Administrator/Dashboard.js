@@ -13,6 +13,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "../../Stylesheet.css";
 import CreateOrganization from "../Admin/Organization/CreateOrganization";
+import UpdateOrganization from "../Admin/Organization/UpdateOrganization";
+import DisplayOrganization from "../Admin/Organization/DisplayOrganization";
+
+import CreateEnquiries from "../Admin/Enquiries/CreateEnquiries";
+import CreateCourse from "../Admin/Courses/CreateCourse";
+import DisplayCourse from "../Admin/Courses/DisplayCourse";
+import UpdateCourse from "../Admin/Courses/UpdateCourse";
 
 export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -46,21 +53,34 @@ export default function Dashboard() {
         </AppBar>
       </Grid>
 
-      <Grid item lg={2} md={3}  className="SideBarContainer">
+      <Grid item lg={2} md={3} className="SideBarContainer">
         <Sidebar />
       </Grid>
 
       <Grid item lg={10} md={9} xs={12} sm={12}>
-
         <Routes>
           <Route
             element={<CreateOrganization />}
             path={"/CreateOrganization"}
           />
-        
-       
-         
-         
+          <Route
+            element={<UpdateOrganization />}
+            path={"/UpdateOrganization/:orgid"}
+          />
+           <Route
+            element={<UpdateCourse />}
+            path={"/UpdateCourse/:crsid"}
+          />
+           <Route
+            element={<DisplayOrganization />}
+            path={"/DisplayOrganization"}
+          />
+            <Route
+            element={<DisplayCourse />}
+            path={"/DisplayCourse"}
+          />
+          <Route element={<CreateEnquiries />} path={"/createenquiries"} />
+          <Route element={<CreateCourse />} path={"/CreateCourse"} />
         </Routes>
       </Grid>
     </Grid>

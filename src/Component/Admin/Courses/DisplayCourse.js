@@ -1,5 +1,12 @@
 import MaterialTable from "@material-table/core";
-import { AppBar, Avatar, Button, Grid, IconButton, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  Toolbar,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ServerURL, getData, postData } from "../../Services/FetchNodeServices";
 import { useNavigate } from "react-router-dom";
@@ -8,23 +15,22 @@ import "../../../Stylesheet.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
-export default function DisplayOrganization() {
+export default function DisplayCourse() {
+  const storedState = JSON.parse(localStorage.getItem("admin"));
   const [organization, setOrganization] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
-
-
-  const fetchAllOrganization=async()=>{
-    var list = await getData('organization/displayAll')
-    console.log(list)
-     setOrganization(list)
+  const fetchAllOrganization = async () => {
+    var body = { organizationid: storedState.organizationid };
+    var list = await postData("course/displayAll", body);
+    console.log(list);
+    setOrganization(list);
     // alert(JSON.parse(list))
-   }
-   useEffect(function(){
-     fetchAllOrganization()
-     
-     },[])
+  };
+  useEffect(function () {
+    fetchAllOrganization();
+  }, []);
 
   const handleDeletconfrim = (rowData) => {
     Swal.fire({
@@ -37,40 +43,29 @@ export default function DisplayOrganization() {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.value) {
-        handleDelete(rowData.organizationid);
+        handleDelete(rowData.courseid);
       }
     });
   };
 
-
-  const handleDelete=async(id)=>{
-    var body={'organizationid':id}
-    var result=await postData('organization/deleteRecord',body)
-    if(result)
-    {
-        Swal.fire({
-            icon: "success",
-            title: "Done",
-            text: 'deleted',
-          });
-          window.location.reload();
-      
- 
-   }
-    else
-    {
-        Swal.fire({
-            icon: "error",
-            title: "Oops....",
-            text: "Store Does Note Deleted",
-          });
+  const handleDelete = async (id) => {
+    var body = { courseId: id };
+    var result = await postData("course/deleteCourse", body);
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "deleted",
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops....",
+        text: "Store Does Note Deleted",
+      });
     }
-  
-
-  
-  }
-
-
+  };
 
   const displayCategories = () => {
     return (
@@ -86,9 +81,9 @@ export default function DisplayOrganization() {
                   <Grid item xs={10}>
                     <div>
                       <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                        List Of Organization
+                        List Of Courses
                       </div>
-                      <div style={{ fontSize: 13}}>List of a stores</div>
+                      <div style={{ fontSize: 13 }}>List of a Courses</div>
                     </div>
                   </Grid>
                 </Grid>
@@ -100,23 +95,22 @@ export default function DisplayOrganization() {
               style={{ borderRadius: 0 }}
               title={false}
               columns={[
-                { title: "ID", field: "organizationid",},
-                { title: "Name", field: "organizationname", },
-                { title: "Owner", field: "ownername",  },
-                { title: "Birth_Date", field: "birthdate",  },
-                { title: "Gendor", field: "gender", },
-                { title: "State", field: "orgstate",  },
-                { title: "City", field: "orgcity", },
-                { title: "Address", field: "address",  },
-                { title: "Phone", field: "phone" },
-                { title: "Mobile", field: "mobile" },
-                { title: 'Logo', field: 'logo',
-              render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.logo}`} style={{width:60,height:40}} variant="rounded" /> },
-            
-              { title: 'Picture', field: 'picture',
-              render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.picture}`} style={{width:60,height:40}} variant="rounded" /> },
-            
-
+                { title: "Course ID", field: "courseid" },
+                { title: "Course Name", field: "coursename" },
+                { title: "Course Duration", field: "courseduration" },
+                { title: "Course Fees", field: "coursefees" },
+                { title: "Description", field: "description" },
+                {
+                  title: "courseLogo",
+                  field: "courseLogo",
+                  render: (rowData) => (
+                    <Avatar
+                      src={`${ServerURL}/images/${rowData.courselogo}`}
+                      style={{ width: 60, height: 40 }}
+                      variant="rounded"
+                    />
+                  ),
+                },
               ]}
               data={organization}
               actions={[
@@ -124,7 +118,9 @@ export default function DisplayOrganization() {
                   icon: "edit",
                   tooltip: "Edit",
                   onClick: (event, rowData) =>
-                    navigate("/dashboard/UpdateOrganization/" + rowData.organizationid),
+                    navigate(
+                      "/dashboard/UpdateCourse/" + rowData.courseid
+                    ),
                   // navigate("/productbycategory/" + item.categoryid)
                 },
                 {
@@ -137,10 +133,9 @@ export default function DisplayOrganization() {
                   icon: "add",
                   tooltip: "Add Store",
                   isFreeAction: true,
-                  onClick: () => navigate("/dashboard/CreateOrganization"),
+                  onClick: () => navigate("/dashboard/CreateCourse"),
                 },
               ]}
-            
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],

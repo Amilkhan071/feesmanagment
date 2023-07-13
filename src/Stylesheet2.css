@@ -1,0 +1,31 @@
+.LoginContainer {
+
+    /* background-image: url("/public/background-gradient-lights.jpg");
+    background-repeat: no-repeat;
+    background-size: cover; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: '100%';
+    height: 100vh;
+  }
+  .changepass_contain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+  }
+  .zoomlgimg {
+    transition: transform 0.2s;
+    margin: 0 auto;
+  }
+  
+  .zoomlgimg:hover {
+    transform: scale(1.08);
+  }
+  .btn-hover.color-7 {
+    background-image: linear-gradient(to right, #6253e1, #852d91, #a3a1ff);
+    box-shadow: 0 4px 15px 0 rgba(126, 52, 161, 0.75);
+  }
+  
