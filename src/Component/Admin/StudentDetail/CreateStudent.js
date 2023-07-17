@@ -29,6 +29,7 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Swal from "sweetalert2";
 export default function CreateStudent() {
   const [getMessage, setMessage] = React.useState("");
   const [getstuname, setstuname] = React.useState("");
@@ -102,9 +103,18 @@ export default function CreateStudent() {
       );
 
       if (result) {
-        alert("Record Submitted..");
-      } else {
-        alert("Fail to submit Record...");
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: 'Record Submitted..',
+              });
+              window.location.reload();
+          } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops....",
+          text: "Fail to submit Record...",
+        });
       }
     }
   };
@@ -318,6 +328,24 @@ export default function CreateStudent() {
               </Grid>
             </Toolbar>
           </AppBar>
+        </Grid>
+        <Grid item md={12}>
+          <div
+            style={{
+              padding: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              letterSpacing: 3,
+            }}
+          >
+            <div>
+              <img src="/course.png" width="60" />
+            </div>
+            <div style={{ marginLeft: 20 }}>Student Register</div>
+          </div>
         </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
@@ -913,7 +941,7 @@ export default function CreateStudent() {
         >
           <Button
             style={{
-              backgroundColor: "#00b894",
+              backgroundColor: "#273c75",
               borderRadius: 0,
               width: 100,
               height: 40,

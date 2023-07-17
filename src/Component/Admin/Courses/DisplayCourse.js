@@ -144,7 +144,7 @@ export default function DisplayCourse() {
                 cellStyle: {
                   fontSize: 12,
                 },
-                tableLayout: "fixed",
+                //tableLayout: "fixed",
               }}
             />
           </Grid>

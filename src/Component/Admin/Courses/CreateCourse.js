@@ -170,7 +170,7 @@ export default function CreateCourse() {
             <div>
               <img src="/course.png" width="60" />
             </div>
-            <div style={{ marginLeft: 20 }}>Time Register</div>
+            <div style={{ marginLeft: 20 }}>Create Course</div>
           </div>
         </Grid>
         <Grid item md={6} lg={6} sm={12} xs={12}>
@@ -181,7 +181,7 @@ export default function CreateCourse() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Organization Id"
-            variant="standard"
+            variant="outlined"
             value={storedState.organizationid}
             // onChange={(e) => setOrgName(e.target.value.trimStart())}
             sx={(theme) => {
@@ -201,7 +201,7 @@ export default function CreateCourse() {
           <TextField
             id="standard-basic"
             label="Course Name"
-            variant="standard"
+            variant="outlined"
             error={!error.getCourseName ? false : true}
             helperText={error.getCourseName}
             onFocus={() => handleError("getCourseName", null)}
@@ -230,7 +230,7 @@ export default function CreateCourse() {
           <TextField
             id="standard-basic"
             label="Course Duration"
-            variant="standard"
+            variant="outlined"
             error={!error.getCourseDuration ? false : true}
             helperText={error.getCourseDuration}
             onFocus={() => handleError("getCourseDuration", null)}
@@ -254,7 +254,7 @@ export default function CreateCourse() {
           <TextField
             id="standard-basic"
             label="Course Fees"
-            variant="standard"
+            variant="outlined"
             error={!error.getCourseFees ? false : true}
             helperText={error.getCourseFees}
             onFocus={() => handleError("getCourseFees", null)}
@@ -279,7 +279,7 @@ export default function CreateCourse() {
           <TextField
             id="standard-basic"
             label="Description"
-            variant="standard"
+            variant="outlined"
             error={!error.getDescription ? false : true}
             helperText={error.getDescription}
             onFocus={() => handleError("getDescription", null)}

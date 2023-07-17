@@ -43,9 +43,7 @@ var navigate =useNavigate()
         emailid: userName,
         password: password,
       };
-      alert(JSON.stringify(body));
       var response = await postData("adminlogin/adminCheck", body);
-      alert(JSON.stringify(response));
       if (response) {
         Swal.fire({
           icon: "success",

@@ -52,6 +52,26 @@ export default function DisplayStudent() {
   const handleDelete = async (id) => {
     var body = { studentid: id };
     var result = await postData("studetail/deleteRecord", body);
+
+    if(result)
+    {
+        Swal.fire({
+            icon: "success",
+            title: "Done",
+            text: 'deleted',
+          });
+          window.location.reload();
+      
+ 
+   }
+    else
+    {
+        Swal.fire({
+            icon: "error",
+            title: "Oops....",
+            text: "Store Does Note Deleted",
+          });
+    }
   };
 
   const displayCategories = () => {
@@ -129,7 +149,7 @@ export default function DisplayStudent() {
                 cellStyle: {
                   fontSize: 12,
                 },
-                tableLayout: "fixed",
+               // tableLayout: "fixed",
               }}
             />
           </Grid>

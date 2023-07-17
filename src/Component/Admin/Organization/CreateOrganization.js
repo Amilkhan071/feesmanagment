@@ -352,6 +352,24 @@ export default function CreateOrganization() {
             </Toolbar>
           </AppBar>
         </Grid>
+        <Grid item md={12}>
+          <div
+            style={{
+              padding: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              letterSpacing: 3,
+            }}
+          >
+            <div>
+              <img src="/course.png" width="60" />
+            </div>
+            <div style={{ marginLeft: 20 }}>Organization Ragitration</div>
+          </div>
+        </Grid>
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             error={!error.getOrgName ? false : true}
@@ -408,7 +426,7 @@ export default function CreateOrganization() {
               onChange={(item) => setDob(item)}
               slotProps={{
                 textField: {
-                  variant: "standard",
+                  variant: "outlined",
                   fullWidth: "100%",
                   helperText: error.getDob,
                   error: !error.getDob ? false : true,

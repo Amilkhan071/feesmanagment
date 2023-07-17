@@ -1,18 +1,13 @@
 import MaterialTable from "@material-table/core";
 import {
   AppBar,
-  Avatar,
-  Button,
   Grid,
-  IconButton,
   Toolbar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { ServerURL, getData, postData } from "../../Services/FetchNodeServices";
+import {  postData } from "../../Services/FetchNodeServices";
 import { useNavigate } from "react-router-dom";
-import { deleteData } from "../../Services/FetchNodeServices";
 import "../../../Stylesheet.css";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 
 export default function DisplayTiming() {
@@ -104,10 +99,10 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
               style={{ borderRadius: 0 }}
               title={false}
               columns={[
-                { title: "Transaction_Id", field: "transactionid" },
+                { title: "Transaction Id", field: "transactionid" },
                 { title: "Start Time", field: "btstart" },
                 { title: "End Time", field: "btend" },
-                { title: "Organisation_Id", field: "organizationid" },
+                { title: "Organisation Id", field: "organizationid" },
                
               ]}
               data={timeTable}
@@ -119,7 +114,6 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
                     navigate(
                       "/dashboard/UpdateTimeTable/" + rowData.transactionid
                     ),
-                  // navigate("/productbycategory/" + item.categoryid)
                 },
                 {
                   icon: "delete",
@@ -134,36 +128,7 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
                   onClick: () => navigate("/dashboard/TimeTable"),
                 },
               ]}
-              // components={{
-              //   Action: (props) => (
-              //     <Button
-              //       onClick={(event) => props.action.onClick(event, props.data)}
-              //       color="primary"
-              //       variant="contained"
-              //       style={{
-              //         margin: 5,
-              //         borderRadius: 0,
-              //         textTransform: "none",
-              //         background:
-              //           props.action.icon == "edit"
-              //             ? "#00b894"
-              //             : props.action.icon == "add"
-              //             ? "#00b894"
-              //             : "red",
-              //       }}
-              //       size="small"
-              //     >
-              //       {/* {props.action.tooltip == "Delete" ? (
-              //         <IconButton aria-label="delete"  color="default">
-              //           <DeleteIcon />
-              //         </IconButton>
-              //       ) : (
-              //         props.action.tooltip
-              //       )}  */}
-              //       {props.action.tooltip}
-              //     </Button>
-              //   ),
-              // }}
+           
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],
@@ -173,7 +138,7 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
                 cellStyle: {
                   fontSize: 12,
                 },
-                tableLayout: "fixed",
+                //tableLayout: "fixed",
               }}
             />
           </Grid>

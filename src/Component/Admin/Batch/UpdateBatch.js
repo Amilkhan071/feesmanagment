@@ -165,7 +165,7 @@ export default function UpdateBatch() {
   const searchById = async () => {
     let body = { batchid: params.batchid };
     let record = await postData("batch/displayById", body);
-    alert(JSON.stringify(record))
+    //alert(JSON.stringify(record))
     if (record != null) {
       setOrganizationId(record.organizationid);
       setCourseId(record.coursename);
@@ -359,7 +359,7 @@ export default function UpdateBatch() {
             <div>
               <img src="/course.png" width="60" />
             </div>
-            <div style={{ marginLeft: 20 }}>Batch Register</div>
+            <div style={{ marginLeft: 20 }}>Batch Update</div>
           </div>
         </Grid>
         <Grid item md={4} lg={4} sm={12} xs={12}>
@@ -508,7 +508,7 @@ export default function UpdateBatch() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Batch Name"
-            variant="standard"
+            variant="outlined"
             value={getBatchName}
             // onChange={(e) => setInputBatchName(e.target.value.trim())}
             sx={(theme) => {

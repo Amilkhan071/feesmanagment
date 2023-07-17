@@ -152,13 +152,12 @@ export default function DisplayOrganization() {
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],
-                // grouping: true,
                 search: true,
                 actionsColumnIndex: -1,
                 cellStyle: {
                   fontSize: 12,
                 },
-                tableLayout: "fixed",
+                //tableLayout: "fixed",
               }}
             />
           </Grid>
