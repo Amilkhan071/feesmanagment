@@ -35,6 +35,8 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { FormHelperText } from "@material-ui/core";
+import Swal from "sweetalert2";
 export default function UpdateOrganization() {
   const params = useParams();
   const [getOrgName, setOrgName] = useState("");
@@ -71,7 +73,8 @@ export default function UpdateOrganization() {
   const stateCityData = Object.keys(StateCity);
 
   const handleSubmitEdit = async () => {
-    let body = {
+    if(validation()){
+    var body = {
       organizationid: params.orgid,
       organizationName: getOrgName,
       ownerName: getOwnerName,
@@ -93,19 +96,21 @@ export default function UpdateOrganization() {
     } else {
       alert("failed");
     }
+  }
   };
   const searchById = async () => {
     var body = { organizationid: params.orgid };
     var record = await postData("organization/displayById", body);
+   // alert(record.birthdate)
     if (record != null) {
       setRecord(record);
       setOrgName(record.organizationname);
 
       setOwnerName(record.ownername);
       var bd = new Date(record.birthdate);
-      var tbd =
-        bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
+      var tbd = bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
       setDob(tbd);
+      //alert(tbd)
       setGender(record.gender);
       setAddress(record.address);
       setState(record.orgstate);
@@ -118,6 +123,8 @@ export default function UpdateOrganization() {
       setStatus(record.status)
       setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
       setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
+      setLogoPicture(record.logo)
+      setOwnerPicture(record.picture)
     } else {
     }
   };
@@ -182,93 +189,178 @@ export default function UpdateOrganization() {
       config
     );
     if (result) {
-      alert("update");
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: 'Updated',
+      });
       
 
     } else {
-      alert("not update");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops....",
+        text: 'Not Updated',
+      });
     }
   };
 
-  //   const validation = () => {
-  //     var isValid = true;
+  const validation = () => {
+    var isValid = true;
 
-  //     if (!name) {
-  //       handleError("name", "Please Input Name");
-  //       isValid = false;
-  //     }
-  //     if (!/^[a-zA-Z0-9\s.]*$/.test(name)) {
-  //       handleError("name", "Please Input Valid Name");
-  //       isValid = false;
-  //     }
-  //     if (!gstno) {
-  //       handleError("gstno", "Please Input gst no");
-  //       isValid = false;
-  //     }
-  //     if (!/\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/.test(gstno)) {
-  //       handleError("gstno", "Please enter a valid gst no");
-  //       isValid = false;
-  //     }
+    if (!getOwnerName) {
+      handleError("getOwnerName", "Please Input Name");
+      isValid = false;
+    }
 
-  //     if (!userName) {
-  //       handleError("userName", "Please Input userName");
-  //       isValid = false;
-  //     }
-  //     if (!/^[a-zA-Z0-9_.@]*$/.test(userName)){
-  //       handleError(
-  //         "userName","Please check username which contain alphabets number & character  _ @ ."
-  //       );
-  //       isValid = false;
-  //     }
+    if (getOwnerName) {
+      if (getOwnerName.length > 18 || getOwnerName.length < 4) {
+        handleError(
+          "getOwnerName",
+          "Please Input Name Between 4 to 18 letters"
+        );
+        isValid = false;
+      }
+    }
 
-  //     if (!password) {
-  //       handleError("password", "Please Input password");
-  //       isValid = false;
-  //     }
-  //     // if (password.length > 8 || password.length < 8) {
-  //     //   handleError("password", "Please Input 8 Digits password");
-  //     //   isValid = false;
-  //     // }
+    if (!/^[a-zA-Z()\s.]*$/.test(getOwnerName)) {
+      handleError("getOwnerName", "Please Input Valid Name");
+      isValid = false;
+    }
 
-  //     if (password.length) {
-  //       if (!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password)) {
-  //         handleError(
-  //           "password","Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
-  //         );
+    if (!getOrgName) {
+      handleError("getOrgName", "Please Input organization name");
+      isValid = false;
+    }
 
-  //         isValid = false;
-  //       }
 
-  //     }
+    if (!/^[a-zA-Z()\s.]*$/.test(getOrgName)) {
+      handleError("getOrgName", "Please check organization name");
+      isValid = false;
+    }
 
-  //     if (mobile.length) {
-  //       if (isNaN(mobile) || mobile.length < 10) {
-  //         handleError("mobile", "Please enter a valid mobile number");
-  //         isValid = false;
-  //       }
-  //     }
+    if (getOrgName) {
+      if (getOrgName.length > 20 || getOrgName.length < 5) {
+        handleError(
+          "getOrgName",
+          "Please Input Name Between 5 to 20 letters"
+        );
+        isValid = false;
+      }
+    }
 
-  //     if (emailAddress.length) {
-  //       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(emailAddress)) {
-  //         handleError("emailAddress", "Please enter a valid emailAddress");
-  //         isValid = false;
-  //       }
-  //     }
-  //     if (!address) {
-  //       handleError("address", "Please Input address");
-  //       isValid = false;
-  //     }
-  //     if (isNaN(mobileBillNo) || mobileBillNo.length < 10) {
-  //       handleError("mobileBillNo", "Please enter a valid mobile number");
-  //       isValid = false;
-  //     }
-  //     if (isNaN(mobileBillNo)) {
-  //       handleError("mobileBillNo", "Please enter a valid mobile number");
-  //       isValid = false;
-  //     }
+    if (!getPassword) {
+      handleError("getPassword", "Please Input password");
+      isValid = false;
+    }
+    if (!getCity) {
+      handleError("getCity", "Please Select City");
+      isValid = false;
+    }
+    if (!getState) {
+      handleError("getState", "Please Select State");
+      isValid = false;
+    }
+    if (!getStatus) {
+      handleError("getStatus", "Please Select Status");
+      isValid = false;
+    }
+    // if (password.length > 8 || password.length < 8) {
+    //   handleError("password", "Please Input 8 Digits password");
+    //   isValid = false;
+    // }
 
-  //     return isValid;
-  //   };
+    if (getPassword.length) {
+      if (
+        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+          getPassword
+        )
+      ) {
+        handleError(
+          "getPassword",
+          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+        );
+
+        isValid = false;
+
+      }
+    }
+
+    if (getMobile.length) {
+      if (isNaN(getMobile) || getMobile.length < 10) {
+        handleError("getMobile", "Please enter a valid mobile number");
+        isValid = false;
+      }
+    }
+
+    if (!getMobile) {
+      handleError("getMobile", "Please Input mobile number");
+      isValid = false;
+      
+    }
+
+    if (getEmail.length) {
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(getEmail)) {
+        handleError("getEmail", "Please enter a valid emailAddress");
+        isValid = false;
+       
+      }
+    }
+    if (!getDob) {
+      handleError("getDob", "Please select birthdate");
+      isValid = false;
+     
+    }
+
+    if (!getEmail) {
+      handleError("getEmail", "Please Input Email Address");
+      isValid = false;
+     
+    }
+    if (!getAddress) {
+      handleError("getAddress", "Please Input address");
+      isValid = false;
+      
+    }
+
+    if (getPhone.length < 10) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
+    
+
+    }
+
+    if (isNaN(getPhone)) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
+    }
+
+    if (!getPhone) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
+     
+    }
+
+    if (!getGender) {
+      handleError("getGender", "Please Select gender");
+      isValid = false;
+      
+      
+    }
+    if (!getOwnerPicture) {
+      handleError("getOwnerPicture", "Please Select ownerpicture");
+      isValid = false;
+     
+    }
+
+    if (!getLogoPicture) {
+      handleError("getLogoPicture", "Please Select logopicture");
+      isValid = false;
+      
+    }
+
+    return isValid;
+  };
 
   return (
     <div className="store_form_1">
@@ -357,7 +449,7 @@ export default function UpdateOrganization() {
             helperText={error.getOwnerName}
             onFocus={() => handleError("getOwnerName", null)}
             value={getOwnerName}
-            onChange={(e) => setOwnerName(e.target.value.trim())}
+            onChange={(e) => setOwnerName(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
@@ -376,23 +468,29 @@ export default function UpdateOrganization() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
-              //  value={getDob}
+              //defaultValue={getDob}
+               //value={getDob}
               onChange={(item) => setDob(item)}
               slotProps={{
                 textField: {
                   variant: "standard",
                   fullWidth: "100%",
+                  helperText: error.getDob,
+                  error: !error.getDob ? false : true,
+                  onFocus: () => handleError("getDob", null),
                 },
               }}
             />
           </LocalizationProvider>
         </Grid>
         <Grid item md={6}>
-          <FormControl>
+          <FormControl error={!error.getGender ? false : true}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender
             </FormLabel>
             <RadioGroup
+             onFocus={() => handleError("getGender", null)}
+
               value={getGender}
               onChange={(event) => setGender(event.target.value)}
               row
@@ -411,6 +509,9 @@ export default function UpdateOrganization() {
                 label="Other"
               />
             </RadioGroup>
+            <FormHelperText style={{ color: "#d32f2f" }}>
+              {error.getGender}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item md={12} lg={12} sm={12} xs={12}>
@@ -438,10 +539,12 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
             <Select
+             error={!error.getState ? false : true}
+             onFocus={() => handleError("getState", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getState}
@@ -466,17 +569,18 @@ export default function UpdateOrganization() {
           )}
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">City</InputLabel>
             <Select
+              error={!error.getCity ? false : true}
+              onFocus={() => handleError("getCity", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCity}
               label="Select City"
               onChange={(event) => setCity(event.target.value)}
             >
-              <MenuItem value={"Choose City..."}>Choose City...</MenuItem>
               {showCity()}
             </Select>
           </FormControl>
@@ -495,10 +599,12 @@ export default function UpdateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={4} sm={12} xs={12}>
         <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                 <Select
+                                 error={!error.getStatus ? false : true}
+                                 onFocus={() => handleError("getStatus", null)}
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={getStatus}
@@ -648,9 +754,22 @@ export default function UpdateOrganization() {
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => handleOwnerPicture(event)}
+              onChange={(event) => {handleOwnerPicture(event);handleError("getOwnerPicture", null)}}
             />
           </Button>
+          {error && (
+            <div
+            style={{
+              color: "#d32f2f",
+              fontSize: 12,
+              marginTop: 5,
+              fontWeight: 400,
+            }}
+            >
+             {error.getOwnerPicture}
+            </div>
+          )}
+
         </Grid>
         <Grid item md={3} lg={3}>
           <Avatar
@@ -679,9 +798,22 @@ export default function UpdateOrganization() {
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => handleLogoPicture(event)}
+              onChange={(event) => {handleLogoPicture(event);handleError("getLogoPicture", null)}}
             />
           </Button>
+          {error && (
+            <div
+            style={{
+              color: "#d32f2f",
+              fontSize: 12,
+              marginTop: 5,
+              fontWeight: 400,
+            }}
+            >
+             {error.getLogoPicture}
+            </div>
+          )}
+
         </Grid>
         <Grid item md={3} lg={3}>
           <Avatar
@@ -707,7 +839,7 @@ export default function UpdateOrganization() {
         >
           <Button
             style={{
-              backgroundColor: "#00b894",
+              backgroundColor: "#273c75",
               borderRadius: 0,
               width: 100,
               height: 40,

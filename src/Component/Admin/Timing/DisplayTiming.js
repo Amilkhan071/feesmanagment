@@ -28,7 +28,6 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
     var result = await postData("timingtable/displayAll", body);
    //console.log(result);
     setTimeTable(result);
-   alert(JSON.stringify(result));
   };
   useEffect(function () {
     fetchAllTimeTable();

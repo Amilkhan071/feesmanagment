@@ -17,15 +17,17 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { postData } from "../../Services/FetchNodeServices";
+import Swal from "sweetalert2";
 
 export default function TimeTable() {
+  const storedState = JSON.parse(localStorage.getItem("admin"));
   const [selectedDate1, setSelectedDate1] = useState(
     new Date("2014-08-18T21:11:54")
   );
   const [selectedDate2, setSelectedDate2] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const [organizationId, setOrganizationId] = useState("");
+  const [organizationId, setOrganizationId] = useState(storedState.organizationid);
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
   const [error, setError] = useState({});
@@ -64,9 +66,17 @@ export default function TimeTable() {
 
       var result = await postData("timingtable/addNewRecord", body);
       if (result) {
-        alert("submited");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: 'Submited',
+        });
       } else {
-        alert("Not Submited");
+        Swal.fire({
+          icon: "error",
+          title: "Ooops....",
+          text: 'Not Submited',
+        });
       }
     }
   };
@@ -78,14 +88,13 @@ export default function TimeTable() {
       handleError("organizationId", "Please Input organizationId");
       isValid = false;
     }
-    if (!btstart) {
-      handleError("btstart", "Please Input Start Time");
+   
+    if (isNaN(organizationId)) {
+      handleError("organizationId", "Please Input valid organization id");
       isValid = false;
     }
-    if (!btend) {
-      handleError("btend", "Please Input Start End");
-      isValid = false;
-    }
+
+   
 
     return isValid;
   };
@@ -165,12 +174,12 @@ export default function TimeTable() {
             <div style={{ marginLeft: 20 }}>Time Register</div>
           </div>
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             error={!error.organizationId ? false : true}
             helperText={error.organizationId}
             onFocus={() => handleError("organizationId", null)}
-            inputProps={{ style: { color: "#000" } }}
+            inputProps={{maxLength:10, style: { color: "#000" }, }}
             id="standard-basic"
             label="Organization Id"
             variant="standard"
@@ -190,19 +199,18 @@ export default function TimeTable() {
           />
         </Grid>
 
-        <Grid item md={12} lg={12} sm={12} xs={12}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} >
             <TimePicker
+            
               //value={selectedDate1}
               onChange={handleDateChange1}
-              label="Batch Time Start"
+              label="Batch Start Time"
               slotProps={{
                 textField: {
                   variant: "standard",
                   fullWidth: "100%",
-                  helperText: error.btStart,
-                  error: !error.btStart ? false : true,
-                  onFocus: () => handleError("btStart", null),
+                  required:true
                 },
               }}
             />
@@ -220,19 +228,18 @@ export default function TimeTable() {
           </LocalizationProvider>
         </Grid>
 
-        <Grid item md={12} lg={12} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               //   value={selectedDate2}
               onChange={handleDateChange2}
-              label="Batch Time End"
+              label="Batch End Time"
+              onError={!error.selectedDate2 ? false : true}
               slotProps={{
                 textField: {
                   variant: "standard",
                   fullWidth: "100%",
-                  helperText: error.selectedDate2,
-                  error: !error.selectedDate2 ? false : true,
-                  onFocus: () => handleError("selectedDate2", null),
+                  required:true
                 },
               }}
             />

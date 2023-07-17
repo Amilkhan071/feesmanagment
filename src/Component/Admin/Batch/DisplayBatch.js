@@ -22,9 +22,8 @@ export default function DisplayBatch() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
 
   const fetchAllBatch = async () => {
-    var body = { organizationid: storedState.organizationid};
+    var body = { organizationid: storedState.organizationid };
     var result = await postData("batch/displayAll", body);
-    //alert(JSON.stringify(result))
     setTimeTable(result);
   };
   useEffect(function () {
@@ -47,34 +46,26 @@ export default function DisplayBatch() {
     });
   };
 
-  const handleDelete=async(batchid)=>{
-    var body={'batchid':batchid}
-      var  result=await postData('batch/deleteBatch',body)
-   
-      if(result)
-      {
-          Swal.fire({
-              icon: "success",
-              title: "Done",
-              text: 'deleted',
-            });
-          
-          window.location.reload();
-        
-    }
-      else
-      {
-          Swal.fire({
-              icon: "error",
-              title: "Oops....",
-              text: "Store Does Note Deleted",
-            });
-      }
-    
-    }
+  const handleDelete = async (batchid) => {
+    var body = { batchid: batchid };
+    var result = await postData("batch/deleteBatch", body);
 
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "deleted",
+      });
 
- 
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops....",
+        text: "Store Does Note Deleted",
+      });
+    }
+  };
 
   const displayCategories = () => {
     return (
@@ -90,7 +81,7 @@ export default function DisplayBatch() {
                   <Grid item xs={10}>
                     <div>
                       <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                        List Of Batch 
+                        List Of Batch
                       </div>
                       <div style={{ fontSize: 13 }}>List of a stores</div>
                     </div>
@@ -110,7 +101,6 @@ export default function DisplayBatch() {
                 { title: "Status", field: "status" },
                 { title: "Batch_name", field: "batchname" },
                 { title: "Organization_id", field: "organizationid" },
-               
               ]}
               data={timeTable}
               actions={[
@@ -118,9 +108,7 @@ export default function DisplayBatch() {
                   icon: "edit",
                   tooltip: "Edit",
                   onClick: (event, rowData) =>
-                    navigate(
-                      "/dashboard/UpdateBatch/" + rowData.batchid
-                    ),
+                    navigate("/dashboard/UpdateBatch/" + rowData.batchid),
                   // navigate("/productbycategory/" + item.categoryid)
                 },
                 {
@@ -136,7 +124,6 @@ export default function DisplayBatch() {
                   onClick: () => navigate("/dashboard/CreateBatch"),
                 },
               ]}
-              
               options={{
                 pageSize: 10,
                 pageSizeOptions: [10, 15, 25, 50],

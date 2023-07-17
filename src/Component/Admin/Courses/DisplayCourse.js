@@ -26,7 +26,6 @@ export default function DisplayCourse() {
     var list = await postData("course/displayAll", body);
     console.log(list);
     setOrganization(list);
-    // alert(JSON.parse(list))
   };
   useEffect(function () {
     fetchAllOrganization();

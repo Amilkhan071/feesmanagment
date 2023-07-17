@@ -7,6 +7,7 @@ import { deleteData } from "../../Services/FetchNodeServices";
 import "../../../Stylesheet.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
+import moment from "moment/moment";
 
 export default function DisplayOrganization() {
   const [organization, setOrganization] = useState([]);
@@ -103,7 +104,13 @@ export default function DisplayOrganization() {
                 { title: "ID", field: "organizationid",},
                 { title: "Name", field: "organizationname", },
                 { title: "Owner", field: "ownername",  },
-                { title: "Birth_Date", field: "birthdate",  },
+                {
+                  title: "Birth_Date",
+                  field: "birthdate",
+                  render: (rowData) =>
+                    moment(rowData.date).format("MMM-DD-YYYY "),
+                },
+
                 { title: "Gendor", field: "gender", },
                 { title: "State", field: "orgstate",  },
                 { title: "City", field: "orgcity", },

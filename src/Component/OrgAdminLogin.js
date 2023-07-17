@@ -12,6 +12,7 @@ import "../Stylesheet2.css";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useNavigate } from "react-router-dom";
 import { postData } from "./Services/FetchNodeServices";
+import Swal from "sweetalert2";
 export default function OrgAdminLogin() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -46,10 +47,20 @@ export default function OrgAdminLogin() {
       var response = await postData("organization/checkLogin", body);
       if (response) {
         localStorage.setItem("admin", JSON.stringify(response));
-        alert("Login Sucessfully");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: 'Login Successfully',
+        });
+        
         navigate("/dashboard");
       } else {
-        alert("error");
+        Swal.fire({
+          icon: "error",
+          title: "Done",
+          text: 'Login Failed',
+        });
+       
       }
     }
   };

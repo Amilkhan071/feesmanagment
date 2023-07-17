@@ -7,14 +7,15 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { postDataAndImage } from "../../Services/FetchNodeServices";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import Swal from "sweetalert2";
 
 export default function CreateCourse() {
   const [getCourseName, setCourseName] = React.useState("");
   const [getCourseDuration, setCourseDuration] = React.useState("");
   const [getCourseFees, setCourseFees] = React.useState("");
   const [getDescription, setDescription] = React.useState("");
-  const [getCourseLogo, setCourseLogo] = React.useState([]);
-  const [getCourseLogoPath, setCourseLogoPath] = React.useState([]);
+  const [getCourseLogo, setCourseLogo] = useState("");
+  const [getCourseLogoPath, setCourseLogoPath] = useState("");
   const [error, setError] = useState({});
 
   const storedState = JSON.parse(localStorage.getItem("admin"));
@@ -33,7 +34,6 @@ export default function CreateCourse() {
 
       let config = { headers: { "content-type": "multipart/form-data" } };
       console.log("config :", formData);
-      // console.log('kk',config)
       let result = await postDataAndImage(
         "course/addNewCourse",
         formData,
@@ -42,9 +42,18 @@ export default function CreateCourse() {
       console.log("result", result);
 
       if (result) {
-        alert("Course Submitted..");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: "Submited",
+        });
+        navigate('/dashboard/displaycourse')
       } else {
-        alert("Fail to Submit Course...");
+        Swal.fire({
+          icon: "error",
+          title: "Ooops...",
+          text: "Not Submitted",
+        });
       }
     }
   };
@@ -73,10 +82,20 @@ export default function CreateCourse() {
       handleError("getCourseFees", "Please Input coursefees");
       isValid = false;
     }
-    if (!getDescription) {
+    
+    if (!getCourseLogo) {
+        handleError("getCourseLogo", "Please Input Logo");
+        isValid = false;
+        alert('hi')
+      }
+   
+        if (!getDescription) {
       handleError("getDescription", "Please Input description");
       isValid = false;
+     
     }
+   
+    
 
     return isValid;
   };
@@ -136,7 +155,24 @@ export default function CreateCourse() {
             </Toolbar>
           </AppBar>
         </Grid>
-
+        <Grid item md={12}>
+          <div
+            style={{
+              padding: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              letterSpacing: 3,
+            }}
+          >
+            <div>
+              <img src="/course.png" width="60" />
+            </div>
+            <div style={{ marginLeft: 20 }}>Time Register</div>
+          </div>
+        </Grid>
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             error={!error.getOrgName ? false : true}
@@ -271,10 +307,14 @@ export default function CreateCourse() {
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => handleCourseLogo(event)}
+              onChange={(event) => {
+                handleCourseLogo(event);
+                handleError("getCourseLogo",null)
+              }}
             />
           </Button>
-          <div
+      {error && (
+      <div
             style={{
               color: "#d32f2f",
               fontSize: 12,
@@ -282,8 +322,9 @@ export default function CreateCourse() {
               fontWeight: 400,
             }}
           >
-            {error.getOwnerPicture}
-          </div>
+            {error.getCourseLogo}
+          </div>)
+      }    
         </Grid>
         <Grid item md={3} lg={3}>
           <Avatar
@@ -305,7 +346,7 @@ export default function CreateCourse() {
         >
           <Button
             style={{
-              backgroundColor: "#00b894",
+              backgroundColor: "#273c75",
               borderRadius: 0,
               width: 100,
               height: 40,

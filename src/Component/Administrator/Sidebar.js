@@ -178,7 +178,7 @@ export default function Sidebar() {
                     sx={{ pl: 4 }}
 
 
-                    onClick={() => navigate("/dashboard/createcourse")}
+                    onClick={() => navigate("/dashboard/displaycourse")}
                   >
                     <ListItemText primary="Course" />
                   </ListItemButton>
@@ -194,12 +194,12 @@ export default function Sidebar() {
                   </ListItemButton>
                  
                  
-                  <ListItemButton
+                  {/* <ListItemButton
                     sx={{ pl: 4 }}
                     onClick={() => navigate("/dashboard/displayallvendor")}
                   >
                     <ListItemText primary="Vendor" />
-                  </ListItemButton>
+                  </ListItemButton> */}
                   {/* <ListItemButton
                     sx={{ pl: 4 }}
                     onClick={() => navigate("/dashboard/displayallbanks")}

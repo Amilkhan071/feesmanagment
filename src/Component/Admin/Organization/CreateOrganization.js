@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Avatar, Grid, Hidden, InputLabel, MenuItem, TextField ,Select} from "@mui/material";
+import {
+  Avatar,
+  Grid,
+  Hidden,
+  InputLabel,
+  MenuItem,
+  TextField,
+  Select,
+} from "@mui/material";
 import "../../../Stylesheet.css";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,6 +28,9 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Phone } from "@mui/icons-material";
+import { FormHelperText } from "@material-ui/core";
+import Swal from "sweetalert2";
 export default function CreateOrganization() {
   const [getOrgName, setOrgName] = useState("");
   const [getOwnerName, setOwnerName] = useState("");
@@ -37,7 +48,7 @@ export default function CreateOrganization() {
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
   const [showPassword, setShowPassword] = React.useState(false);
-  const [getStatus,setStatus]=useState('')
+  const [getStatus, setStatus] = useState("");
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
@@ -52,85 +63,51 @@ export default function CreateOrganization() {
 
   const stateCityData = Object.keys(StateCity);
 
-  const handleChangeSecond = (e) => {
-    if (e != null) {
-      const citiesx = StateCity[e];
-      //console.log(citiesx);
-      setCityData(citiesx);
-      setCity("");
-    } else {
-      setCityData([]);
-      setCity("");
-    }
-
-    // setState(e.target.value)
-    // const citiesx= StateCity[e.target.value]
-    //setCityData(citiesx)
-  };
+ 
 
   const handleSubmit = async () => {
-    var formData = new FormData();
-    formData.append("organizationName", getOrgName);
-    formData.append("ownerName", getOwnerName);
-    formData.append("birthDate", getDob);
-    formData.append("gender", getGender);
-    formData.append("address", getAddress);
-    formData.append("state", getState);
-    formData.append("city", getCity);
-    formData.append("mobile", getMobile);
-    formData.append("phone", getPhone);
-    formData.append("email", getEmail);
-    formData.append("picture", getOwnerPicture);
-    formData.append("logo", getLogoPicture);
-    formData.append("password", getPassword);
-    formData.append("status", getStatus);
+    if (validation()) {
+      var formData = new FormData();
+      formData.append("organizationName", getOrgName);
+      formData.append("ownerName", getOwnerName);
+      formData.append("birthDate", getDob);
+      formData.append("gender", getGender);
+      formData.append("address", getAddress);
+      formData.append("state", getState);
+      formData.append("city", getCity);
+      formData.append("mobile", getMobile);
+      formData.append("phone", getPhone);
+      formData.append("email", getEmail);
+      formData.append("picture", getOwnerPicture);
+      formData.append("logo", getLogoPicture);
+      formData.append("password", getPassword);
+      formData.append("status", getStatus);
 
-    var config = { headers: { "content-type": "multipart/form-data" } };
-    var result = await postDataAndImage(
-      "organization/addNewRecord",
-      formData,
-      config
-    );
-    if (result) {
-      alert("success");
-      navigate('/maindashboard/displayorganization')
-      //setMessage("Record Submitted..")
-      // clearValues()
-    } else {
-      //setMessage("Fail to Submit Record...")
+      var config = { headers: { "content-type": "multipart/form-data" } };
+      var result = await postDataAndImage(
+        "organization/addNewRecord",
+        formData,
+        config
+      );
+      if (result) {
+       
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: 'Submitted',
+        });
+       
+        navigate("/maindashboard/displayorganization");
+      } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops....",
+          text: 'Not Submitted',
+        });
+
     }
+  }
   };
-  //   const handleSubmit = async () => {
-  //     if (validation()) {
-  //       var body = {
-  //         name: name.trimEnd(),
-  //         username: userName.trimEnd(),
-  //         password: password.trimEnd(),
-  //         email: emailAddress.trimEnd(),
-  //         mobile: mobile,
-  //         address: address.trimEnd(),
-  //         gstno: gstno.trimEnd(),
-  //         mobilebill: mobileBillNo,
-  //         lat: latitude.trimEnd(),
-  //         lng: longitude.trimEnd(),
-  //       };
-  //       var result = await postData("store/create", body);
-  //       if (result) {
-  //         Swal.fire({
-  //           icon: "success",
-  //           title: "Done",
-  //           text: result.message,
-  //         });
-  //         navigate("/dashboard/DisplayAllStore");
-  //       } else {
-  //         Swal.fire({
-  //           icon: "error",
-  //           title: "Oops...",
-  //           text: "Store Does Not Create",
-  //         });
-  //       }
-  //     }
-  //   };
 
   const handleError = (inputs, value) => {
     setError((prev) => ({ ...prev, [inputs]: value }));
@@ -144,117 +121,180 @@ export default function CreateOrganization() {
     setLogoPicturePath(URL.createObjectURL(event.target.files[0]));
     setLogoPicture(event.target.files[0]);
   };
-  //   const validation = () => {
-  //     var isValid = true;
 
-  //     if (!name) {
-  //       handleError("name", "Please Input Name");
-  //       isValid = false;
-  //     }
-  //     if (!/^[a-zA-Z0-9\s.]*$/.test(name)) {
-  //       handleError("name", "Please Input Valid Name");
-  //       isValid = false;
-  //     }
-  //     if (!gstno) {
-  //       handleError("gstno", "Please Input gst no");
-  //       isValid = false;
-  //     }
-  //     if (!/\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/.test(gstno)) {
-  //       handleError("gstno", "Please enter a valid gst no");
-  //       isValid = false;
-  //     }
+  const validation = () => {
+    var isValid = true;
 
-  //     if (!userName) {
-  //       handleError("userName", "Please Input userName");
-  //       isValid = false;
-  //     }
-  //     if (!/^[a-zA-Z0-9_.@]*$/.test(userName)){
-  //       handleError(
-  //         "userName","Please check username which contain alphabets number & character  _ @ ."
-  //       );
-  //       isValid = false;
-  //     }
+    if (!getOwnerName) {
+      handleError("getOwnerName", "Please Input Name");
+      isValid = false;
+    }
 
-  //     if (!password) {
-  //       handleError("password", "Please Input password");
-  //       isValid = false;
-  //     }
-  //     // if (password.length > 8 || password.length < 8) {
-  //     //   handleError("password", "Please Input 8 Digits password");
-  //     //   isValid = false;
-  //     // }
+    if (getOwnerName) {
+      if (getOwnerName.length > 18 || getOwnerName.length < 4) {
+        handleError(
+          "getOwnerName",
+          "Please Input Name Between 4 to 18 letters"
+        );
+        isValid = false;
+      }
+    }
 
-  //     if (password.length) {
-  //       if (!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(password)) {
-  //         handleError(
-  //           "password","Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
-  //         );
+    if (!/^[a-zA-Z()\s.]*$/.test(getOwnerName)) {
+      handleError("getOwnerName", "Please Input Valid Name");
+      isValid = false;
+    }
 
-  //         isValid = false;
-  //       }
-
-  //     }
-
-  //     if (mobile.length) {
-  //       if (isNaN(mobile) || mobile.length < 10) {
-  //         handleError("mobile", "Please enter a valid mobile number");
-  //         isValid = false;
-  //       }
-  //     }
-
-  //     if (emailAddress.length) {
-  //       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(emailAddress)) {
-  //         handleError("emailAddress", "Please enter a valid emailAddress");
-  //         isValid = false;
-  //       }
-  //     }
-  //     if (!address) {
-  //       handleError("address", "Please Input address");
-  //       isValid = false;
-  //     }
-  //     if (isNaN(mobileBillNo) || mobileBillNo.length < 10) {
-  //       handleError("mobileBillNo", "Please enter a valid mobile number");
-  //       isValid = false;
-  //     }
-  //     if (isNaN(mobileBillNo)) {
-  //       handleError("mobileBillNo", "Please enter a valid mobile number");
-  //       isValid = false;
-  //     }
-
-  //     return isValid;
-  //   };
+    if (!getOrgName) {
+      handleError("getOrgName", "Please Input organization name");
+      isValid = false;
+    }
 
 
-  const showState=()=>
-  {
-   return stateCityData?.map(item=>(
+    if (!/^[a-zA-Z()\s.]*$/.test(getOrgName)) {
+      handleError("getOrgName", "Please check organization name");
+      isValid = false;
+    }
+    if (getOrgName) {
+      if (getOrgName.length > 20 || getOrgName.length < 5) {
+        handleError(
+          "getOrgName",
+          "Please Input Name Between 5 to 20 letters"
+        );
+        isValid = false;
+      }
+    }
+
+
+    if (!getPassword) {
+      handleError("getPassword", "Please Input password");
+      isValid = false;
+    }
+    if (!getCity) {
+      handleError("getCity", "Please Select City");
+      isValid = false;
+    }
+    if (!getState) {
+      handleError("getState", "Please Select State");
+      isValid = false;
+    }
+    if (!getStatus) {
+      handleError("getStatus", "Please Select Status");
+      isValid = false;
+    }
+    // if (password.length > 8 || password.length < 8) {
+    //   handleError("password", "Please Input 8 Digits password");
+    //   isValid = false;
+    // }
+
+    if (getPassword.length) {
+      if (
+        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+          getPassword
+        )
+      ) {
+        handleError(
+          "getPassword",
+          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+        );
+
+        isValid = false;
+
+      }
+    }
+
+    if (getMobile.length) {
+      if (isNaN(getMobile) || getMobile.length < 10) {
+        handleError("getMobile", "Please enter a valid mobile number");
+        isValid = false;
+      }
+    }
+
+    if (!getMobile) {
+      handleError("getMobile", "Please Input mobile number");
+      isValid = false;
+      
+    }
+
+    if (getEmail.length) {
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(getEmail)) {
+        handleError("getEmail", "Please enter a valid emailAddress");
+        isValid = false;
+       
+      }
+    }
+    if (!getDob) {
+      handleError("getDob", "Please select birthdate");
+      isValid = false;
      
-   
-        <MenuItem  value={item}>{item}</MenuItem>
-         
- 
-    ))
- 
-  }
+    }
 
-  const showCity=()=>
-  {
-   return cityData?.map(item=>(
+    if (!getEmail) {
+      handleError("getEmail", "Please Input Email Address");
+      isValid = false;
      
-   
-        <MenuItem value={item}>{item}</MenuItem>
-         
- 
-    ))
- 
-  }
+    }
+    if (!getAddress) {
+      handleError("getAddress", "Please Input address");
+      isValid = false;
+      
+    }
 
-
-  const handleChangeState=(event)=>{
-    setState(event.target.value)
-    setCityData(StateCity[event.target.value.trim()])
+    if (getPhone.length < 10) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
     
-  }
+
+    }
+
+    if (isNaN(getPhone)) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
+    }
+
+    if (!getPhone) {
+      handleError("getPhone", "Please enter a valid Phone number");
+      isValid = false;
+     
+    }
+
+    if (!getGender) {
+      handleError("getGender", "Please Select gender");
+      isValid = false;
+      
+      
+    }
+    if (!getOwnerPicture) {
+      handleError("getOwnerPicture", "Please Select ownerpicture");
+      isValid = false;
+     
+    }
+
+    if (!getLogoPicture) {
+      handleError("getLogoPicture", "Please Select logopicture");
+      isValid = false;
+      
+    }
+
+  
+
+    return isValid;
+  };
+
+  const showState = () => {
+    return stateCityData?.map((item) => (
+      <MenuItem value={item}>{item}</MenuItem>
+    ));
+  };
+
+  const showCity = () => {
+    return cityData?.map((item) => <MenuItem value={item}>{item}</MenuItem>);
+  };
+
+  const handleChangeState = (event) => {
+    setState(event.target.value);
+    setCityData(StateCity[event.target.value.trim()]);
+  };
 
   return (
     <div className="store_form_1">
@@ -281,7 +321,9 @@ export default function CreateOrganization() {
                 </Grid>
                 <Grid item xs={2}>
                   <div
-                    onClick={() => navigate("/maindashboard/DisplayOrganization")}
+                    onClick={() =>
+                      navigate("/maindashboard/DisplayOrganization")
+                    }
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
@@ -343,7 +385,7 @@ export default function CreateOrganization() {
             helperText={error.getOwnerName}
             onFocus={() => handleError("getOwnerName", null)}
             value={getOwnerName}
-            onChange={(e) => setOwnerName(e.target.value.trim())}
+            onChange={(e) => setOwnerName(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
@@ -368,17 +410,21 @@ export default function CreateOrganization() {
                 textField: {
                   variant: "standard",
                   fullWidth: "100%",
+                  helperText: error.getDob,
+                  error: !error.getDob ? false : true,
+                  onFocus: () => handleError("getDob", null),
                 },
               }}
             />
           </LocalizationProvider>
         </Grid>
         <Grid item md={6}>
-          <FormControl>
+          <FormControl error={!error.getGender ? false : true}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender
             </FormLabel>
             <RadioGroup
+              onFocus={() => handleError("getGender", null)}
               value={getGender}
               onChange={(event) => setGender(event.target.value)}
               row
@@ -397,6 +443,9 @@ export default function CreateOrganization() {
                 label="Other"
               />
             </RadioGroup>
+            <FormHelperText style={{ color: "#d32f2f" }}>
+              {error.getGender}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item md={12} lg={12} sm={12} xs={12}>
@@ -424,21 +473,22 @@ export default function CreateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12}>
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">State</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getState}
-                                    label="Select State"
-                                    onChange={(event)=>handleChangeState(event)}
-                                >
-                                    
-                                    {showState()}
-                                </Select>
-                            </FormControl>
-          
+        <Grid item md={4} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">State</InputLabel>
+            <Select
+              error={!error.getState ? false : true}
+              onFocus={() => handleError("getState", null)}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getState}
+              label="Select State"
+              onChange={(event) => handleChangeState(event)}
+            >
+              {showState()}
+            </Select>
+          </FormControl>
+
           {error && (
             <div
               style={{
@@ -452,23 +502,22 @@ export default function CreateOrganization() {
           )}
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={4} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">City</InputLabel>
+            <Select
+              error={!error.getCity ? false : true}
+              onFocus={() => handleError("getCity", null)}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getCity}
+              label="Select City"
+              onChange={(event) => setCity(event.target.value)}
+            >
+              {showCity()}
+            </Select>
+          </FormControl>
 
-
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">City</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getCity}
-                                    label="Select City"
-                                    onChange={(event)=>setCity(event.target.value)}
-                                >
-                                   
-                                    {showCity()}
-                                </Select>
-                            </FormControl>
-         
           {error && (
             <div
               style={{
@@ -481,23 +530,23 @@ export default function CreateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={6} sm={12} xs={12}>
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getStatus}
-                                    label="Select Status"
-                                    onChange={(event)=>setStatus(event.target.value)}
-                                >
-                                    <MenuItem value={'Valid'}>Valid</MenuItem>
-                                    <MenuItem value={'Invalid'}>Invalid</MenuItem>
+        <Grid item md={4} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+            <Select
+              error={!error.getStatus ? false : true}
+              onFocus={() => handleError("getStatus", null)}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getStatus}
+              label="Select Status"
+              onChange={(event) => setStatus(event.target.value)}
+            >
+              <MenuItem value={"Valid"}>Valid</MenuItem>
+              <MenuItem value={"Invalid"}>Invalid</MenuItem>
+            </Select>
+          </FormControl>
 
-                                   
-                                </Select>
-                            </FormControl>
-          
           {error && (
             <div
               style={{
@@ -510,8 +559,6 @@ export default function CreateOrganization() {
             </div>
           )}
         </Grid>
-
-
 
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
@@ -567,7 +614,7 @@ export default function CreateOrganization() {
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             id="standard-basic"
-            label="Email Address (optional)"
+            label="Email Address"
             variant="outlined"
             error={!error.getEmail ? false : true}
             helperText={error.getEmail}
@@ -630,16 +677,30 @@ export default function CreateOrganization() {
         </Grid>
 
         <Grid item md={3} lg={3} sm={12} xs={12}>
-          <Button variant="contained" component="label" fullWidth>
+          <Button variant="contained" component="label" fullWidth  >
             Picture
             <input
               hidden
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => handleOwnerPicture(event)}
+              onChange={(event) => {handleOwnerPicture(event);handleError("getOwnerPicture", null)}}
             />
           </Button>
+         
+ {error && (
+            <div
+            style={{
+              color: "#d32f2f",
+              fontSize: 12,
+              marginTop: 5,
+              fontWeight: 400,
+            }}
+            >
+             {error.getOwnerPicture}
+            </div>
+          )}
+
         </Grid>
         <Grid item md={3} lg={3}>
           <Avatar
@@ -658,12 +719,25 @@ export default function CreateOrganization() {
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => handleLogoPicture(event)}
+              onChange={(event) => {handleLogoPicture(event);handleError("getLogoPicture", null) } }
             />
           </Button>
+          {error && (
+            <div
+            style={{
+              color: "#d32f2f",
+              fontSize: 12,
+              marginTop: 5,
+              fontWeight: 400,
+            }}
+            >
+             {error.getLogoPicture}
+            </div>
+          )}
         </Grid>
         <Grid item md={3} lg={3}>
           <Avatar
+          onFocus={()=>handleError("getLogoPicturePath", null)}
             alt="Category Icon"
             src={getLogoPicturePath}
             variant="circular"
@@ -682,7 +756,7 @@ export default function CreateOrganization() {
         >
           <Button
             style={{
-              backgroundColor: "#00b894",
+              backgroundColor: "#273c75",
               borderRadius: 0,
               width: 100,
               height: 40,

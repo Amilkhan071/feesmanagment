@@ -41,7 +41,7 @@ export default function CreateCourse() {
 
   const navigate = useNavigate();
   const params = useParams();
-  //(params.crsid)
+
   const searchById = async () => {
     let body = { courseId: params.crsid };
     let record = await postData("course/displayById", body);
@@ -72,11 +72,18 @@ export default function CreateCourse() {
       let result = await postData("course/updateRecord", body);
       console.log("hh", result);
       if (result) {
-        alert("Course Updated..");
-      navigate("/dashboard/DisplayCourse");
-
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: "Updated",
+        });
+        navigate("/dashboard/DisplayCourse");
       } else {
-        alert("Fail to Update Course...");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: "Not Updated",
+        });
       }
     }
   };
@@ -96,9 +103,17 @@ export default function CreateCourse() {
       config
     );
     if (result) {
-      alert("Course Logo Updated...");
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "logo Updated",
+      });
     } else {
-      alert("Failed To Update Course Logo...");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops...",
+        text: "logo Not Updated",
+      });
     }
   };
   const handleError = (inputs, value) => {
@@ -184,7 +199,24 @@ export default function CreateCourse() {
             </Toolbar>
           </AppBar>
         </Grid>
-
+        <Grid item md={12}>
+          <div
+            style={{
+              padding: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              letterSpacing: 3,
+            }}
+          >
+            <div>
+              <img src="/course.png" width="60" />
+            </div>
+            <div style={{ marginLeft: 20 }}>Time Register</div>
+          </div>
+        </Grid>
         <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             error={!error.getOrgName ? false : true}
@@ -360,7 +392,7 @@ export default function CreateCourse() {
         >
           <Button
             style={{
-              backgroundColor: "#00b894",
+              backgroundColor: "#273c75",
               borderRadius: 0,
               width: 100,
               height: 40,

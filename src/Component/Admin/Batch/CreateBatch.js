@@ -27,15 +27,19 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { getData, postData } from "../../Services/FetchNodeServices";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import Swal from "sweetalert2";
 
 export default function CreateBatch() {
+  const storedState = JSON.parse(localStorage.getItem("admin"));
   const [selectedDate1, setSelectedDate1] = useState(
     new Date("2014-08-18T21:11:54")
   );
   const [selectedDate2, setSelectedDate2] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const [organizationId, setOrganizationId] = useState("");
+  const [organizationId, setOrganizationId] = useState(
+    storedState.organizationid
+  );
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
   const [error, setError] = useState({});
@@ -49,7 +53,6 @@ export default function CreateBatch() {
   const [getBatchName, setBatchName] = useState("");
   const [getStatus, setStatus] = useState("");
 
-
   const [getMon, setMon] = useState({ value: "", state: false });
   const [getTue, setTue] = useState({ value: "", state: false });
   const [getWed, setWed] = useState({ value: "", state: false });
@@ -57,8 +60,6 @@ export default function CreateBatch() {
   const [getFri, setFri] = useState({ value: "", state: false });
   const [getSat, setSat] = useState({ value: "", state: false });
   const [getReg, setReg] = useState({ value: "", state: false });
-
- 
 
   const handleChangeMon = (event) => {
     if (event.target.checked)
@@ -109,8 +110,8 @@ export default function CreateBatch() {
       setReg({ value: "", state: event.target.checked });
     }
   };
- 
-  const handleBatch = () =>{
+
+  const handleBatch = () => {
     var date = new Date();
     var month = [
       "jan",
@@ -124,10 +125,10 @@ export default function CreateBatch() {
       "sep",
       "oct",
       "nov",
-      "dec", ]; 
-   
-   
-   var status =
+      "dec",
+    ];
+
+    var status =
       getMon.value +
       "" +
       getTue.value +
@@ -155,9 +156,7 @@ export default function CreateBatch() {
     setBatchName(batchname);
   };
 
-
   var navigate = useNavigate();
-
 
   const changeBatchTime = (event) => {
     var crst = event.target.value.split(",");
@@ -170,24 +169,32 @@ export default function CreateBatch() {
     setCourseName(crs[1]);
   };
   const handleSubmit = async () => {
-    if(validation()){
-    var time = batchTime.split(",");
-    var crs = courseId.split(",");
-    var body = {
-      organizationid: organizationId,
-      coursename: crs[1],
-      timing: time[1],
-      status: getStatus,
-      batchname: getBatchName,
-    };
-   var  result = await postData("batch/addNewRecord", body);
-    if (result) {
-     alert('submitted')
-     navigate("/dashboard/DisplayBatch")
-     } else {
-alert('failed')
+    if (validation()) {
+      var time = batchTime.split(",");
+      var crs = courseId.split(",");
+      var body = {
+        organizationid: organizationId,
+        coursename: courseId,
+        timing: batchTime,
+        status: getStatus,
+        batchname: getBatchName,
+      };
+      var result = await postData("batch/addNewRecord", body);
+      if (result) {
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: "Submited",
+        });
+        navigate("/dashboard/DisplayBatch");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Ooops...",
+          text: "Not Submited",
+        });
+      }
     }
-  }
   };
 
   const validation = () => {
@@ -221,11 +228,8 @@ alert('failed')
     var body = { organizationid: 7 };
     var list = await postData("course/displayAll", body);
     setCourseNameList(list);
-    // alert(JSON.stringify(list))
-    //console.log(list);
   };
 
-  
   const showCourse = () => {
     return courseNameList?.map((item) => (
       <MenuItem value={`${item.courseid},${item.coursename}`}>
@@ -253,8 +257,6 @@ alert('failed')
     fillCourse();
   }, []);
 
- 
-
   return (
     <div className="store_form_1">
       <Grid
@@ -274,7 +276,7 @@ alert('failed')
                 <Grid item xs={10}>
                   <div>
                     <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                    Batch
+                      Batch
                     </div>
                   </div>
                 </Grid>
@@ -300,7 +302,7 @@ alert('failed')
                         </Hidden>
                       </div>
                       <div style={{ fontSize: 14, fontWeight: "bold" }}>
-                      Batch List
+                        Batch List
                       </div>
                     </div>
                   </div>
@@ -365,7 +367,6 @@ alert('failed')
               value={courseId}
               onChange={(event) => handleCourse(event)}
             >
-              <MenuItem value={"Choose Course..."}>Choose Course...</MenuItem>
               {showCourse()}
             </Select>
           </FormControl>
@@ -386,9 +387,9 @@ alert('failed')
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Time</InputLabel>
             <Select
-             error={!error.batchTime ? false : true}
-             //helperText={error.courseId}
-             onFocus={() => handleError("batchTime", null)}
+              error={!error.batchTime ? false : true}
+              //helperText={error.courseId}
+              onFocus={() => handleError("batchTime", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchTime}
@@ -415,98 +416,109 @@ alert('failed')
           )}
         </Grid>
         <Grid item xs={12}>
-            <FormGroup row>
-              <FormLabel component="legend" >
-                Status
-              </FormLabel>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getMon.state}
-                    onChange={(event) => handleChangeMon(event)}
-                    value="M"
-                  />
-                }
-                label="Monday"
-              />
+          <FormGroup row>
+            <FormLabel
+              component="legend"
+              style={{
+                colors: "#273c75",
+                marginTop: 10,
+                fontSize: 20,
+                fontWeight: "bold",
+                paddingRight: 10,
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getTue.state}
-                    onChange={(event) => handleChangeTue(event)}
-                    value="T"
-                  />
-                }
-                label="Tuesday"
-              />
+                letterSpacing: 3,
+              }}
+            >
+              Status
+            </FormLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getMon.state}
+                  onChange={(event) => handleChangeMon(event)}
+                  value="M"
+                />
+              }
+              label="Monday"
+            />
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getWed.state}
-                    onChange={(event) => handleChangeWed(event)}
-                    value="W"
-                  />
-                }
-                label="Wednesday"
-              />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getTue.state}
+                  onChange={(event) => handleChangeTue(event)}
+                  value="T"
+                />
+              }
+              label="Tuesday"
+            />
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getThu.state}
-                    onChange={(event) => handleChangeThu(event)}
-                    value="Th"
-                  />
-                }
-                label="Thursday"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getFri.state}
-                    onChange={(event) => handleChangeFri(event)}
-                    value="F"
-                  />
-                }
-                label="Friday"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getSat.state}
-                    onChange={(event) => handleChangeSat(event)}
-                    value="S"
-                  />
-                }
-                label="Saturday"
-              />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getWed.state}
+                  onChange={(event) => handleChangeWed(event)}
+                  value="W"
+                />
+              }
+              label="Wednesday"
+            />
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={getReg.state}
-                    onChange={(event) => handleChangeReg(event)}
-                    value="R"
-                  />
-                }
-                label="Regular"
-              />
-            </FormGroup>
-          </Grid>
-       
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getThu.state}
+                  onChange={(event) => handleChangeThu(event)}
+                  value="t"
+                />
+              }
+              label="Thursday"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getFri.state}
+                  onChange={(event) => handleChangeFri(event)}
+                  value="F"
+                />
+              }
+              label="Friday"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getSat.state}
+                  onChange={(event) => handleChangeSat(event)}
+                  value="S"
+                />
+              }
+              label="Saturday"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getReg.state}
+                  onChange={(event) => handleChangeReg(event)}
+                  value="R"
+                />
+              }
+              label="Regular"
+            />
+          </FormGroup>
+        </Grid>
+
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
-             error={!error.getBatchName ? false : true}
-             helperText={error.getBatchName}
-             onFocus={() => handleError("getBatchName", null)}
+            error={!error.getBatchName ? false : true}
+            helperText={error.getBatchName}
+            onFocus={() => handleError("getBatchName", null)}
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Batch Name"
             variant="standard"
             value={getBatchName}
-            // onChange={(e) => setInputBatchName(e.target.value.trim())}
+            onChange={(e) => setInputBatchName(e.target.value.trim())}
             sx={(theme) => {
               return {
                 "& label.Mui-focused": {
@@ -522,7 +534,8 @@ alert('failed')
         </Grid>
         <Grid
           item
-          md={2}
+          md={4}
+          lg={4}
           sm={6}
           xs={6}
           style={{
@@ -541,7 +554,6 @@ alert('failed')
               fontSize: 12,
             }}
             onClick={handleBatch}
-            // onClick={() => handleTarnsferStatus()}
             variant="contained"
             fullWidth
           >

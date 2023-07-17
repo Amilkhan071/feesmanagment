@@ -12,6 +12,7 @@ import "../../Stylesheet2.css";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { postData, postDataAndImage } from "../Services/FetchNodeServices";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 export default function AdminLogin() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -46,10 +47,18 @@ var navigate =useNavigate()
       var response = await postData("adminlogin/adminCheck", body);
       alert(JSON.stringify(response));
       if (response) {
-        alert("Login sucessfully");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: 'Login Successfully',
+        });
         navigate('/maindashboard')
       } else {
-        alert("error");
+        Swal.fire({
+          icon: "error",
+          title: "Ooops....",
+          text: 'Login Failed',
+        });
       }
     }
   };

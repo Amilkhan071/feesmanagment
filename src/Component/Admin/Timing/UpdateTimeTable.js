@@ -17,6 +17,7 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { postData } from "../../Services/FetchNodeServices";
+import Swal from "sweetalert2";
 
 export default function UpdateTimeTable() {
   const params = useParams();
@@ -40,14 +41,17 @@ export default function UpdateTimeTable() {
       setSelectedDate1(st);
       setSelectedDate2(et);
     } else {
-      alert("Failed");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops..",
+        text: 'Fetch Failed',
+      });
     }
   };
   useEffect(() => {
     searchById();
   }, []);
   const handleDateChange1 = (date) => {
-    alert(date);
     var time = new Date(date);
     var h = time.toLocaleString("en-US", {
       hour: "numeric",
@@ -78,10 +82,18 @@ export default function UpdateTimeTable() {
       };
       var result = await postData("timingtable/updateRecord", body);
       if (result) {
-        alert("updated");
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: 'updated',
+        });
         navigate("/dashboard/DisplayTiming");
       } else {
-        alert("failed");
+        Swal.fire({
+          icon: "error",
+          title: "Ooops....",
+          text: 'Not Updated',
+        });
       }
     }
   };
@@ -180,7 +192,7 @@ export default function UpdateTimeTable() {
             <div style={{ marginLeft: 20 }}>Time Register</div>
           </div>
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             error={!error.organizationId ? false : true}
             helperText={error.organizationId}
@@ -205,7 +217,7 @@ export default function UpdateTimeTable() {
           />
         </Grid>
 
-        <Grid item md={12} lg={12} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               value={selectedDate1}
@@ -235,7 +247,7 @@ export default function UpdateTimeTable() {
           </LocalizationProvider>
         </Grid>
 
-        <Grid item md={12} lg={12} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               value={selectedDate2}
