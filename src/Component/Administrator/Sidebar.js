@@ -158,7 +158,7 @@ export default function Sidebar() {
                
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    onClick={() => navigate("/dashboard/createstudent")}
+                    onClick={() => navigate("/dashboard/displayStudent")}
                     
                   >
                     <ListItemText primary="Student" />

@@ -27,6 +27,9 @@ import UpdateTimeTable from "../Admin/Timing/UpdateTimeTable";
 import CreateBatch from "../Admin/Batch/CreateBatch";
 import DisplayBatch from "../Admin/Batch/DisplayBatch";
 import UpdateBatch from "../Admin/Batch/UpdateBatch";
+import DisplayStudent from "../Admin/StudentDetail/DisplayStudent";
+import CreateStudent from "../Admin/StudentDetail/CreateStudent";
+import UpdateStudent from "../Admin/StudentDetail/UpdateStudent";
 
 export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -121,6 +124,19 @@ export default function Dashboard() {
              <Route
             element={<UpdateBatch />}
             path={"/UpdateBatch/:batchid"}
+          />
+          
+          <Route
+            element={<DisplayStudent />}
+            path={"/DisplayStudent"}
+          />
+          <Route
+            element={<CreateStudent />}
+            path={"/CreateStudent"}
+          />
+          <Route
+            element={<UpdateStudent />}
+            path={"/UpdateStudent/:stdid"}
           />
         </Routes>
       </Grid>
