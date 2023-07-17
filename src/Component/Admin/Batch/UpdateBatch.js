@@ -289,7 +289,7 @@ export default function UpdateBatch() {
       }
     }
   };
-
+  
   return (
     <div className="store_form_1">
       <Grid
