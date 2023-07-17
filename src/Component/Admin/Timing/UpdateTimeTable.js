@@ -32,8 +32,8 @@ export default function UpdateTimeTable() {
   const searchById = async () => {
     var body = { transactionid: params.trnsid };
     var record = await postData("timingtable/displayById", body);
-    console.log(record);
-    alert(JSON.stringify(record));
+   // console.log(record);
+  //  alert(JSON.stringify(record));
     if (record != null) {
       setOrganizationId(record.organizationid);
       var st = new Date("2019/01/01 " + record.btstart + " GMT+0530");
@@ -189,7 +189,7 @@ export default function UpdateTimeTable() {
             <div>
               <img src="/course.png" width="60" />
             </div>
-            <div style={{ marginLeft: 20 }}>Time Register</div>
+            <div style={{ marginLeft: 20 }}>Update Time</div>
           </div>
         </Grid>
         <Grid item md={4} lg={4} sm={12} xs={12}>
@@ -200,7 +200,7 @@ export default function UpdateTimeTable() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Organization Id"
-            variant="standard"
+            variant="outlined"
             value={organizationId}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
@@ -225,7 +225,7 @@ export default function UpdateTimeTable() {
               label="Batch Time Start"
               slotProps={{
                 textField: {
-                  variant: "standard",
+                  variant: "outlined",
                   fullWidth: "100%",
                   helperText: error.btStart,
                   error: !error.btStart ? false : true,
@@ -255,7 +255,7 @@ export default function UpdateTimeTable() {
               label="Batch Time End"
               slotProps={{
                 textField: {
-                  variant: "standard",
+                  variant: "outlined",
                   fullWidth: "100%",
                   helperText: error.selectedDate2,
                   error: !error.selectedDate2 ? false : true,

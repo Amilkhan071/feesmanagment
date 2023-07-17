@@ -182,7 +182,7 @@ export default function TimeTable() {
             inputProps={{maxLength:10, style: { color: "#000" }, }}
             id="standard-basic"
             label="Organization Id"
-            variant="standard"
+            variant="outlined"
             value={organizationId}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
@@ -208,7 +208,7 @@ export default function TimeTable() {
               label="Batch Start Time"
               slotProps={{
                 textField: {
-                  variant: "standard",
+                  variant: "outlined",
                   fullWidth: "100%",
                   required:true
                 },
@@ -237,7 +237,7 @@ export default function TimeTable() {
               onError={!error.selectedDate2 ? false : true}
               slotProps={{
                 textField: {
-                  variant: "standard",
+                  variant: "outlined",
                   fullWidth: "100%",
                   required:true
                 },

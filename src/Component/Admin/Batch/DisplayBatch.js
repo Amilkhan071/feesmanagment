@@ -95,12 +95,12 @@ export default function DisplayBatch() {
               style={{ borderRadius: 0 }}
               title={false}
               columns={[
-                { title: "Batch_Id", field: "batchid" },
-                { title: "Course_name", field: "coursename" },
+                { title: "Batch Id", field: "batchid" },
+                { title: "Course name", field: "coursename" },
                 { title: "Time", field: "batchtime" },
                 { title: "Status", field: "status" },
-                { title: "Batch_name", field: "batchname" },
-                { title: "Organization_id", field: "organizationid" },
+                { title: "Batch name", field: "batchname" },
+                { title: "Organization id", field: "organizationid" },
               ]}
               data={timeTable}
               actions={[
@@ -133,7 +133,7 @@ export default function DisplayBatch() {
                 cellStyle: {
                   fontSize: 12,
                 },
-                tableLayout: "fixed",
+               // tableLayout: "fixed",
               }}
             />
           </Grid>

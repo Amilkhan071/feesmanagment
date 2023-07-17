@@ -516,7 +516,7 @@ export default function CreateBatch() {
             inputProps={{ style: { color: "#000" } }}
             id="standard-basic"
             label="Batch Name"
-            variant="standard"
+            variant="outlined"
             value={getBatchName}
             onChange={(e) => setInputBatchName(e.target.value.trim())}
             sx={(theme) => {
@@ -535,7 +535,7 @@ export default function CreateBatch() {
         <Grid
           item
           md={4}
-          lg={4}
+          lg={2}
           sm={6}
           xs={6}
           style={{
