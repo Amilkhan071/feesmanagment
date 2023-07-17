@@ -109,6 +109,7 @@ export default function CreateStudent() {
                 text: 'Record Submitted..',
               });
               window.location.reload();
+              navigate('/dashboard/displayStudent')
           } else {
         Swal.fire({
           icon: "error",

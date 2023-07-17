@@ -104,7 +104,6 @@ export default function CreateOrganization() {
         title: "Oops....",
           text: 'Not Submitted',
         });
-
     }
   }
   };
@@ -370,7 +369,7 @@ export default function CreateOrganization() {
             <div style={{ marginLeft: 20 }}>Organization Ragitration</div>
           </div>
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             error={!error.getOrgName ? false : true}
             helperText={error.getOrgName}
@@ -394,7 +393,7 @@ export default function CreateOrganization() {
             fullWidth
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Owner Name"
@@ -418,7 +417,7 @@ export default function CreateOrganization() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
@@ -436,7 +435,7 @@ export default function CreateOrganization() {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={4}>
           <FormControl error={!error.getGender ? false : true}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender
@@ -466,31 +465,7 @@ export default function CreateOrganization() {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item md={12} lg={12} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Address"
-            variant="outlined"
-            error={!error.getAddress ? false : true}
-            helperText={error.getAddress}
-            onFocus={() => handleError("getAddress", null)}
-            value={getAddress}
-            onChange={(e) => setAddress(e.target.value.trimStart())}
-            fullWidth
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
-                },
-
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
-        </Grid>
-
+        
         <Grid item md={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
@@ -578,7 +553,7 @@ export default function CreateOrganization() {
           )}
         </Grid>
 
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Mobile"
@@ -603,7 +578,7 @@ export default function CreateOrganization() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Phone"
@@ -629,7 +604,7 @@ export default function CreateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Email Address"
@@ -654,7 +629,7 @@ export default function CreateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Password"
@@ -693,10 +668,43 @@ export default function CreateOrganization() {
             }}
           />
         </Grid>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Address"
+            variant="outlined"
+            error={!error.getAddress ? false : true}
+            helperText={error.getAddress}
+            onFocus={() => handleError("getAddress", null)}
+            value={getAddress}
+            onChange={(e) => setAddress(e.target.value.trimStart())}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
 
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+        </Grid>
+
+        <Grid item md={1} lg={1}>
+          <Avatar
+            alt="Category Icon"
+            src={getOwnerPicturePath}
+            variant="rounded"
+            sx={{ width: 56, height: 56 }}
+          />
+        </Grid>
+        
         <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth  >
-            Picture
+           Upload Owner Picture
             <input
               hidden
               accept="image/*"
@@ -720,18 +728,18 @@ export default function CreateOrganization() {
           )}
 
         </Grid>
-        <Grid item md={3} lg={3}>
+        <Grid item md={1} lg={1}>
           <Avatar
+          onFocus={()=>handleError("getLogoPicturePath", null)}
             alt="Category Icon"
-            src={getOwnerPicturePath}
-            variant="circular"
+            src={getLogoPicturePath}
+            variant="rounded"
             sx={{ width: 56, height: 56 }}
           />
         </Grid>
-
         <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
-            Logo
+           Upload Organisation Logo
             <input
               hidden
               accept="image/*"
@@ -753,15 +761,7 @@ export default function CreateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-          onFocus={()=>handleError("getLogoPicturePath", null)}
-            alt="Category Icon"
-            src={getLogoPicturePath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-        </Grid>
+        
 
         <Grid
           item

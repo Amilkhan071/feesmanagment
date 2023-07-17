@@ -105,6 +105,7 @@ export default function UpdateStudent() {
           title: "Done",
           text: "Record update",
         });
+        navigate('/dashboard/displayStudent')
       } else {
         Swal.fire({
           icon: "error",
@@ -232,8 +233,7 @@ export default function UpdateStudent() {
       studentid: params.stdid,
       organizationid: storedState.organizationid,
     };
-    let record = await postData("studetail/displayById", body);
-    // alert(JSON.stringify(record))
+    let record = await postData("studetail/displayById", body)
 
     if (record != null) {
       setstuname(record.studentname); // database column name studentname like this
@@ -261,6 +261,11 @@ export default function UpdateStudent() {
       setCurrentDate(record.currentdate);
       setRemark(record.remark);
     } else {
+      Swal.fire({
+        icon: "error",
+        title: "Ooops..",
+        text: "Does Not Fetch",
+      });
     }
   };
 
@@ -289,9 +294,18 @@ export default function UpdateStudent() {
       config
     );
     if (result) {
-      alert("Logo  Updated..");
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "Logo  Updated..",
+      });
+  
     } else {
-      alert("Fail to Update Logo...");
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: "Fail to Update Logo...",
+      });
     }
   };
 
