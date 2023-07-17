@@ -248,6 +248,8 @@ export default function UpdateOrganization() {
         isValid = false;
       }
     }
+
+
     
     if (!getPassword) {
       handleError("getPassword", "Please Input password");
