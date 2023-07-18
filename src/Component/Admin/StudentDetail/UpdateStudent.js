@@ -332,10 +332,8 @@ export default function UpdateStudent() {
       setCourseId(record.courseid);
       setCurrentDate(record.currentdate);
       setRemark(record.remark);
-    //  var result = await postData("studetail/getbtbcs", record.batchid);
-     // alert(record.batchid)
-
-     // setBatchId(result.data)
+      fillbatch( record.courseid)
+     setBatchId(record.batchid)
     } else {
       Swal.fire({
         icon: "error",
