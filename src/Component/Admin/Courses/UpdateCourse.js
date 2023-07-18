@@ -45,13 +45,19 @@ export default function CreateCourse() {
   const searchById = async () => {
     let body = { courseId: params.crsid };
     let record = await postData("course/displayById", body);
-    if (record != null) {
-      setCourseName(record.coursename);
-      setCourseDuration(record.courseduration);
-      setCourseFees(record.coursefees);
-      setDescription(record.description);
-      setCourseLogoPath(`${ServerURL}/images/${record.courselogo}`);
-    } else {
+    if (record.data != null) {
+      setCourseName(record.data.coursename);
+      setCourseDuration(record.data.courseduration);
+      setCourseFees(record.data.coursefees);
+      setDescription(record.data.description);
+      setCourseLogoPath(`${ServerURL}/images/${record.data.courselogo}`);
+    } else
+     {
+      Swal.fire({
+        icon: "error",
+        title: "Ooops....",
+        text: record.message,
+      });
     }
   };
   useEffect(() => {
@@ -68,21 +74,19 @@ export default function CreateCourse() {
         organizationid: storedState.organizationid,
       };
 
-      console.log("body Detail", body);
-      let result = await postData("course/updateRecord", body);
-      console.log("hh", result);
-      if (result) {
+     var  result = await postData("course/updateRecord", body);
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Updated",
+          text: result.message,
         });
         navigate("/dashboard/DisplayCourse");
       } else {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Not Updated",
+          text: result.message,
         });
       }
     }
@@ -102,17 +106,17 @@ export default function CreateCourse() {
       formData,
       config
     );
-    if (result) {
+    if (result.status) {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: "logo Updated",
+        text: result.message,
       });
     } else {
       Swal.fire({
         icon: "error",
         title: "Ooops...",
-        text: "logo Not Updated",
+        text: result.message,
       });
     }
   };

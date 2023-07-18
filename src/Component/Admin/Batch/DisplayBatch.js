@@ -24,8 +24,9 @@ export default function DisplayBatch() {
   const fetchAllBatch = async () => {
     var body = { organizationid: storedState.organizationid };
     var result = await postData("batch/displayAll", body);
-    setTimeTable(result);
+    setTimeTable(result.data);
   };
+
   useEffect(function () {
     fetchAllBatch();
   }, []);
@@ -50,11 +51,11 @@ export default function DisplayBatch() {
     var body = { batchid: batchid };
     var result = await postData("batch/deleteBatch", body);
 
-    if (result) {
+    if (result.status) {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: "deleted",
+        text: result.message,
       });
 
       window.location.reload();
@@ -62,7 +63,7 @@ export default function DisplayBatch() {
       Swal.fire({
         icon: "error",
         title: "Oops....",
-        text: "Store Does Note Deleted",
+        text: result.message ,
       });
     }
   };

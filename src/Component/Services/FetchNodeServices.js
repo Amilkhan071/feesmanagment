@@ -46,8 +46,8 @@ const getData = async (url) => {
       var response = await axios.post(`${ServerURL}/${url}`, formData, config);
       console.log(response.data);
       //  var result=response.data[0].result
-      var result = response.data[0].result;
-      console.log('mmm', result);
+      var result = await response.data;
+      console.log('mmmsfafaf', response);
       return result;
     } catch (e) {
       console.log(e);

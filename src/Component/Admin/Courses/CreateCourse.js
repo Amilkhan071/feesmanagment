@@ -32,27 +32,26 @@ export default function CreateCourse() {
       formData.append("description", getDescription);
       formData.append("courseLogo", getCourseLogo);
 
-      let config = { headers: { "content-type": "multipart/form-data" } };
+     var config = { headers: { "content-type": "multipart/form-data" } };
       console.log("config :", formData);
-      let result = await postDataAndImage(
+     var result = await postDataAndImage(
         "course/addNewCourse",
         formData,
         config
       );
-      console.log("result", result);
-
-      if (result) {
+ 
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Submited",
+          text: result.message,
         });
         navigate('/dashboard/displaycourse')
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops...",
-          text: "Not Submitted",
+          text: result.message,
         });
       }
     }
