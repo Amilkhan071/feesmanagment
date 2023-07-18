@@ -179,15 +179,14 @@ export default function UpdateBatch() {
     let body = { batchid: params.batchid };
     let record = await postData("batch/displayById", body);
     
-    if (record != null) {
-      setOrganizationId(record.organizationid);
-      
-      setCourseId(record.coursename);
-      setCourseName(record.tempcoursename);
-      setBST(record.starttime + " to " + record.endtime);
-      setBatchTime(record.batchtime);
-      setStatus(record.status);
-      var sts = record.status;
+    if (record.data!= null) {
+      setOrganizationId(record.data.organizationid);
+      setCourseId(record.data.coursename);
+      setCourseName(record.data.tempcoursename);
+      setBST(record.data.starttime + " to " + record.data.endtime);
+      setBatchTime(record.data.batchtime);
+      setStatus(record.data.status);
+      var sts = record.data.status;
 
       for (var i = 0; i < sts.length; i++) {
         if (sts[i] == "M") {
@@ -207,11 +206,16 @@ export default function UpdateBatch() {
         }
       }
 
-      setBatchName(record.batchname);
+      setBatchName(record.data.batchname);
     } else {
-      alert("failed");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops...",
+        text: record.message,
+      });
     }
   }; 
+
   const validation = () => {
     var isValid = true;
 
@@ -261,18 +265,18 @@ export default function UpdateBatch() {
         batchname: getBatchName,
       };
       let result = await postData("batch/updateBatch", body);
-      if (result[0].result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Updated",
+          text: result.message,
         });
         navigate("/dashboard/displaybatch");
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops...",
-          text: "Not Submitted",
+          text:result.message ,
         });
       }
     }

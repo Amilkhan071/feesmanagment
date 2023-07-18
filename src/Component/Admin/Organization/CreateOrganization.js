@@ -92,12 +92,12 @@ export default function CreateOrganization() {
         formData,
         config
       );
-      if (result) {
+      if (result.status) {
        
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: 'Submitted',
+          text: result.message,
         });
        
         navigate("/maindashboard/displayorganization");
@@ -105,7 +105,7 @@ export default function CreateOrganization() {
       Swal.fire({
         icon: "error",
         title: "Oops....",
-          text: 'Not Submitted',
+          text: result.message,
         });
     }
   }
@@ -766,7 +766,6 @@ export default function CreateOrganization() {
             sx={{ width: 56, height: 56 }}
           />
         </Grid>
-        
         <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth  >
            Upload Owner Picture

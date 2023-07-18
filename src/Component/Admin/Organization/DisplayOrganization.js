@@ -11,16 +11,14 @@ import moment from "moment/moment";
 
 export default function DisplayOrganization() {
   const [organization, setOrganization] = useState([]);
-  const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
 
 
   const fetchAllOrganization=async()=>{
     var list = await getData('organization/displayAll')
-    console.log(list)
-     setOrganization(list)
-    // alert(JSON.parse(list))
+    console.log(list.data)
+     setOrganization(list.data)
    }
    useEffect(function(){
      fetchAllOrganization()
@@ -47,13 +45,15 @@ export default function DisplayOrganization() {
   const handleDelete=async(id)=>{
     var body={'organizationid':id}
     var result=await postData('organization/deleteRecord',body)
-    if(result)
+    if(result.status)
     {
         Swal.fire({
             icon: "success",
             title: "Done",
-            text: 'deleted',
+            text: result.message,
           });
+         
+         
           window.location.reload();
       
  
@@ -63,7 +63,7 @@ export default function DisplayOrganization() {
         Swal.fire({
             icon: "error",
             title: "Oops....",
-            text: "Store Does Note Deleted",
+            text: result.message,
           });
     }
   

@@ -94,43 +94,59 @@ export default function UpdateOrganization() {
       status: getStatus
     };
     let result = await postData("organization/updateRecord", body);
-    if (result) {
-      alert("success");
+    if (result.status) {
+    
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: result.message,
+      });
       navigate('/maindashboard/displayorganization')
     } else {
-      alert("failed");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops...",
+        text: result.message,
+      });
+    
     }
   }
   };
   const searchById = async () => {
     var body = { organizationid: params.orgid };
     var record = await postData("organization/displayById", body);
-   // alert(record.birthdate)
-    if (record != null) {
-      setRecord(record);
-      setOrgName(record.organizationname);
+    if (record.data != null) {
+      setRecord(record.data);
+      setOrgName(record.data.organizationname);
 
-      setOwnerName(record.ownername);
-      var bd = new Date(record.birthdate);
+      setOwnerName(record.data.ownername);
+      var bd = new Date(record.data.birthdate);
       var tbd = bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
       setDob(tbd);
       //alert(tbd)
-      setGender(record.gender);
-      setAddress(record.address);
-      setState(record.orgstate);
-      setCityData(StateCity[record.orgstate]);
-      setCity(record.orgcity);
-      setMobile(record.mobile);
-      setPhone(record.phone);
-      setEmail(record.email);
-      setPassword(record.password);
-      setCnfmPassword(record.password)
-      setStatus(record.status)
-      setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
-      setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
-      setLogoPicture(record.logo)
-      setOwnerPicture(record.picture)
-    } else {
+      setGender(record.data.gender);
+      setAddress(record.data.address);
+      setState(record.data.orgstate);
+      setCityData(StateCity[record.data.orgstate]);
+      setCity(record.data.orgcity);
+      setMobile(record.data.mobile);
+      setPhone(record.data.phone);
+      setEmail(record.data.email);
+      setPassword(record.data.password);
+      setCnfmPassword(record.data.password)
+      setStatus(record.data.status)
+      setOwnerPicturePath(`${ServerURL}/images/${record.data.picture}`);
+      setLogoPicturePath(`${ServerURL}/images/${record.data.logo}`);
+      setLogoPicture(record.data.logo)
+      setOwnerPicture(record.data.picture)
+    } 
+    else {
+      Swal.fire({
+        icon: "error",
+        title: "Ooops....",
+        text: record.message,
+      });
+
     }
   };
 
@@ -176,10 +192,20 @@ export default function UpdateOrganization() {
       formData,
       config
     );
-    if (result) {
-      alert("update");
+    if (result.status) {
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: result.message,
+      });
+      
+
     } else {
-      alert("not update");
+      Swal.fire({
+        icon: "error",
+        title: "Ooops....",
+        text: result.message,
+      });
     }
   };
 
@@ -193,11 +219,11 @@ export default function UpdateOrganization() {
       formData,
       config
     );
-    if (result) {
+    if (result.status) {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: 'Updated',
+        text: result.message,
       });
       
 
@@ -205,7 +231,7 @@ export default function UpdateOrganization() {
       Swal.fire({
         icon: "error",
         title: "Ooops....",
-        text: 'Not Updated',
+        text: result.message,
       });
     }
   };

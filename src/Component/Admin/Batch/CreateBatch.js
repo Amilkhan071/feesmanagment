@@ -172,11 +172,11 @@ export default function CreateBatch() {
         batchname: getBatchName,
       };
       var result = await postData("batch/addNewRecord", body);
-      if (result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Submited",
+          text: result.message,
         });
         navigate("/dashboard/DisplayBatch");
       } else {

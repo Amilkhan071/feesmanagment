@@ -18,14 +18,13 @@ import Swal from "sweetalert2";
 export default function DisplayCourse() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
   const [organization, setOrganization] = useState([]);
-  const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
   const fetchAllOrganization = async () => {
     var body = { organizationid: storedState.organizationid };
     var list = await postData("course/displayAll", body);
-    console.log(list);
-    setOrganization(list);
+    console.log(list.data);
+    setOrganization(list.data);
   };
   useEffect(function () {
     fetchAllOrganization();
@@ -50,18 +49,18 @@ export default function DisplayCourse() {
   const handleDelete = async (id) => {
     var body = { courseId: id };
     var result = await postData("course/deleteCourse", body);
-    if (result) {
+    if (result.status) {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: "deleted",
+        text: result.message,
       });
       window.location.reload();
     } else {
       Swal.fire({
         icon: "error",
         title: "Oops....",
-        text: "Store Does Note Deleted",
+        text: result.message,
       });
     }
   };
