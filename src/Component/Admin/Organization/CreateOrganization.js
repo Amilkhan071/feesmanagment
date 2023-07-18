@@ -28,7 +28,7 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Phone } from "@mui/icons-material";
+import { Password, Phone } from "@mui/icons-material";
 import { FormHelperText } from "@material-ui/core";
 import Swal from "sweetalert2";
 export default function CreateOrganization() {
@@ -47,16 +47,19 @@ export default function CreateOrganization() {
   const [getPassword, setPassword] = useState("");
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm,setShowConfirm]=useState('')
   const [getStatus, setStatus] = useState("");
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
-
+  const[cnfmPassword,setCnfmPassword]=useState("")
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
+  
+  const handleClickConfirmPassword = () => setShowConfirm((sho) => !sho);
+  
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -150,7 +153,7 @@ export default function CreateOrganization() {
     }
 
 
-    if (!/^[a-zA-Z()\s.]*$/.test(getOrgName)) {
+    if (!/^[a-zA-Z0-9()\s.]*$/.test(getOrgName)) {
       handleError("getOrgName", "Please check organization name");
       isValid = false;
     }
@@ -272,10 +275,24 @@ export default function CreateOrganization() {
     if (!getLogoPicture) {
       handleError("getLogoPicture", "Please Select logopicture");
       isValid = false;
-      
+      }
+
+  if(cnfmPassword){ 
+    if( getPassword !== cnfmPassword ){
+      handleError("cnfmPassword", "Password does not match");
+      isValid = false;
+    }
+
+  }
+
+  if(!cnfmPassword){ 
+ 
+      handleError("cnfmPassword", "Please Confirm Password");
+      isValid = false;
     }
 
   
+
 
     return isValid;
   };
@@ -475,7 +492,7 @@ export default function CreateOrganization() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getState}
-              label="Select State"
+              label="State"
               onChange={(event) => handleChangeState(event)}
             >
               {showState()}
@@ -504,7 +521,7 @@ export default function CreateOrganization() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCity}
-              label="Select City"
+              label="City"
               onChange={(event) => setCity(event.target.value)}
             >
               {showCity()}
@@ -532,7 +549,7 @@ export default function CreateOrganization() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getStatus}
-              label="Select Status"
+              label="Status"
               onChange={(event) => setStatus(event.target.value)}
             >
               <MenuItem value={"Valid"}>Valid</MenuItem>
@@ -667,12 +684,60 @@ export default function CreateOrganization() {
               };
             }}
           />
+
+
         </Grid>
+    
         <Grid item md={4} lg={4} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Confirm Password"
+            variant="outlined"
+            error={!error.cnfmPassword ? false : true}
+            helperText={error.cnfmPassword}
+            onFocus={() => handleError("cnfmPassword", null)}
+            value={cnfmPassword}
+            onChange={(e) => setCnfmPassword (e.target.value.trim())}
+            type={showConfirm ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showConfirm ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+
+          
+        </Grid>
+
+
+        <Grid item md={12} lg={12} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Address"
             variant="outlined"
+            multiline
+            rows={4}
             error={!error.getAddress ? false : true}
             helperText={error.getAddress}
             onFocus={() => handleError("getAddress", null)}

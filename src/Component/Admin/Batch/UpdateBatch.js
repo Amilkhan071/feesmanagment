@@ -31,6 +31,8 @@ import Swal from "sweetalert2";
 
 export default function UpdateBatch() {
   const params = useParams();
+  const storedState = JSON.parse(localStorage.getItem("admin"));
+
   const [organizationId, setOrganizationId] = useState("");
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
@@ -53,7 +55,33 @@ export default function UpdateBatch() {
   const [getFri, setFri] = useState({ value: "", state: false });
   const [getSat, setSat] = useState({ value: "", state: false });
   const [getReg, setReg] = useState({ value: "", state: false });
+  
+  const fillCourse = async () => {
+    var body = { organizationid:storedState.organizationid };
+    var list = await postData("course/displayAll", body);
+    setCourseNameList(list);
+  };
 
+  const showCourse = () => {
+    return courseNameList?.map((item) => (
+      <MenuItem value={`${item.courseid},${item.coursename}`}>
+        {item.coursename}
+      </MenuItem>
+    ));
+  };
+
+  const fillBatchTime = async () => {
+    let list = await getData("timingtable/displayAlltimingtable");
+    setBatchTimeList(list);
+  };
+
+  const showBatchTime = () => {
+    return batchTimeList.map((item) => (
+      <MenuItem value={`${item.transactionid},${item.btstart}`}>
+        {item.btstart} to {item.btend}
+      </MenuItem>
+    ));
+  };
   const handleChangeMon = (event) => {
     if (event.target.checked)
       setMon({ value: "M", state: event.target.checked });
@@ -113,7 +141,6 @@ export default function UpdateBatch() {
   };
   const handleCourse = (event) => {
     var crs = event.target.value.split(",");
-    //alert(event.target.value)
     setCourseId(event.target.value);
     setCourseName(crs[1]);
   };
@@ -134,40 +161,27 @@ export default function UpdateBatch() {
       "Nov",
       "Dec",
     ];
-    var status =
-      getMon.value +
+    var status = getMon.value + "" +getTue.value + "" + getWed.value +"" +getThu.value+
       "" +
-      getTue.value +
-      "" +
-      getWed.value +
-      "" +
-      getThu.value +
-      "" +
-      getFri.value +
+     getFri.value +
       "" +
       getSat.value +
       "" +
       getReg.value;
     setStatus(status);
-    var batchname =
-      month[date.getMonth()] +
-      "" +
-      date.getFullYear() +
-      "," +
-      courseName +
-      "," +
-      getBST +
-      "," +
-      status;
+  
+    var batchname = month[date.getMonth()] + "" + date.getFullYear() +"," +courseName +"," +getBST + "," + status;
     setBatchName(batchname);
   };
+ 
 
   const searchById = async () => {
     let body = { batchid: params.batchid };
     let record = await postData("batch/displayById", body);
-    //alert(JSON.stringify(record))
+    
     if (record != null) {
       setOrganizationId(record.organizationid);
+      
       setCourseId(record.coursename);
       setCourseName(record.tempcoursename);
       setBST(record.starttime + " to " + record.endtime);
@@ -197,8 +211,7 @@ export default function UpdateBatch() {
     } else {
       alert("failed");
     }
-  };
-
+  }; 
   const validation = () => {
     var isValid = true;
 
@@ -226,32 +239,7 @@ export default function UpdateBatch() {
     setError((prev) => ({ ...prev, [inputs]: value }));
   };
 
-  const fillCourse = async () => {
-    var body = { organizationid: 7 };
-    var list = await postData("course/displayAll", body);
-    setCourseNameList(list);
-  };
 
-  const showCourse = () => {
-    return courseNameList?.map((item) => (
-      <MenuItem value={`${item.courseid},${item.coursename}`}>
-        {item.coursename}
-      </MenuItem>
-    ));
-  };
-
-  const fillBatchTime = async () => {
-    let list = await getData("timingtable/displayAlltimingtable");
-    setBatchTimeList(list);
-  };
-
-  const showBatchTime = () => {
-    return batchTimeList.map((item) => (
-      <MenuItem value={`${item.transactionid},${item.btstart}`}>
-        {item.btstart} to {item.btend}
-      </MenuItem>
-    ));
-  };
 
   useState(() => {
     searchById();
@@ -265,7 +253,7 @@ export default function UpdateBatch() {
       var crs = courseId.split(",");
       let body = {
         batchid: params.batchid,
-        // courseid: crs[1],
+        // courseid: crs[0],
         // timings: time[1],
         courseid:courseId,
         timings:batchTime,
@@ -393,11 +381,10 @@ export default function UpdateBatch() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              label="Select Course"
+              label="Course"
               value={courseId}
               onChange={(event) => handleCourse(event)}
             >
-              <MenuItem value={"Choose Course..."}>Choose Course...</MenuItem>
               {showCourse()}
             </Select>
           </FormControl>
@@ -410,19 +397,26 @@ export default function UpdateBatch() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchTime}
-              label="Batch Name"
+              label="Batch Time"
               onChange={(event) => changeBatchTime(event)}
             >
-              <MenuItem value={"Choose State..."}>
-                Choose Batch Time...
-              </MenuItem>
+              
               {showBatchTime()}
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12}> <div  
+         style={{
+          colors: "#273c75",
+       
+          fontSize: 20,
+          fontWeight: "bold",
+          
+          letterSpacing: 3,
+        }}
+      >Status</div> </Grid>
         <Grid item xs={12}>
           <FormGroup row>
-            <FormLabel component="legend">Status</FormLabel>
             <FormControlLabel
               control={
                 <Checkbox
@@ -545,7 +539,6 @@ export default function UpdateBatch() {
               fontSize: 12,
             }}
             onClick={handleBatch}
-            // onClick={() => handleTarnsferStatus()}
             variant="contained"
             fullWidth
           >

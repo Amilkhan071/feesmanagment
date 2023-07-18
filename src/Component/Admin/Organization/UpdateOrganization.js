@@ -62,9 +62,13 @@ export default function UpdateOrganization() {
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
   const [getRecord, setRecord] = useState("");
+  const[cnfmPassword,setCnfmPassword]=useState("")
+  const [showConfirm,setShowConfirm]=useState('')
+
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickConfirmPassword = () => setShowConfirm((sho) => !sho);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -120,6 +124,7 @@ export default function UpdateOrganization() {
       setPhone(record.phone);
       setEmail(record.email);
       setPassword(record.password);
+      setCnfmPassword(record.password)
       setStatus(record.status)
       setOwnerPicturePath(`${ServerURL}/images/${record.picture}`);
       setLogoPicturePath(`${ServerURL}/images/${record.logo}`);
@@ -234,7 +239,7 @@ export default function UpdateOrganization() {
     }
 
 
-    if (!/^[a-zA-Z()\s.]*$/.test(getOrgName)) {
+    if (!/^[a-zA-Z0-9()\s.]*$/.test(getOrgName)) {
       handleError("getOrgName", "Please check organization name");
       isValid = false;
     }
@@ -361,6 +366,21 @@ export default function UpdateOrganization() {
       
     }
 
+    if(cnfmPassword){ 
+      if( getPassword !== cnfmPassword ){
+        handleError("cnfmPassword", "Password does not match");
+        isValid = false;
+      }
+  
+    }
+  
+    if(!cnfmPassword){ 
+   
+        handleError("cnfmPassword", "Please Confirm Password");
+        isValid = false;
+      }
+
+
     return isValid;
   };
 
@@ -436,7 +456,7 @@ export default function UpdateOrganization() {
             <div style={{ marginLeft: 20 }}>Update Ragistration</div>
           </div>
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             error={!error.getOrgName ? false : true}
             helperText={error.getOrgName}
@@ -460,7 +480,7 @@ export default function UpdateOrganization() {
             fullWidth
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Owner Name"
@@ -484,7 +504,7 @@ export default function UpdateOrganization() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
@@ -501,7 +521,7 @@ export default function UpdateOrganization() {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <FormControl error={!error.getGender ? false : true}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender
@@ -532,32 +552,9 @@ export default function UpdateOrganization() {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item md={12} lg={12} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Address"
-            variant="outlined"
-            error={!error.getAddress ? false : true}
-            helperText={error.getAddress}
-            onFocus={() => handleError("getAddress", null)}
-            value={getAddress}
-            onChange={(e) => setAddress(e.target.value.trimStart())}
-            fullWidth
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
-                },
+    
 
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
-        </Grid>
-
-        <Grid item md={4} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
             <Select
@@ -587,7 +584,7 @@ export default function UpdateOrganization() {
           )}
         </Grid>
 
-        <Grid item md={4} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">City</InputLabel>
             <Select
@@ -617,7 +614,7 @@ export default function UpdateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={4} sm={12} xs={12}>
+        <Grid item md={4}  lg={4}sm={12} xs={12}>
         <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                 <Select
@@ -648,7 +645,7 @@ export default function UpdateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Mobile"
@@ -673,7 +670,7 @@ export default function UpdateOrganization() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Phone"
@@ -699,7 +696,7 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Email Address (optional)"
@@ -724,7 +721,7 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-        <Grid item md={6} lg={6} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Password"
@@ -764,9 +761,92 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Confirm Password"
+            variant="outlined"
+            error={!error.cnfmPassword ? false : true}
+            helperText={error.cnfmPassword}
+            onFocus={() => handleError("cnfmPassword", null)}
+            value={cnfmPassword}
+            onChange={(e) => setCnfmPassword (e.target.value.trim())}
+            type={showConfirm ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showConfirm ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+
+          
+        </Grid>
+        <Grid item md={12} lg={12} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Address"
+            multiline
+            rows={4}
+            variant="outlined"
+            error={!error.getAddress ? false : true}
+            helperText={error.getAddress}
+            onFocus={() => handleError("getAddress", null)}
+            value={getAddress}
+            onChange={(e) => setAddress(e.target.value.trimStart())}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+        </Grid>
+
+
+      
+        <Grid item md={1} lg={1} sm={3} xs={3}>
+
+          <Avatar
+            alt="Picture"
+            src={getOwnerPicturePath}
+            variant="circular"
+            sx={{ width: 56, height: 56 }}
+          />
+
+       
+        </Grid>
+
+        <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
-            Picture
+          Select Owner Picture
+            
             <input
               hidden
               accept="image/*"
@@ -774,6 +854,15 @@ export default function UpdateOrganization() {
               type="file"
               onChange={(event) => {handleOwnerPicture(event);handleError("getOwnerPicture", null)}}
             />
+          </Button>
+          <Button
+            onClick={handleEditOwnerPicture}
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{marginTop:5}}
+          >
+            Edit Owner Picture
           </Button>
           {error && (
             <div
@@ -789,28 +878,22 @@ export default function UpdateOrganization() {
           )}
 
         </Grid>
-        <Grid item md={3} lg={3}>
+
+
+
+       
+        <Grid item md={1} lg={1} sm={3} xs={3}>
           <Avatar
-            alt="Picture"
-            src={getOwnerPicturePath}
+            alt="Logo"
+            src={getLogoPicturePath}
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-
          
-
-          <Button
-            onClick={handleEditOwnerPicture}
-            variant="contained"
-            color="primary"
-          >
-            Edit Picture
-          </Button>
         </Grid>
-
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
-            Logo
+           Select Organization Logo
             <input
               hidden
               accept="image/*"
@@ -818,6 +901,11 @@ export default function UpdateOrganization() {
               type="file"
               onChange={(event) => {handleLogoPicture(event);handleError("getLogoPicture", null)}}
             />
+          </Button>
+          <Button
+           style={{marginTop:5}}
+           onClick={handleEditLogo} variant="contained" color="primary" fullWidth>
+            Edit Organization Logo
           </Button>
           {error && (
             <div
@@ -833,19 +921,6 @@ export default function UpdateOrganization() {
           )}
 
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-            alt="Logo"
-            src={getLogoPicturePath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-         
-          <Button onClick={handleEditLogo} variant="contained" color="primary">
-            Edit Logo
-          </Button>
-        </Grid>
-
         <Grid
           item
           xs={12}
