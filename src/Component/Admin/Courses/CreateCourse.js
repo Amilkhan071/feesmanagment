@@ -86,7 +86,6 @@ export default function CreateCourse() {
     if (!getCourseLogo) {
         handleError("getCourseLogo", "Please Input Logo");
         isValid = false;
-        alert('hi')
       }
    
         if (!getDescription) {
@@ -99,7 +98,7 @@ export default function CreateCourse() {
 
     return isValid;
   };
-  const RegexLetter = /^[a-zA-Z\s]*$/;
+  const RegexLetter = /^[A-Z@~`!@#$%^&*()_=+\\\\';:\"\\/?>.<,-\s]*$/i;
 
   return (
     <div className="store_form_1">
@@ -299,6 +298,14 @@ export default function CreateCourse() {
             }}
           />
         </Grid>
+        <Grid item md={1} lg={1}>
+          <Avatar
+            alt="Course Logo"
+            src={getCourseLogoPath}
+            variant="rounded"
+            sx={{ width: 56, height: 56 }}
+          />
+        </Grid>
         <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Picture
@@ -326,14 +333,7 @@ export default function CreateCourse() {
           </div>)
       }    
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-            alt="Course Logo"
-            src={getCourseLogoPath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-        </Grid>
+       
 
         <Grid
           item

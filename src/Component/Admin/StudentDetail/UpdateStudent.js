@@ -62,6 +62,8 @@ export default function UpdateStudent() {
   const [getCurrentDate, setCurrentDate] = React.useState("");
   const [getRemark, setRemark] = React.useState("");
   const [cityData, setCityData] = useState([]);
+  const [batchId, setBatchId] = React.useState("");
+  const [batchIdList, setBatchIdList] = React.useState([]);
   const [error, setError] = useState({});
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -70,7 +72,7 @@ export default function UpdateStudent() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  
   const handleSubmitEdit = async () => {
     if (validation()) {
       var body = {
@@ -96,6 +98,7 @@ export default function UpdateStudent() {
         courseid: getCourseId,
         currentdate: getCurrentDate,
         remark: getRemark,
+        batchid:batchId
       };
       var result = await postData("studetail/updateRecord", body);
       console.log(body);
@@ -105,7 +108,7 @@ export default function UpdateStudent() {
           title: "Done",
           text: "Record update",
         });
-        navigate('/dashboard/displayStudent')
+        navigate("/dashboard/displayStudent");
       } else {
         Swal.fire({
           icon: "error",
@@ -132,22 +135,66 @@ export default function UpdateStudent() {
 
     setCourseIdList(record);
   };
-
+  const fillbatch = async (getCourseId) => {
+    var body = { coursename: getCourseId };
+   // alert(JSON.stringify(body));
+    var result = await postData("studetail/getbtbcs", body);
+    setBatchIdList(result.data)
+    alert(JSON.stringify(result.data));
+   
+  };
+  function showBatch() {
+    return batchIdList.map((item) => (
+      <MenuItem value={item.batchid}>{item.batchname}</MenuItem>
+    ));
+  }
   function showCourse() {
     return getCourseIdList.map((item) => (
       <MenuItem value={item.courseid}>{item.coursename}</MenuItem>
     ));
   }
+  const handleCourse = (event) => {
+    alert(event.target.value);
+    // var crs = event.target.value.split(",");
+    setCourseId(event.target.value);
+    alert(event.target.value)
+    fillbatch(event.target.value)
+    // setCourseName(crs[1]);
+  };
 
   const validation = () => {
     var isValid = true;
-
     if (!getstuname) {
       handleError("getstuname", "Please Input studentname");
       isValid = false;
     }
+    if (getstuname) {
+      if (getstuname.length > 18 || getstuname.length < 4) {
+        handleError("getstuname", "Please Input Name Between 4 to 18 letters");
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getstuname)) {
+      handleError("getstuname", "Please Input Valid Name");
+      isValid = false;
+    }
     if (!getfathername) {
       handleError("getfathername", "Please Input fathername");
+      isValid = false;
+    }
+    if (getfathername) {
+      if (getfathername.length > 18 || getfathername.length < 4) {
+        handleError(
+          "getfathername",
+          "Please Input Name Between 4 to 18 letters"
+        );
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getfathername)) {
+      handleError("getfathername", "Please Input Valid Name");
       isValid = false;
     }
 
@@ -172,9 +219,23 @@ export default function UpdateStudent() {
       handleError("getphoneno", "Please enter a valid mobile number");
       isValid = false;
     }
-    if (getpassword.length > 8 || getpassword.length < 8) {
-      handleError("getpassword", "Please Input 8 Digits password");
+    if (!getpassword) {
+      handleError("getpassword", "Please Input password");
       isValid = false;
+    }
+    if (getpassword.length) {
+      if (
+        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+          getpassword
+        )
+      ) {
+        handleError(
+          "getpassword",
+          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+        );
+
+        isValid = false;
+      }
     }
     if (!getaddress) {
       handleError("getaddress", "Please Input address");
@@ -200,6 +261,17 @@ export default function UpdateStudent() {
       handleError("getInstituename", "Please Input Instituename");
       isValid = false;
     }
+    if (getInstituename) {
+      if (getInstituename.length > 18 || getInstituename.length < 4) {
+        handleError("getInstituename", "Please Input instituename Between 4 to 18 letters");
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getInstituename)) {
+      handleError("getInstituename", "Please Input Valid instituename");
+      isValid = false;
+    }
     if (!getCourseId) {
       handleError("getCourseId", "Please Select coursename");
       isValid = false;
@@ -209,7 +281,7 @@ export default function UpdateStudent() {
     //   isValid = false;
     // }
     if (!getCurrentDate) {
-      handleError("getCurrentDate", "Please Input currentdate");
+      handleError("getCurrentDate", "Please Select currentdate");
       isValid = false;
     }
     if (!getRemark) {
@@ -233,7 +305,7 @@ export default function UpdateStudent() {
       studentid: params.stdid,
       organizationid: storedState.organizationid,
     };
-    let record = await postData("studetail/displayById", body)
+    let record = await postData("studetail/displayById", body);
 
     if (record != null) {
       setstuname(record.studentname); // database column name studentname like this
@@ -260,6 +332,10 @@ export default function UpdateStudent() {
       setCourseId(record.courseid);
       setCurrentDate(record.currentdate);
       setRemark(record.remark);
+    //  var result = await postData("studetail/getbtbcs", record.batchid);
+     // alert(record.batchid)
+
+     // setBatchId(result.data)
     } else {
       Swal.fire({
         icon: "error",
@@ -299,7 +375,6 @@ export default function UpdateStudent() {
         title: "Done",
         text: "Logo  Updated..",
       });
-  
     } else {
       Swal.fire({
         icon: "success",
@@ -387,7 +462,7 @@ export default function UpdateStudent() {
             <div>
               <img src="/course.png" width="60" />
             </div>
-            <div style={{ marginLeft: 20 }}> Edit Student</div>
+            <div style={{ marginLeft: 20 }}> Update Student</div>
           </div>
         </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
@@ -465,7 +540,7 @@ export default function UpdateStudent() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
-              //  value={getDob}
+               //value={getdob}
               onChange={(item) => setdob(item)}
               slotProps={{
                 textField: {
@@ -643,30 +718,7 @@ export default function UpdateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={8} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Address"
-            variant="outlined"
-            error={!error.getaddress ? false : true}
-            helperText={error.getaddress}
-            onFocus={() => handleError("getaddress", null)}
-            value={getaddress}
-            onChange={(e) => setaddress(e.target.value.trimStart())}
-            fullWidth
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
-                },
-
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
-        </Grid>
+       
 
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
@@ -677,7 +729,7 @@ export default function UpdateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getState}
-              label="Select State"
+              label="State"
               onChange={(event) => handleChangeState(event)}
             >
               {showState()}
@@ -705,7 +757,7 @@ export default function UpdateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCity}
-              label="Select City"
+              label="City"
               onChange={(event) => setCity(event.target.value)}
             >
               {showCity()}
@@ -733,11 +785,12 @@ export default function UpdateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getqualification}
-              label="Select Qualification"
+              label="Qualification"
               onFocus={() => handleError("getqualification", null)}
               onChange={(event) => setqualification(event.target.value)}
             >
-              <MenuItem value={"12"}>12</MenuItem>
+              <MenuItem value={"10"}>10th</MenuItem>
+              <MenuItem value={"12"}>12th</MenuItem>
               <MenuItem value={"Graduate"}>Graduate</MenuItem>
               <MenuItem value={"PostGraduate"}>Post Graduate</MenuItem>
               <MenuItem value={"other"}>Other</MenuItem>
@@ -813,9 +866,9 @@ export default function UpdateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCourseId}
-              label="Select Course Name"
+              label="Course Name"
               onChange={(event) => {
-                setCourseId(event.target.value);
+                handleCourse(event);
               }}
             >
               {showCourse()}
@@ -834,14 +887,14 @@ export default function UpdateStudent() {
             </div>
           )}
         </Grid>
-        {/* <Grid item md={6} sm={12} xs={12}>
-          <FormControl fullWidth>
+        <Grid item md={6} lg={4} sm={12} xs={12}>
+        <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
-              label="Select Batch Name"
+              label="Batch Name"
               onChange={(event) => setBatchId(event.target.value)}
             >
               {showBatch()}
@@ -859,30 +912,25 @@ export default function UpdateStudent() {
               {error.batchId}
             </div>
           )}
-        </Grid> */}
+        </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Current Date"
-            variant="outlined"
-            error={!error.getCurrentDate ? false : true}
-            helperText={error.getCurrentDate}
-            onFocus={() => handleError("getCurrentDate", null)}
-            fullWidth
-            value={getCurrentDate}
-            onChange={(e) => setCurrentDate(e.target.value.trim())}
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Current Date"
+             // value={getCurrentDate}
+            // defaultValue={new Date()}
+              onChange={(item) => setCurrentDate(item)}
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  fullWidth: "100%",
+                  helperText: error.getCurrentDate,
+                  error: !error.getCurrentDate ? false : true,
+                  onFocus: () => handleError("getCurrentDate", null),
                 },
-
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
+              }}
+            />
+          </LocalizationProvider>
         </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
@@ -938,7 +986,42 @@ export default function UpdateStudent() {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid item md={6} lg={12} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Address"
+            multiline
+            rows={4}
+            variant="outlined"
+            error={!error.getaddress ? false : true}
+            helperText={error.getaddress}
+            onFocus={() => handleError("getaddress", null)}
+            value={getaddress}
+            onChange={(e) => setaddress(e.target.value.trimStart())}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+        </Grid>
+        <Grid item md={1} lg={1} sm={3} xs={3}>
+          <Avatar
+            alt="photo"
+            src={getstudentphoto}
+            variant="circular"
+            sx={{ width: 56, height: 56 }}
+          />
+         
+        </Grid>
+        <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Photograph
             <input
@@ -951,6 +1034,15 @@ export default function UpdateStudent() {
                 handleError("getPhoto", null);
               }}
             />
+          </Button>
+          <Button
+            style={{ marginTop: 5 }}
+            onClick={editStudentPicture}
+            variant="contained"
+            fullWidth
+            color="primary"
+          >
+            Edit picture
           </Button>
           {/* {error && (
             <div
@@ -965,22 +1057,7 @@ export default function UpdateStudent() {
             </div>
           )} */}
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-            alt="photo"
-            src={getstudentphoto}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-          <Button
-            style={{ marginTop: 5 }}
-            onClick={editStudentPicture}
-            variant="contained"
-            color="primary"
-          >
-            Edit picture
-          </Button>
-        </Grid>
+       
         <Grid
           item
           xs={12}

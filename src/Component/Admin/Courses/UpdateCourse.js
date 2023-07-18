@@ -143,7 +143,8 @@ export default function CreateCourse() {
 
     return isValid;
   };
-  const RegexLetter = /^[a-zA-Z\s]*$/;
+  const RegexLetter = /^[A-Z@~`!@#$%^&*()_=+\\\\';:\"\\/?>.<,-\s]*$/i;
+
 
   return (
     <div className="store_form_1">
@@ -343,7 +344,16 @@ export default function CreateCourse() {
             }}
           />
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid item md={1} lg={1} sm={3} xs={3}>
+          <Avatar
+            alt="Course Logo"
+            src={getCourseLogoPath}
+            variant="circular"
+            sx={{ width: 56, height: 56 }}
+          />
+         
+        </Grid>
+        <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Picture
             <input
@@ -353,6 +363,15 @@ export default function CreateCourse() {
               type="file"
               onChange={(event) => handleCourseLogo(event)}
             />
+          </Button>
+          <Button
+          style={{ marginTop: 5 }}
+          fullWidth
+            onClick={handleEditCourseLogo}
+            variant="contained"
+            color="primary"
+          >
+            Edit Logo
           </Button>
           <div
             style={{
@@ -365,21 +384,7 @@ export default function CreateCourse() {
             {error.getOwnerPicture}
           </div>
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-            alt="Course Logo"
-            src={getCourseLogoPath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-          <Button
-            onClick={handleEditCourseLogo}
-            variant="contained"
-            color="primary"
-          >
-            Edit Logo
-          </Button>
-        </Grid>
+       
 
         <Grid
           item

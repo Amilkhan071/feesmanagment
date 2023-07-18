@@ -71,6 +71,7 @@ export default function CreateStudent() {
   };
 
   const handleSubmit = async () => {
+    alert(batchId)
     if (validation()) {
       var formData = new FormData();
       formData.append("organizationid", storedState.organizationid);
@@ -94,6 +95,7 @@ export default function CreateStudent() {
       formData.append("courseid", getCourseId);
       formData.append("currentdate", getCurrentDate);
       formData.append("remark", getRemark);
+      formData.append("batchid", batchId);
 
       let config = { headers: { "content-type": "multerpart / form-Data" } };
       let result = await postDataAndImage(
@@ -103,14 +105,14 @@ export default function CreateStudent() {
       );
 
       if (result) {
-            Swal.fire({
-                icon: "success",
-                title: "Done",
-                text: 'Record Submitted..',
-              });
-              window.location.reload();
-              navigate('/dashboard/displayStudent')
-          } else {
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: "Record Submitted..",
+        });
+        window.location.reload();
+        navigate("/dashboard/displayStudent");
+      } else {
         Swal.fire({
           icon: "error",
           title: "Oops....",
@@ -133,7 +135,6 @@ export default function CreateStudent() {
   const fillCourse = async () => {
     var body = { organizationid: storedState.organizationid };
     var record = await postData("course/displayAll", body);
-
     setCourseIdList(record);
   };
 
@@ -142,14 +143,23 @@ export default function CreateStudent() {
       <MenuItem value={item.courseid}>{item.coursename}</MenuItem>
     ));
   }
-  const fillbatch = async () => {
-    var body = {
-      organizationid: storedState.organizationid,
-      coursename: getCourseId,
-    };
-    var record = await postData("batch/getCourseBatch", body);
-    console.log(record);
-    setBatchId();
+
+  const handleCourse = (event) => {
+    alert(event.target.value);
+    // var crs = event.target.value.split(",");
+    setCourseId(event.target.value);
+    alert(event.target.value)
+    fillbatch(event.target.value)
+    // setCourseName(crs[1]);
+  };
+
+  const fillbatch = async (getCourseId) => {
+    var body = { coursename: getCourseId };
+   // alert(JSON.stringify(body));
+    var result = await postData("studetail/getbtbcs", body);
+    setBatchIdList(result.data)
+    alert(JSON.stringify(result.data));
+   
   };
   function showBatch() {
     return batchIdList.map((item) => (
@@ -159,6 +169,7 @@ export default function CreateStudent() {
 
   useEffect(function () {
     fillCourse();
+    // fillbatch();
   }, []);
   useEffect(function () {}, [getCourseId]);
   const validation = () => {
@@ -168,8 +179,33 @@ export default function CreateStudent() {
       handleError("getstuname", "Please Input studentname");
       isValid = false;
     }
+    if (getstuname) {
+      if (getstuname.length > 18 || getstuname.length < 4) {
+        handleError("getstuname", "Please Input Name Between 4 to 18 letters");
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getstuname)) {
+      handleError("getstuname", "Please Input Valid Name");
+      isValid = false;
+    }
     if (!getfathername) {
       handleError("getfathername", "Please Input fathername");
+      isValid = false;
+    }
+    if (getfathername) {
+      if (getfathername.length > 18 || getfathername.length < 4) {
+        handleError(
+          "getfathername",
+          "Please Input Name Between 4 to 18 letters"
+        );
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getfathername)) {
+      handleError("getfathername", "Please Input Valid Name");
       isValid = false;
     }
 
@@ -194,9 +230,24 @@ export default function CreateStudent() {
       handleError("getphoneno", "Please enter a valid mobile number");
       isValid = false;
     }
-    if (getpassword.length > 8 || getpassword.length < 8) {
-      handleError("getpassword", "Please Input 8 Digits password");
+
+    if (!getpassword) {
+      handleError("getpassword", "Please Input password");
       isValid = false;
+    }
+    if (getpassword.length) {
+      if (
+        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+          getpassword
+        )
+      ) {
+        handleError(
+          "getpassword",
+          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+        );
+
+        isValid = false;
+      }
     }
     if (!getaddress) {
       handleError("getaddress", "Please Input address");
@@ -222,6 +273,20 @@ export default function CreateStudent() {
       handleError("getInstituename", "Please Input Instituename");
       isValid = false;
     }
+    if (getInstituename) {
+      if (getInstituename.length > 18 || getInstituename.length < 4) {
+        handleError(
+          "getInstituename",
+          "Please Input instituename Between 4 to 18 letters"
+        );
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(getInstituename)) {
+      handleError("getInstituename", "Please Input Valid instituename");
+      isValid = false;
+    }
     if (!getCourseId) {
       handleError("getCourseId", "Please Select coursename");
       isValid = false;
@@ -231,7 +296,7 @@ export default function CreateStudent() {
     //   isValid = false;
     // }
     if (!getCurrentDate) {
-      handleError("getCurrentDate", "Please Input currentdate");
+      handleError("getCurrentDate", "Please select currentdate");
       isValid = false;
     }
     if (!getRemark) {
@@ -241,21 +306,16 @@ export default function CreateStudent() {
     if (!getdob) {
       handleError("getdob", "Please select birthdate");
       isValid = false;
-     
     }
 
     if (!getGender) {
       handleError("getGender", "Please Select gender");
       isValid = false;
-      
-      
     }
 
     if (!getPhoto) {
       handleError("getPhoto", "Please Select photo");
       isValid = false;
-      
-      
     }
 
     return isValid;
@@ -437,7 +497,7 @@ export default function CreateStudent() {
             />
           </LocalizationProvider>
         </Grid>
-       
+
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
@@ -601,41 +661,17 @@ export default function CreateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={8} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Address"
-            variant="outlined"
-            error={!error.getaddress ? false : true}
-            helperText={error.getaddress}
-            onFocus={() => handleError("getaddress", null)}
-            value={getaddress}
-            onChange={(e) => setaddress(e.target.value.trimStart())}
-            fullWidth
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
-                },
 
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
-        </Grid>
-       
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
             <Select
-               error={!error.getState ? false : true}
-               onFocus={() => handleError("getState", null)}
+              error={!error.getState ? false : true}
+              onFocus={() => handleError("getState", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getState}
-              label="Select State"
+              label="State"
               onChange={(event) => handleChangeState(event)}
             >
               {showState()}
@@ -663,7 +699,7 @@ export default function CreateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCity}
-              label="Select City"
+              label="City"
               onChange={(event) => setCity(event.target.value)}
             >
               {showCity()}
@@ -682,7 +718,7 @@ export default function CreateStudent() {
             </div>
           )}
         </Grid>
-      
+
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Qualification</InputLabel>
@@ -691,11 +727,12 @@ export default function CreateStudent() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getqualification}
-              label="Select Qualification"
+              label="Qualification"
               onFocus={() => handleError("getqualification", null)}
               onChange={(event) => setqualification(event.target.value)}
             >
-              <MenuItem value={"12"}>12</MenuItem>
+              <MenuItem value={"10"}>10th</MenuItem>
+              <MenuItem value={"12"}>12th</MenuItem>
               <MenuItem value={"Graduate"}>Graduate</MenuItem>
               <MenuItem value={"PostGraduate"}>Post Graduate</MenuItem>
               <MenuItem value={"other"}>Other</MenuItem>
@@ -766,14 +803,14 @@ export default function CreateStudent() {
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Course Name</InputLabel>
             <Select
-                 error={!error.getCourseId ? false : true}
-                 onFocus={() => handleError("getCourseId", null)}
+              error={!error.getCourseId ? false : true}
+              onFocus={() => handleError("getCourseId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getCourseId}
-              label="Select Course Name"
+              label="Course Name"
               onChange={(event) => {
-                setCourseId(event.target.value);
+                handleCourse(event);
               }}
             >
               {showCourse()}
@@ -792,14 +829,14 @@ export default function CreateStudent() {
             </div>
           )}
         </Grid>
-        {/* <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
-              label="Select Batch Name"
+              label="Batch Name"
               onChange={(event) => setBatchId(event.target.value)}
             >
               {showBatch()}
@@ -817,30 +854,25 @@ export default function CreateStudent() {
               {error.batchId}
             </div>
           )}
-        </Grid> */}
+        </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
-          <TextField
-            id="standard-basic"
-            label="Current Date"
-            variant="outlined"
-            error={!error.getCurrentDate ? false : true}
-            helperText={error.getCurrentDate}
-            onFocus={() => handleError("getCurrentDate", null)}
-            fullWidth
-            value={getCurrentDate}
-            onChange={(e) => setCurrentDate(e.target.value.trim())}
-            sx={(theme) => {
-              return {
-                "& label.Mui-focused": {
-                  color: "#000",
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Current Date"
+              value={getCurrentDate}
+              //defaultValue={new Date()}
+              onChange={(item) => setCurrentDate(item)}
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  fullWidth: "100%",
+                  helperText: error.getCurrentDate,
+                  error: !error.getCurrentDate ? false : true,
+                  onFocus: () => handleError("getCurrentDate", null),
                 },
-
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#000",
-                },
-              };
-            }}
-          />
+              }}
+            />
+          </LocalizationProvider>
         </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
@@ -866,7 +898,7 @@ export default function CreateStudent() {
             }}
           />
         </Grid>
-         <Grid item md={6} lg={4} >
+        <Grid item md={6} lg={4}>
           <FormControl error={!error.getGender ? false : true}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender
@@ -896,6 +928,40 @@ export default function CreateStudent() {
             </FormHelperText>
           </FormControl>
         </Grid>
+        <Grid item md={6} lg={12} sm={12} xs={12}>
+          <TextField
+            id="standard-basic"
+            label="Address"
+            variant="outlined"
+            multiline
+            rows={4}
+            error={!error.getaddress ? false : true}
+            helperText={error.getaddress}
+            onFocus={() => handleError("getaddress", null)}
+            value={getaddress}
+            onChange={(e) => setaddress(e.target.value.trimStart())}
+            fullWidth
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+          />
+        </Grid>
+        <Grid item md={1} lg={1}>
+          <Avatar
+            alt="photo"
+            src={getstudentphoto}
+            variant="rounded"
+            sx={{ width: 56, height: 56 }}
+          />
+        </Grid>
         <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Photograph
@@ -904,33 +970,26 @@ export default function CreateStudent() {
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => 
-                {handlephoto(event);
-                  handleError("getPhoto", null)
-                }}
+              onChange={(event) => {
+                handlephoto(event);
+                handleError("getPhoto", null);
+              }}
             />
           </Button>
           {error && (
             <div
-            style={{
-              color: "#d32f2f",
-              fontSize: 12,
-              marginTop: 5,
-              fontWeight: 400,
-            }}
+              style={{
+                color: "#d32f2f",
+                fontSize: 12,
+                marginTop: 5,
+                fontWeight: 400,
+              }}
             >
-             {error.getPhoto}
+              {error.getPhoto}
             </div>
           )}
         </Grid>
-        <Grid item md={3} lg={3}>
-          <Avatar
-            alt="photo"
-            src={getstudentphoto}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
-          />
-        </Grid>
+
         <Grid
           item
           xs={12}
