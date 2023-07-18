@@ -12,31 +12,18 @@ import {
   FormControlLabel,
   Checkbox,
   FormGroup,
-  FormLabel,
-  ListItemText,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import {
-  DatePicker,
-  LocalizationProvider,
-  MobileTimePicker,
-  TimePicker,
-} from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 import { getData, postData } from "../../Services/FetchNodeServices";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Swal from "sweetalert2";
 
 export default function CreateBatch() {
+  var navigate = useNavigate();
+
   const storedState = JSON.parse(localStorage.getItem("admin"));
-  const [selectedDate1, setSelectedDate1] = useState(
-    new Date("2014-08-18T21:11:54")
-  );
-  const [selectedDate2, setSelectedDate2] = useState(
-    new Date("2014-08-18T21:11:54")
-  );
   const [organizationId, setOrganizationId] = useState(
     storedState.organizationid
   );
@@ -114,18 +101,18 @@ export default function CreateBatch() {
   const handleBatch = () => {
     var date = new Date();
     var month = [
-      "jan",
-      "feb",
-      "mar",
-      "apr",
-      "may",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
       "jun",
-      "jul",
-      "aug",
-      "sep",
-      "oct",
-      "nov",
-      "dec",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     var status =
@@ -156,7 +143,6 @@ export default function CreateBatch() {
     setBatchName(batchname);
   };
 
-  var navigate = useNavigate();
 
   const changeBatchTime = (event) => {
     var crst = event.target.value.split(",");
@@ -166,14 +152,20 @@ export default function CreateBatch() {
   const handleCourse = (event) => {
     var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-    setCourseName(crs[1]);
+   setCourseName(crs[1]);
   };
   const handleSubmit = async () => {
+
+    //idcourse//alert(crs[0])
+    //id//alert(time[1])
     if (validation()) {
       var time = batchTime.split(",");
       var crs = courseId.split(",");
+      
       var body = {
-        organizationid: organizationId,
+        organizationid: storedState.organizationid,
+        // coursename: crs[0],
+        // timing: time[1],
         coursename: courseId,
         timing: batchTime,
         status: getStatus,
@@ -225,7 +217,7 @@ export default function CreateBatch() {
   };
 
   const fillCourse = async () => {
-    var body = { organizationid: 7 };
+    var body = { organizationid: storedState.organizationid};
     var list = await postData("course/displayAll", body);
     setCourseNameList(list);
   };
@@ -338,7 +330,7 @@ export default function CreateBatch() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={organizationId}
+            value={storedState.organizationid}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
               return {
@@ -363,7 +355,7 @@ export default function CreateBatch() {
               onFocus={() => handleError("courseId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              label="Select Course"
+              label="Course"
               value={courseId}
               onChange={(event) => handleCourse(event)}
             >
@@ -393,12 +385,9 @@ export default function CreateBatch() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchTime}
-              label="Batch Name"
+              label="Batch Time"
               onChange={(event) => changeBatchTime(event)}
             >
-              <MenuItem value={"Choose State..."}>
-                Choose Batch Time...
-              </MenuItem>
               {showBatchTime()}
             </Select>
           </FormControl>
@@ -415,22 +404,19 @@ export default function CreateBatch() {
             </div>
           )}
         </Grid>
+        <Grid item xs={12}> <div  
+         style={{
+          colors: "#273c75",
+       
+          fontSize: 20,
+          fontWeight: "bold",
+          
+          letterSpacing: 3,
+        }}
+      >Status</div> </Grid>
         <Grid item xs={12}>
           <FormGroup row>
-            <FormLabel
-              component="legend"
-              style={{
-                colors: "#273c75",
-                marginTop: 10,
-                fontSize: 20,
-                fontWeight: "bold",
-                paddingRight: 10,
-
-                letterSpacing: 3,
-              }}
-            >
-              Status
-            </FormLabel>
+           
             <FormControlLabel
               control={
                 <Checkbox
