@@ -97,26 +97,26 @@ export default function CreateStudent() {
       formData.append("remark", getRemark);
       formData.append("batchid", batchId);
 
-      let config = { headers: { "content-type": "multerpart / form-Data" } };
+     // let config = { headers: { "content-type": "multerpart / form-Data" } };
       let result = await postDataAndImage(
         "studetail/addNewRecord",
         formData,
-        config
+       // config
       );
 
-      if (result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Record Submitted..",
+          text: result.message,
         });
-        window.location.reload();
+       // window.location.reload();
         navigate("/dashboard/displayStudent");
       } else {
         Swal.fire({
           icon: "error",
           title: "Oops....",
-          text: "Fail to submit Record...",
+          text: result.message,
         });
       }
     }
@@ -135,7 +135,7 @@ export default function CreateStudent() {
   const fillCourse = async () => {
     var body = { organizationid: storedState.organizationid };
     var record = await postData("course/displayAll", body);
-    setCourseIdList(record);
+    setCourseIdList(record.data);
   };
 
   function showCourse() {

@@ -25,7 +25,7 @@ export default function DisplayStudent() {
   const fetchAllOrganization = async () => {
     let body = { organizationid: storedState.organizationid };
     var list = await postData("studetail/displayAllRecord", body);
-    setOrganization(list);
+    setOrganization(list.data);
     // alert(JSON.parse(list))
   };
 
@@ -53,12 +53,12 @@ export default function DisplayStudent() {
     var body = { studentid: id };
     var result = await postData("studetail/deleteRecord", body);
 
-    if(result)
+    if(result.status)
     {
         Swal.fire({
             icon: "success",
             title: "Done",
-            text: 'deleted',
+            text: result.message,
           });
           window.location.reload();
       
@@ -69,7 +69,7 @@ export default function DisplayStudent() {
         Swal.fire({
             icon: "error",
             title: "Oops....",
-            text: "Store Does Note Deleted",
+            text: result.message,
           });
     }
   };

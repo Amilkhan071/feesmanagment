@@ -5,7 +5,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {  postData } from "../../Services/FetchNodeServices";
+import {  getData, postData } from "../../Services/FetchNodeServices";
 import { useNavigate } from "react-router-dom";
 import "../../../Stylesheet.css";
 import Swal from "sweetalert2";
@@ -19,10 +19,10 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
 
 
   const fetchAllTimeTable = async () => {
-    var body = { organizationid:storedState.organizationid  };
-    var result = await postData("timingtable/displayAll", body);
+   // var body = { organizationid:storedState.organizationid  };
+    var result = await getData("timingtable/displayAlltimingtable");
    //console.log(result);
-    setTimeTable(result);
+    setTimeTable(result.data);
   };
   useEffect(function () {
     fetchAllTimeTable();
@@ -46,12 +46,12 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
   const handleDelete=async(id)=>{
     var body={'transactionid':id}
     let result=await postData('timingtable/deleteRecord',body)
-    if(result)
+    if(result.status)
     {
         Swal.fire({
             icon: "success",
             title: "Done",
-            text: 'deleted',
+            text: result.message,
           });
           window.location.reload();
       
@@ -62,7 +62,8 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
         Swal.fire({
             icon: "error",
             title: "Oops....",
-            text: "Store Does Note Deleted",
+            text: result.message,
+
           });
     }
   

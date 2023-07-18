@@ -45,12 +45,13 @@ export default function OrgAdminLogin() {
         password: password,
       };
       var response = await postData("organization/checkLogin", body);
-      if (response) {
-        localStorage.setItem("admin", JSON.stringify(response));
+      if (response.status) {
+        localStorage.setItem("admin", JSON.stringify(response.data));
+        localStorage.setItem("TOKEN",JSON.stringify(response.accessToken))
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: 'Login Successfully',
+          text: response.message,
         });
         
         navigate("/dashboard");
@@ -58,7 +59,7 @@ export default function OrgAdminLogin() {
         Swal.fire({
           icon: "error",
           title: "Done",
-          text: 'Login Failed',
+          text: response.message,
         });
        
       }

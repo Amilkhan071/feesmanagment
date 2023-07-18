@@ -3,7 +3,11 @@ const ServerURL = "http://localhost:3001"
 
 const getData = async (url) => {
     try {
-      var response = await fetch(`${ServerURL}/${url}`);
+      var response = await fetch(`${ServerURL}/${url}`,{
+        headers:{
+          Authorization:"Bearer " +JSON.parse(localStorage.getItem("TOKEN"))
+        },
+      });
       var result = await response.json();
       return result;
     } catch (e) {
@@ -13,7 +17,11 @@ const getData = async (url) => {
   
   const postData = async (url, body) => {
     try {
-      var response = await axios.post(`${ServerURL}/${url}`, body);
+      var response = await axios.post(`${ServerURL}/${url}`, body,{
+        headers:{
+          Authorization:"Bearer " +JSON.parse(localStorage.getItem("TOKEN"))
+        },
+      });
       var result = await response.data;
       return result;
     } catch (error) {
@@ -23,7 +31,11 @@ const getData = async (url) => {
   
   const putData = async (url, body) => {
     try {
-      var response = await axios.put(`${ServerURL}/${url}`, body);
+      var response = await axios.put(`${ServerURL}/${url}`, body,{
+        headers:{
+          Authorization:"Bearer " +localStorage.getItem("TOKEN")
+        },
+      });
       var result = await response.data;
       return result;
     } catch (error) {
@@ -33,7 +45,11 @@ const getData = async (url) => {
   
   const deleteData = async (url, body) => {
     try {
-      var response = await axios.delete(`${ServerURL}/${url}`, body);
+      var response = await axios.delete(`${ServerURL}/${url}`, body,{
+        headers:{
+          Authorization:"Bearer " +localStorage.getItem("TOKEN")
+        },
+      });
       var result = await response.data;
       return result;
     } catch (error) {
@@ -41,9 +57,13 @@ const getData = async (url) => {
       return false;
     }
   };
-  const postDataAndImage = async (url, formData, config) => {
+  const postDataAndImage = async (url, formData,) => {
     try {
-      var response = await axios.post(`${ServerURL}/${url}`, formData, config);
+      var response = await axios.post(`${ServerURL}/${url}`, formData, {
+        headers:{
+          Authorization:"Bearer " +JSON.parse(localStorage.getItem("TOKEN"))
+        }
+      });
       console.log(response.data);
       //  var result=response.data[0].result
       var result = await response.data;

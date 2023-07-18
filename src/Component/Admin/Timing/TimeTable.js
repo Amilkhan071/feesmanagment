@@ -65,17 +65,22 @@ export default function TimeTable() {
       };
 
       var result = await postData("timingtable/addNewRecord", body);
-      if (result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: 'Submited',
+          text: result.message,
+
         });
+      
+        navigate("/dashboard/displayTiming");
+
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops....",
-          text: 'Not Submited',
+          text: result.message,
+
         });
       }
     }

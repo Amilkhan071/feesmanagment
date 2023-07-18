@@ -59,7 +59,7 @@ export default function UpdateBatch() {
   const fillCourse = async () => {
     var body = { organizationid:storedState.organizationid };
     var list = await postData("course/displayAll", body);
-    setCourseNameList(list);
+    setCourseNameList(list.data);
   };
 
   const showCourse = () => {
@@ -72,7 +72,7 @@ export default function UpdateBatch() {
 
   const fillBatchTime = async () => {
     let list = await getData("timingtable/displayAlltimingtable");
-    setBatchTimeList(list);
+    setBatchTimeList(list.data);
   };
 
   const showBatchTime = () => {

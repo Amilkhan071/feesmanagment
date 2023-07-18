@@ -99,12 +99,12 @@ export default function CreateCourse() {
     var formData = new FormData();
     formData.append("courseId", params.crsid);
     formData.append("courseLogo", getCourseLogo);
-    let config = { headers: { "content-type": "multi-part/formData" } };
+    //let config = { headers: { "content-type": "multi-part/formData" } };
 
     let result = await postDataAndImage(
       "course/updateCourseLogo",
       formData,
-      config
+     // config
     );
     if (result.status) {
       Swal.fire({

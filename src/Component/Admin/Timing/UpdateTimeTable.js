@@ -32,19 +32,18 @@ export default function UpdateTimeTable() {
   const searchById = async () => {
     var body = { transactionid: params.trnsid };
     var record = await postData("timingtable/displayById", body);
-   // console.log(record);
-  //  alert(JSON.stringify(record));
-    if (record != null) {
-      setOrganizationId(record.organizationid);
-      var st = new Date("2019/01/01 " + record.btstart + " GMT+0530");
-      var et = new Date("2019/01/01 " + record.btend + " GMT+0530");
+   // alert(JSON.stringify(record))
+if (record.data != null) {
+      setOrganizationId(record.data.organizationid);
+      var st = new Date("2019/01/01 " + record.data.btstart + " GMT+0530");
+      var et = new Date("2019/01/01 " + record.data.btend + " GMT+0530");
       setSelectedDate1(st);
       setSelectedDate2(et);
     } else {
       Swal.fire({
         icon: "error",
         title: "Ooops..",
-        text: 'Fetch Failed',
+        text: record.message,
       });
     }
   };
@@ -74,25 +73,27 @@ export default function UpdateTimeTable() {
   };
 
   const handleSubmitEdit = async () => {
+   
     if (validation()) {
+      alert('jii')
       var body = {
         transactionid: params.trnsid,
         btStart: btstart,
         btEnd: btend,
       };
       var result = await postData("timingtable/updateRecord", body);
-      if (result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: 'updated',
+          text: result.message,
         });
         navigate("/dashboard/DisplayTiming");
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops....",
-          text: 'Not Updated',
+          text: result.message,
         });
       }
     }
@@ -105,14 +106,14 @@ export default function UpdateTimeTable() {
       handleError("organizationId", "Please Input organizationId");
       isValid = false;
     }
-    if (!btstart) {
-      handleError("btstart", "Please Input Start Time");
-      isValid = false;
-    }
-    if (!btend) {
-      handleError("btend", "Please Input Start End");
-      isValid = false;
-    }
+    // if (!btstart) {
+    //   handleError("btstart", "Please Input Start Time");
+    //   isValid = false;
+    // }
+    // if (!btend) {
+    //   handleError("btend", "Please Input Start End");
+    //   isValid = false;
+    // }
 
     return isValid;
   };

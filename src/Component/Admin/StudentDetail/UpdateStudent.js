@@ -102,18 +102,18 @@ export default function UpdateStudent() {
       };
       var result = await postData("studetail/updateRecord", body);
       console.log(body);
-      if (result) {
+      if (result.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: "Record update",
+          text: result.message,
         });
         navigate("/dashboard/displayStudent");
       } else {
         Swal.fire({
           icon: "error",
           title: "Oops....",
-          text: "Record failed update",
+          text: result.message,
         });
       }
     }
@@ -133,14 +133,14 @@ export default function UpdateStudent() {
     var body = { organizationid: storedState.organizationid };
     var record = await postData("course/displayAll", body);
 
-    setCourseIdList(record);
+    setCourseIdList(record.data);
   };
   const fillbatch = async (getCourseId) => {
     var body = { coursename: getCourseId };
    // alert(JSON.stringify(body));
     var result = await postData("studetail/getbtbcs", body);
     setBatchIdList(result.data)
-    alert(JSON.stringify(result.data));
+  //  alert(JSON.stringify(result.data));
    
   };
   function showBatch() {
@@ -154,10 +154,10 @@ export default function UpdateStudent() {
     ));
   }
   const handleCourse = (event) => {
-    alert(event.target.value);
+   // alert(event.target.value);
     // var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-    alert(event.target.value)
+   // alert(event.target.value)
     fillbatch(event.target.value)
     // setCourseName(crs[1]);
   };
@@ -307,38 +307,38 @@ export default function UpdateStudent() {
     };
     let record = await postData("studetail/displayById", body);
 
-    if (record != null) {
-      setstuname(record.studentname); // database column name studentname like this
-      setfathername(record.fathername);
-      var bd = new Date(record.birthdate);
+    if (record.data != null) {
+      setstuname(record.data.studentname); // database column name studentname like this
+      setfathername(record.data.fathername);
+      var bd = new Date(record.data.birthdate);
       var tbd =
         bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
       setdob(tbd);
-      setGender(record.gender);
-      setemail(record.email);
-      setmobile(record.mobile);
-      setparentmobile(record.parentmobileno);
-      setphoneno(record.phoneno);
-      setwhatsappnumber(record.whatsappnumber);
-      setpassword(record.password);
-      setaddress(record.address);
-      setState(record.stustate);
-      setCityData(StateCity[record.stustate]);
-      setCity(record.stucity);
-      setstudentphoto(`${ServerURL}/images/${record.picture}`);
-      setqualification(record.qualification);
-      setqualificationremark(record.quaremark);
-      setInstituename(record.institutename);
-      setCourseId(record.courseid);
-      setCurrentDate(record.currentdate);
-      setRemark(record.remark);
-      fillbatch( record.courseid)
-     setBatchId(record.batchid)
+      setGender(record.data.gender);
+      setemail(record.data.email);
+      setmobile(record.data.mobile);
+      setparentmobile(record.data.parentmobileno);
+      setphoneno(record.data.phoneno);
+      setwhatsappnumber(record.data.whatsappnumber);
+      setpassword(record.data.password);
+      setaddress(record.data.address);
+      setState(record.data.stustate);
+      setCityData(StateCity[record.data.stustate]);
+      setCity(record.data.stucity);
+      setstudentphoto(`${ServerURL}/images/${record.data.picture}`);
+      setqualification(record.data.qualification);
+      setqualificationremark(record.data.quaremark);
+      setInstituename(record.data.institutename);
+      setCourseId(record.data.courseid);
+      setCurrentDate(record.data.currentdate);
+      setRemark(record.data.remark);
+      fillbatch( record.data.courseid)
+     setBatchId(record.data.batchid)
     } else {
       Swal.fire({
         icon: "error",
         title: "Ooops..",
-        text: "Does Not Fetch",
+        text: record.message,
       });
     }
   };
@@ -361,23 +361,23 @@ export default function UpdateStudent() {
     formData.append("organizationid", storedState.organizationname);
     formData.append("studentid", params.stdid);
     formData.append("picture", getPhoto);
-    let config = { headers: { "content-type": "multipart/form-data" } };
+//  let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "studetail/updateLogo",
       formData,
-      config
+     // config
     );
-    if (result) {
+    if (result.status) {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: "Logo  Updated..",
+        text: result.message,
       });
     } else {
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: "Fail to Update Logo...",
+        text: result.message,
       });
     }
   };

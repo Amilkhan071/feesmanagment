@@ -44,18 +44,18 @@ var navigate =useNavigate()
         password: password,
       };
       var response = await postData("adminlogin/adminCheck", body);
-      if (response) {
+      if (response.status) {
         Swal.fire({
           icon: "success",
           title: "Done",
-          text: 'Login Successfully',
+          text: response.message,
         });
         navigate('/maindashboard')
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops....",
-          text: 'Login Failed',
+          text: response.message,
         });
       }
     }

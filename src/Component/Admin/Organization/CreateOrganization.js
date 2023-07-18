@@ -86,11 +86,11 @@ export default function CreateOrganization() {
       formData.append("password", getPassword);
       formData.append("status", getStatus);
 
-      var config = { headers: { "content-type": "multipart/form-data" } };
+     // var config = { headers: { "content-type": "multipart/form-data" } };
       var result = await postDataAndImage(
         "organization/addNewRecord",
         formData,
-        config
+        //config
       );
       if (result.status) {
        

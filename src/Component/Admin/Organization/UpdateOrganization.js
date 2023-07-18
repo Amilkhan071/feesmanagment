@@ -186,11 +186,11 @@ export default function UpdateOrganization() {
     var formData = new FormData();
     formData.append("organizationid", params.orgid);
     formData.append("picture", getOwnerPicture);
-    let config = { headers: { "content-type": "multipart/form-data" } };
+   // let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "organization/updatePicture",
       formData,
-      config
+     // config
     );
     if (result.status) {
       Swal.fire({
@@ -213,11 +213,11 @@ export default function UpdateOrganization() {
     var formData = new FormData();
     formData.append("organizationid", params.orgid);
     formData.append("logo", getLogoPicture);
-    let config = { headers: { "content-type": "multipart/form-data" } };
+   // let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "organization/updateLogo",
       formData,
-      config
+     // config
     );
     if (result.status) {
       Swal.fire({
