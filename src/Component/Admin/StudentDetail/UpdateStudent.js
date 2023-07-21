@@ -76,7 +76,7 @@ export default function UpdateStudent() {
   const handleSubmitEdit = async () => {
     if (validation()) {
       var body = {
-        organizationid: storedState.organizationid,
+        organizationid: storedState?.organizationid,
         studentid: params.stdid,
         studentname: getstuname,
         fathername: getfathername,
@@ -130,7 +130,7 @@ export default function UpdateStudent() {
   const stateCityData = Object.keys(StateCity);
 
   const fillCourse = async () => {
-    var body = { organizationid: storedState.organizationid };
+    var body = { organizationid: storedState?.organizationid };
     var record = await postData("course/displayAll", body);
 
     setCourseIdList(record.data);
@@ -303,7 +303,7 @@ export default function UpdateStudent() {
   const searchById = async () => {
     let body = {
       studentid: params.stdid,
-      organizationid: storedState.organizationid,
+      organizationid: storedState?.organizationid,
     };
     let record = await postData("studetail/displayById", body);
 
@@ -358,7 +358,7 @@ export default function UpdateStudent() {
   };
   const editStudentPicture = async () => {
     var formData = new FormData();
-    formData.append("organizationid", storedState.organizationname);
+    formData.append("organizationid", storedState?.organizationname);
     formData.append("studentid", params.stdid);
     formData.append("picture", getPhoto);
 //  let config = { headers: { "content-type": "multipart/form-data" } };
@@ -472,7 +472,7 @@ export default function UpdateStudent() {
             id="standard-basic"
             label="Organization id"
             variant="outlined"
-            value={storedState.organizationid}
+            value={storedState?.organizationid}
             sx={(theme) => {
               return {
                 "& label.Mui-focused": {

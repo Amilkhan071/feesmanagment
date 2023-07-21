@@ -74,7 +74,7 @@ export default function CreateStudent() {
     alert(batchId)
     if (validation()) {
       var formData = new FormData();
-      formData.append("organizationid", storedState.organizationid);
+      formData.append("organizationid", storedState?.organizationid);
       formData.append("studentname", getstuname);
       formData.append("fathername", getfathername);
       formData.append("birthdate", getdob);
@@ -133,7 +133,7 @@ export default function CreateStudent() {
   const stateCityData = Object.keys(StateCity);
 
   const fillCourse = async () => {
-    var body = { organizationid: storedState.organizationid };
+    var body = { organizationid: storedState?.organizationid };
     var record = await postData("course/displayAll", body);
     setCourseIdList(record.data);
   };
@@ -417,7 +417,7 @@ export default function CreateStudent() {
             id="standard-basic"
             label="Organization id"
             variant="outlined"
-            value={storedState.organizationid}
+            value={storedState?.organizationid}
             sx={(theme) => {
               return {
                 "& label.Mui-focused": {

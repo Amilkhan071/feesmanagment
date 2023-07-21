@@ -21,7 +21,7 @@ export default function DisplayCourse() {
   const navigate = useNavigate();
 
   const fetchAllOrganization = async () => {
-    var body = { organizationid: storedState.organizationid };
+    var body = { organizationid: storedState?.organizationid };
     var list = await postData("course/displayAll", body);
     console.log(list.data);
     setOrganization(list.data);

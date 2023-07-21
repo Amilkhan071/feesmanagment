@@ -23,7 +23,7 @@ export default function DisplayStudent() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
 
   const fetchAllOrganization = async () => {
-    let body = { organizationid: storedState.organizationid };
+    let body = { organizationid: storedState?.organizationid };
     var list = await postData("studetail/displayAllRecord", body);
     setOrganization(list.data);
     // alert(JSON.parse(list))
@@ -53,24 +53,19 @@ export default function DisplayStudent() {
     var body = { studentid: id };
     var result = await postData("studetail/deleteRecord", body);
 
-    if(result.status)
-    {
-        Swal.fire({
-            icon: "success",
-            title: "Done",
-            text: result.message,
-          });
-          window.location.reload();
-      
- 
-   }
-    else
-    {
-        Swal.fire({
-            icon: "error",
-            title: "Oops....",
-            text: result.message,
-          });
+    if (result.status) {
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: result.message,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops....",
+        text: result.message,
+      });
     }
   };
 
@@ -149,7 +144,7 @@ export default function DisplayStudent() {
                 cellStyle: {
                   fontSize: 12,
                 },
-               // tableLayout: "fixed",
+                // tableLayout: "fixed",
               }}
             />
           </Grid>
