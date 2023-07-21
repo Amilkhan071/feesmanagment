@@ -65,7 +65,7 @@ export default function Sidebar() {
   var navigate = useNavigate();
   const handleClickLogOut = () => {
     localStorage.removeItem("admin");
-    navigate("/");
+    navigate("/orgadminlogin");
   };
   return (
     <>
@@ -104,7 +104,7 @@ export default function Sidebar() {
                     textTransform:'uppercase'
                   }}
                 >
-                {storedState.organizationname}
+                {storedState?.organizationname}
                 </div>
               </div>
             </Grid>

@@ -30,6 +30,7 @@ import UpdateBatch from "../Admin/Batch/UpdateBatch";
 import DisplayStudent from "../Admin/StudentDetail/DisplayStudent";
 import CreateStudent from "../Admin/StudentDetail/CreateStudent";
 import UpdateStudent from "../Admin/StudentDetail/UpdateStudent";
+import AdminProtected from "./AdminProtected";
 
 export default function Dashboard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -84,58 +85,37 @@ export default function Dashboard() {
             path={"/DisplayOrganization"}
           /> */}
 
-
-
-<Route
-            element={<UpdateCourse />}
-            path={"/UpdateCourse/:crsid"}
-          />
-            <Route
-            element={<DisplayCourse />}
-            path={"/DisplayCourse"}
-          />
+          <Route element={<UpdateCourse />} path={"/UpdateCourse/:crsid"} />
+          <Route element={<DisplayCourse />} path={"/DisplayCourse"} />
           <Route element={<CreateCourse />} path={"/CreateCourse"} />
 
-          
-       <Route
+          <Route
             element={<UpdateOrganization />}
             path={"/UpdateOrganization/:orgid"}
           />
+          <Route element={<TimeTable />} path={"/TimeTable"} />
+          <Route element={<DisplayTiming />} path={"/DisplayTiming"} />
           <Route
-            element={<TimeTable />}
-            path={"/TimeTable"}
-          />
-             <Route
-            element={<DisplayTiming />}
-            path={"/DisplayTiming"}
-          />
-           <Route
             element={<UpdateTimeTable />}
             path={"/UpdateTimeTable/:trnsid"}
           />
-           <Route
-            element={<CreateBatch />}
-            path={"/CreateBatch"}
-          />
+          <Route element={<CreateBatch />} path={"/CreateBatch"} />
+          <Route element={<DisplayBatch />} path={"/DisplayBatch"} />
+          <Route element={<UpdateBatch />} path={"/UpdateBatch/:batchid"} />
+
+          {/* <Route element={<DisplayStudent />} path={"/DisplayStudent"} />
+          <Route element={<CreateStudent />} path={"/CreateStudent"} />
+          <Route element={<UpdateStudent />} path={"/UpdateStudent/:stdid"} /> */}
           <Route
-            element={<DisplayBatch />}
-            path={"/DisplayBatch"}
-          />
-             <Route
-            element={<UpdateBatch />}
-            path={"/UpdateBatch/:batchid"}
-          />
-          
-          <Route
-            element={<DisplayStudent />}
-            path={"/DisplayStudent"}
-          />
-          <Route
-            element={<CreateStudent />}
+            element={<AdminProtected Component={CreateStudent} />}
             path={"/CreateStudent"}
           />
           <Route
-            element={<UpdateStudent />}
+            element={<AdminProtected Component={DisplayStudent} />}
+            path={"/DisplayStudent"}
+          />
+          <Route
+            element={<AdminProtected Component={UpdateStudent} />}
             path={"/UpdateStudent/:stdid"}
           />
         </Routes>
