@@ -13,7 +13,7 @@ import {
   Checkbox,
   FormGroup,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
@@ -25,7 +25,7 @@ export default function CreateBatch() {
 
   const storedState = JSON.parse(localStorage.getItem("admin"));
   const [organizationId, setOrganizationId] = useState(
-    storedState.organizationid
+    storedState?.organizationid
   );
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
@@ -50,37 +50,37 @@ export default function CreateBatch() {
 
   const handleChangeMon = (event) => {
     if (event.target.checked)
-      setMon({ value: "M", state: event.target.checked });
+      setMon({ value: "Mon", state: event.target.checked });
     else setMon({ value: "", state: event.target.checked });
   };
 
   const handleChangeTue = (event) => {
     if (event.target.checked)
-      setTue({ value: "T", state: event.target.checked });
+      setTue({ value: "Tue", state: event.target.checked });
     else setTue({ value: "", state: event.target.checked });
   };
 
   const handleChangeWed = (event) => {
     if (event.target.checked)
-      setWed({ value: "W", state: event.target.checked });
+      setWed({ value: "Wed", state: event.target.checked });
     else setWed({ value: "", state: event.target.checked });
   };
 
   const handleChangeThu = (event) => {
     if (event.target.checked)
-      setThu({ value: "t", state: event.target.checked });
+      setThu({ value: "Thu", state: event.target.checked });
     else setThu({ value: "", state: event.target.checked });
   };
 
   const handleChangeFri = (event) => {
     if (event.target.checked)
-      setFri({ value: "F", state: event.target.checked });
+      setFri({ value: "Fri", state: event.target.checked });
     else setFri({ value: "", state: event.target.checked });
   };
 
   const handleChangeSat = (event) => {
     if (event.target.checked)
-      setSat({ value: "S", state: event.target.checked });
+      setSat({ value: "Sat", state: event.target.checked });
     else setSat({ value: "", state: event.target.checked });
   };
 
@@ -132,38 +132,41 @@ export default function CreateBatch() {
     setStatus(status);
     var batchname =
       month[date.getMonth()] +
-      " ," +
+      ", " +
       date.getFullYear() +
-      " ," +
+      ", " +
       courseName +
-      " " +
+      ", " +
       batchStartTime +
-      "," +
+      ", " +
       status;
     setBatchName(batchname);
   };
 
-
   const changeBatchTime = (event) => {
-    var crst = event.target.value.split(",");
+    //var crst = event.target.value.split("to");
     setBatchTime(event.target.value);
-    setBatchStartTime(crst[1]);
+   // alert(JSON.stringify(crst[0]))
+    setBatchStartTime(event.target.value);
   };
+
   const handleCourse = (event) => {
-    var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-   setCourseName(crs[1]);
+    fillCourseById(event.target.value)
+  };
+
+  const fillCourseById = async (cid) => {
+    var body = { courseid: cid };
+    var list = await postData("course/displayById", body);
+  setCourseName(list.data.coursename);
   };
   const handleSubmit = async () => {
-
-    //idcourse//alert(crs[0])
-    //id//alert(time[1])
     if (validation()) {
       var time = batchTime.split(",");
-      var crs = courseId.split(",");
-      
+     // var crs = courseId.split(",");
+
       var body = {
-        organizationid: storedState.organizationid,
+        organizationid: storedState?.organizationid,
         // coursename: crs[0],
         // timing: time[1],
         coursename: courseId,
@@ -217,14 +220,14 @@ export default function CreateBatch() {
   };
 
   const fillCourse = async () => {
-    var body = { organizationid: storedState.organizationid};
+    var body = { organizationid: storedState?.organizationid };
     var list = await postData("course/displayAll", body);
     setCourseNameList(list.data);
   };
 
   const showCourse = () => {
     return courseNameList?.map((item) => (
-      <MenuItem value={`${item.courseid},${item.coursename}`}>
+      <MenuItem value={item.courseid}>
         {item.coursename}
       </MenuItem>
     ));
@@ -236,15 +239,24 @@ export default function CreateBatch() {
     setBatchTimeList(list.data);
   };
 
+  // const showBatchTime = () => {
+  //   return batchTimeList?.map((item) => (
+  //     <MenuItem value={`${item.transactionid},${item.btstart}`}>
+  //       {item.btstart} to {item.btend}
+  //     </MenuItem>
+  //   ));
+  // };
+
   const showBatchTime = () => {
-    return batchTimeList.map((item) => (
-      <MenuItem value={`${item.transactionid},${item.btstart}`}>
+    return batchTimeList?.map((item) => (
+      <MenuItem value={`${item.btstart} to ${item.btend}`}>
         {item.btstart} to {item.btend}
       </MenuItem>
     ));
   };
 
-  useState(() => {
+
+  useEffect(() => {
     fillBatchTime();
     fillCourse();
   }, []);
@@ -330,7 +342,7 @@ export default function CreateBatch() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={storedState.organizationid}
+            value={storedState?.organizationid}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
               return {
@@ -404,25 +416,29 @@ export default function CreateBatch() {
             </div>
           )}
         </Grid>
-        <Grid item xs={12}> <div  
-         style={{
-          colors: "#273c75",
-       
-          fontSize: 20,
-          fontWeight: "bold",
-          
-          letterSpacing: 3,
-        }}
-      >Status</div> </Grid>
+        <Grid item xs={12}>
+          {" "}
+          <div
+            style={{
+              colors: "#273c75",
+
+              fontSize: 20,
+              fontWeight: "bold",
+
+              letterSpacing: 3,
+            }}
+          >
+            Status
+          </div>{" "}
+        </Grid>
         <Grid item xs={12}>
           <FormGroup row>
-           
             <FormControlLabel
               control={
                 <Checkbox
                   checked={getMon.state}
                   onChange={(event) => handleChangeMon(event)}
-                  value="M"
+                  value="Mon"
                 />
               }
               label="Monday"
@@ -433,7 +449,7 @@ export default function CreateBatch() {
                 <Checkbox
                   checked={getTue.state}
                   onChange={(event) => handleChangeTue(event)}
-                  value="T"
+                  value="Tue"
                 />
               }
               label="Tuesday"
@@ -444,7 +460,7 @@ export default function CreateBatch() {
                 <Checkbox
                   checked={getWed.state}
                   onChange={(event) => handleChangeWed(event)}
-                  value="W"
+                  value="Wed"
                 />
               }
               label="Wednesday"
@@ -455,7 +471,7 @@ export default function CreateBatch() {
                 <Checkbox
                   checked={getThu.state}
                   onChange={(event) => handleChangeThu(event)}
-                  value="t"
+                  value="Thu"
                 />
               }
               label="Thursday"
@@ -465,7 +481,7 @@ export default function CreateBatch() {
                 <Checkbox
                   checked={getFri.state}
                   onChange={(event) => handleChangeFri(event)}
-                  value="F"
+                  value="Fri"
                 />
               }
               label="Friday"
@@ -475,7 +491,7 @@ export default function CreateBatch() {
                 <Checkbox
                   checked={getSat.state}
                   onChange={(event) => handleChangeSat(event)}
-                  value="S"
+                  value="Sat"
                 />
               }
               label="Saturday"

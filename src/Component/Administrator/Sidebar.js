@@ -63,9 +63,12 @@ export default function Sidebar() {
     setTwo(false);
   };
   var navigate = useNavigate();
+  
   const handleClickLogOut = () => {
-    localStorage.removeItem("admin");
-    navigate("/orgadminlogin");
+ 
+   localStorage.removeItem("admin");
+  localStorage.clear()
+    navigate("/orgAdminlogin");
   };
   return (
     <>

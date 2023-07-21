@@ -71,7 +71,7 @@ export default function CreateCourse() {
         courseDuration: getCourseDuration,
         courseFees: getCourseFees,
         description: getDescription,
-        organizationid: storedState.organizationid,
+        organizationid: storedState?.organizationid,
       };
 
      var  result = await postData("course/updateRecord", body);
@@ -231,7 +231,7 @@ export default function CreateCourse() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={storedState.organizationid}
+            value={storedState?.organizationid}
             // onChange={(e) => setOrgName(e.target.value.trimStart())}
             sx={(theme) => {
               return {

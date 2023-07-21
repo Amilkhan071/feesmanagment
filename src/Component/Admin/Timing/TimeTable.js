@@ -27,7 +27,7 @@ export default function TimeTable() {
   const [selectedDate2, setSelectedDate2] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const [organizationId, setOrganizationId] = useState(storedState.organizationid);
+  const [organizationId, setOrganizationId] = useState(storedState?.organizationid);
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
   const [error, setError] = useState({});

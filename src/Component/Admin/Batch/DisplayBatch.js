@@ -22,7 +22,7 @@ export default function DisplayBatch() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
 
   const fetchAllBatch = async () => {
-    var body = { organizationid: storedState.organizationid };
+    var body = { organizationid: storedState?.organizationid };
     var result = await postData("batch/displayAll", body);
     setTimeTable(result.data);
   };

@@ -25,7 +25,7 @@ export default function CreateCourse() {
   const handleSubmit = async () => {
     if (validation()) {
       var formData = new FormData();
-      formData.append("organizationid", storedState.organizationid);
+      formData.append("organizationid", storedState?.organizationid);
       formData.append("courseName", getCourseName);
       formData.append("courseDuration", getCourseDuration);
       formData.append("courseFees", getCourseFees);
@@ -180,7 +180,7 @@ export default function CreateCourse() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={storedState.organizationid}
+            value={storedState?.organizationid}
             // onChange={(e) => setOrgName(e.target.value.trimStart())}
             sx={(theme) => {
               return {
