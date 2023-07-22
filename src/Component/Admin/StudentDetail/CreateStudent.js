@@ -69,7 +69,7 @@ export default function CreateStudent() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-// alert(generateRandomPassword())
+ 
   const handleSubmit = async () => {
     if (validation()) {
       var formData = new FormData();
@@ -144,20 +144,16 @@ export default function CreateStudent() {
   }
 
   const handleCourse = (event) => {
-    alert(event.target.value);
     // var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-    alert(event.target.value)
     fillbatch(event.target.value)
     // setCourseName(crs[1]);
   };
 
   const fillbatch = async (getCourseId) => {
     var body = { coursename: getCourseId };
-   // alert(JSON.stringify(body));
     var result = await postData("studetail/getbtbcs", body);
     setBatchIdList(result.data)
-    alert(JSON.stringify(result.data));
    
   };
   function showBatch() {
@@ -218,7 +214,7 @@ export default function CreateStudent() {
 
       if (!/^[6789]\d{9}$/.test(getmobile)) {
 
-        handleError("getmobile", "Please enter a valid mobile number");
+        handleError("getmobile", "Please enter a valid mobile no start with 6,7,8,9");
         isValid = false;
      
       }
@@ -234,7 +230,7 @@ export default function CreateStudent() {
 
       if (!/^[6789]\d{9}$/.test(getparentmobile)) {
 
-        handleError("getparentmobile", "Please enter a valid mobile number");
+        handleError("getparentmobile", "Please enter a valid  mobile no start with 6,7,8,9");
         isValid = false;
      
       }
@@ -250,7 +246,7 @@ export default function CreateStudent() {
 
       if (!/^[6789]\d{9}$/.test(getwhatsappnumber)) {
 
-        handleError("getwhatsappnumber", "Please enter a valid mobile number");
+        handleError("getwhatsappnumber", "Please enter a valid mobile no start with 6,7,8,9");
         isValid = false;
      
       }
@@ -266,7 +262,7 @@ export default function CreateStudent() {
 
       if (!/^[6789]\d{9}$/.test(getphoneno)) {
 
-        handleError("getphoneno", "Please enter a valid mobile number");
+        handleError("getphoneno", "Please enter a valid mobile no start with 6,7,8,9");
         isValid = false;
      
       }
@@ -1004,15 +1000,15 @@ export default function CreateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={1} lg={1}>
+        <Grid item md={2} lg={1}>
           <Avatar
             alt="photo"
             src={getstudentphoto}
             variant="rounded"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Photograph
             <input

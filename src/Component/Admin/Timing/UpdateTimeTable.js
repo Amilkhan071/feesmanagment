@@ -15,6 +15,7 @@ import {
   MobileTimePicker,
   TimePicker,
 } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { postData } from "../../Services/FetchNodeServices";
 import Swal from "sweetalert2";
@@ -35,12 +36,8 @@ export default function UpdateTimeTable() {
 
   const handleStartTimeChange = (newStartTime) => {
     var time = new Date(newStartTime);
-    var h = time.toLocaleString("en-us", {
-      hour: "numeric",
-      hour12: true,
-      minute: "numeric",
-    });
-    setStartTime(h);
+    var mtime = moment(time).format("YYYY-MM-DDTHH:mm");
+    setStartTime(mtime);
     setEndTime(calculateEndTime(newStartTime));
   };
 
@@ -53,7 +50,10 @@ export default function UpdateTimeTable() {
     return null;
   };
   const handleEndTimeChange = (newEndTime) => {
-    setEndTime(newEndTime);
+    var time = new Date(newEndTime);
+    var mtime = moment(time).format("YYYY-MM-DDTHH:mm");
+    alert(mtime)
+    setEndTime(mtime);
   };
 
   const searchById = async () => {
@@ -105,8 +105,8 @@ export default function UpdateTimeTable() {
       alert("jii");
       var body = {
         transactionid: params.trnsid,
-        btStart: startTime,
-        btEnd: moment(endTime).format("h:mm A"),
+        btStart: moment(startTime).format("hh:mm A"),
+        btEnd: moment(endTime).format("hh:mm A"),
       };
       var result = await postData("timingtable/updateRecord", body);
       if (result.status) {
@@ -248,7 +248,8 @@ export default function UpdateTimeTable() {
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <MobileTimePicker
-              value={startTime}
+              // value={startTime}
+              value={dayjs(startTime)}
               onChange={handleStartTimeChange}
               label="Batch Start Time"
               slotProps={{
@@ -266,7 +267,7 @@ export default function UpdateTimeTable() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <MobileTimePicker
               label="Batch End Time"
-              value={endTime}
+              value={dayjs(endTime)}
               onChange={handleEndTimeChange}
               disabled={!startTime}
               onError={!error.selectedDate2 ? false : true}

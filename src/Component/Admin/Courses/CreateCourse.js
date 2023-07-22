@@ -39,7 +39,6 @@ export default function CreateCourse() {
         formData,
       //  config
       );
- alert(JSON.stringify(result))
       if (result.status==true) {
         Swal.fire({
           icon: "success",
@@ -297,15 +296,15 @@ export default function CreateCourse() {
             }}
           />
         </Grid>
-        <Grid item md={1} lg={1}>
+        <Grid item md={2} lg={1}>
           <Avatar
             alt="Course Logo"
             src={getCourseLogoPath}
             variant="rounded"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Picture
             <input

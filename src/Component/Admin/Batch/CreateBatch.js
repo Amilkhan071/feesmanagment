@@ -240,7 +240,8 @@ export default function CreateBatch() {
   };
 
   const fillBatchTime = async () => {
-    let list = await getData("timingtable/displayAlltimingtable");
+    var body = { organizationid:storedState?.organizationid  };
+    var  list = await postData("timingtable/displayAll",body);
     console.log(list);
     setBatchTimeList(list.data);
   };

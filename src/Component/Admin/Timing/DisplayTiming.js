@@ -19,9 +19,9 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
 
 
   const fetchAllTimeTable = async () => {
-   // var body = { organizationid:storedState.organizationid  };
-    var result = await getData("timingtable/displayAlltimingtable");
-   //console.log(result);
+    var body = { organizationid:storedState?.organizationid  };
+    var result = await postData("timingtable/displayAll",body);
+    //alert(JSON.stringify(result.data))
     setTimeTable(result.data);
   };
   useEffect(function () {

@@ -80,6 +80,7 @@ export default function UpdateBatch() {
       setBST(record.data.starttime);
       setBatchTime(record.data.batchtime);
       setStatus(record.data.status);
+      setBatchStartTime(record.data.batchtime)
       var sts = record.data.status.split(/(?<=^(?:.{3})+)(?!$)/);
 
       for (var i = 0; i < sts.length; i++) {
@@ -118,17 +119,12 @@ export default function UpdateBatch() {
   };
 
   const fillBatchTime = async () => {
-    let list = await getData("timingtable/displayAlltimingtable");
+    var body = { organizationid:storedState?.organizationid  };
+    var  list = await postData("timingtable/displayAll",body);
     setBatchTimeList(list.data);
   };
 
-  // const showBatchTime = () => {
-  //   return batchTimeList?.map((item) => (
-  //     <MenuItem value={`${item.transactionid},${item.btstart}`}>
-  //       {item.btstart} to {item.btend}
-  //     </MenuItem>
-  //   ));
-  // };
+ 
 
   const showBatchTime = () => {
     return batchTimeList?.map((item) => (

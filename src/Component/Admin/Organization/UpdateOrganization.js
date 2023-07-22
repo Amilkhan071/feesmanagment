@@ -77,7 +77,6 @@ export default function UpdateOrganization() {
   const stateCityData = Object.keys(StateCity);
 
   const handleSubmitEdit = async () => {
-    // alert(getDob)
     if (validation()) {
       var body = {
         organizationid: params.orgid,
@@ -114,7 +113,6 @@ export default function UpdateOrganization() {
   const searchById = async () => {
     var body = { organizationid: params.orgid };
     var record = await postData("organization/displayById", body);
-    //alert(JSON.stringify(record))
     if (record.data != null) {
       setRecord(record.data);
       setOrgName(record.data.organizationname);
@@ -123,7 +121,6 @@ export default function UpdateOrganization() {
       // var bd = new Date(record.data.birthdate);
       // var tbd = bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
       setDob(JSON.stringify(ttth));
-      //alert(JSON.stringify(ttth))
       setGender(record.data.gender);
       setAddress(record.data.address);
       setState(record.data.orgstate);
@@ -845,16 +842,16 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-        <Grid item md={1} lg={1} sm={3} xs={3}>
+        <Grid item md={2} lg={1} sm={3} xs={3}>
           <Avatar
             alt="Picture"
             src={getOwnerPicturePath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
+            variant="rounded"
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
 
-        <Grid item md={5} lg={5} sm={12} xs={12}>
+        <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Select Owner Picture
             <input
@@ -891,15 +888,15 @@ export default function UpdateOrganization() {
           )}
         </Grid>
 
-        <Grid item md={1} lg={1} sm={3} xs={3}>
+        <Grid item md={2} lg={1} sm={3} xs={3}>
           <Avatar
             alt="Logo"
             src={getLogoPicturePath}
-            variant="circular"
-            sx={{ width: 56, height: 56 }}
+            variant="rounded"
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={5} lg={5} sm={12} xs={12}>
+        <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Select Organization Logo
             <input

@@ -15,7 +15,6 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 export default function Sidebar() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
-  //alert(JSON.stringify(storedState))
 
 
   const [openn, setOpenn] = useState(false);

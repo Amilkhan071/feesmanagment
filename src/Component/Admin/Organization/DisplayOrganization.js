@@ -42,7 +42,6 @@ export default function DisplayOrganization() {
 
 
   const handleDelete=async(id)=>{
-    //alert(id)
     var body={'organizationid':id}
     var result=await postData('organization/deleteRecord',body)
     if(result.status)

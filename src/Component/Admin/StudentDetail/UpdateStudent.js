@@ -74,7 +74,7 @@ export default function UpdateStudent() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  
+
   const handleSubmitEdit = async () => {
     if (validation()) {
       var body = {
@@ -89,7 +89,7 @@ export default function UpdateStudent() {
         parentno: getparentmobile,
         phoneno: getphoneno,
         Whatsappnumber: getwhatsappnumber,
-        password: getpassword,
+        // password: getpassword,
         address: getaddress,
         stustate: getState,
         stucity: getCity,
@@ -100,7 +100,7 @@ export default function UpdateStudent() {
         courseid: getCourseId,
         currentdate: new Date().toLocaleString(),
         remark: getRemark,
-        batchid:batchId
+        batchid: batchId,
       };
       var result = await postData("studetail/updateRecord", body);
       console.log(body);
@@ -139,11 +139,8 @@ export default function UpdateStudent() {
   };
   const fillbatch = async (getCourseId) => {
     var body = { coursename: getCourseId };
-   // alert(JSON.stringify(body));
     var result = await postData("studetail/getbtbcs", body);
-    setBatchIdList(result.data)
-  //  alert(JSON.stringify(result.data));
-   
+    setBatchIdList(result.data);
   };
   function showBatch() {
     return batchIdList.map((item) => (
@@ -156,12 +153,8 @@ export default function UpdateStudent() {
     ));
   }
   const handleCourse = (event) => {
-   // alert(event.target.value);
-    // var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-   // alert(event.target.value)
-    fillbatch(event.target.value)
-    // setCourseName(crs[1]);
+    fillbatch(event.target.value);
   };
 
   const validation = () => {
@@ -206,50 +199,44 @@ export default function UpdateStudent() {
     }
 
     if (getmobile.length) {
-
       if (!/^[6789]\d{9}$/.test(getmobile)) {
-
-        handleError("getmobile", "Please enter a valid mobile number");
+        handleError(
+          "getmobile",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
-
 
     if (isNaN(getmobile) || getmobile.length < 10) {
       handleError("getmobile", "Please enter a valid mobile number");
       isValid = false;
     }
-  
+
     if (getparentmobile.length) {
-
       if (!/^[6789]\d{9}$/.test(getparentmobile)) {
-
-        handleError("getparentmobile", "Please enter a valid mobile number");
+        handleError(
+          "getparentmobile",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
 
-  
     if (isNaN(getparentmobile) || getparentmobile.length < 10) {
       handleError("getparentmobile", "Please enter a valid mobile number");
       isValid = false;
     }
 
     if (getwhatsappnumber.length) {
-
       if (!/^[6789]\d{9}$/.test(getwhatsappnumber)) {
-
-        handleError("getwhatsappnumber", "Please enter a valid mobile number");
+        handleError(
+          "getwhatsappnumber",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
-
 
     if (isNaN(getwhatsappnumber) || getwhatsappnumber.length < 10) {
       handleError("getwhatsappnumber", "Please enter a valid mobile number");
@@ -257,16 +244,14 @@ export default function UpdateStudent() {
     }
 
     if (getphoneno.length) {
-
       if (!/^[6789]\d{9}$/.test(getphoneno)) {
-
-        handleError("getphoneno", "Please enter a valid mobile number");
+        handleError(
+          "getphoneno",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
-
 
     if (isNaN(getphoneno) || getphoneno.length < 10) {
       handleError("getphoneno", "Please enter a valid mobile number");
@@ -276,7 +261,7 @@ export default function UpdateStudent() {
     //   handleError("getpassword", "Please Input password");
     //   isValid = false;
     // }
-   
+
     // if (getpassword.length) {
     //   if (
     //     !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
@@ -318,7 +303,10 @@ export default function UpdateStudent() {
     }
     if (getInstituename) {
       if (getInstituename.length > 18 || getInstituename.length < 4) {
-        handleError("getInstituename", "Please Input instituename Between 4 to 18 letters");
+        handleError(
+          "getInstituename",
+          "Please Input instituename Between 4 to 18 letters"
+        );
         isValid = false;
       }
     }
@@ -370,8 +358,8 @@ export default function UpdateStudent() {
       // var bd = new Date(record.data.birthdate);
       // var tbd =
       //   bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
-      var dateModi=moment(record.data.birthdate).format("MM-DD-YYYY")
-        setdob(JSON.stringify(dateModi));
+      var dateModi = moment(record.data.birthdate).format("MM-DD-YYYY");
+      setdob(JSON.stringify(dateModi));
       setGender(record.data.gender);
       setemail(record.data.email);
       setmobile(record.data.mobile);
@@ -390,8 +378,8 @@ export default function UpdateStudent() {
       setCourseId(record.data.courseid);
       setCurrentDate(record.data.currentdate);
       setRemark(record.data.remark);
-      fillbatch( record.data.courseid)
-     setBatchId(record.data.batchid)
+      fillbatch(record.data.courseid);
+      setBatchId(record.data.batchid);
     } else {
       Swal.fire({
         icon: "error",
@@ -419,11 +407,11 @@ export default function UpdateStudent() {
     formData.append("organizationid", storedState?.organizationname);
     formData.append("studentid", params.stdid);
     formData.append("picture", getPhoto);
-//  let config = { headers: { "content-type": "multipart/form-data" } };
+    //  let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "studetail/updateLogo",
-      formData,
-     // config
+      formData
+      // config
     );
     if (result.status) {
       Swal.fire({
@@ -596,7 +584,7 @@ export default function UpdateStudent() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
-               value={dayjs(getdob)}
+              value={dayjs(getdob)}
               onChange={(item) => setdob(item)}
               slotProps={{
                 textField: {
@@ -735,7 +723,7 @@ export default function UpdateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={4} sm={12} xs={12}>
+        {/* <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Password"
@@ -773,8 +761,7 @@ export default function UpdateStudent() {
               };
             }}
           />
-        </Grid>
-       
+        </Grid> */}
 
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
@@ -944,11 +931,11 @@ export default function UpdateStudent() {
           )}
         </Grid>
         <Grid item md={6} lg={4} sm={12} xs={12}>
-        <FormControl fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
-             error={!error.batchId ? false : true}
-             onFocus={() => handleError("batchId", null)}
+              error={!error.batchId ? false : true}
+              onFocus={() => handleError("batchId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
@@ -1070,16 +1057,15 @@ export default function UpdateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={1} lg={1} sm={3} xs={3}>
+        <Grid item md={2} lg={1} sm={3} xs={3}>
           <Avatar
             alt="photo"
             src={getstudentphoto}
             variant="circular"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
-         
         </Grid>
-        <Grid item md={5} lg={5} sm={12} xs={12}>
+        <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Photograph
             <input
@@ -1115,7 +1101,7 @@ export default function UpdateStudent() {
             </div>
           )} */}
         </Grid>
-       
+
         <Grid
           item
           xs={12}

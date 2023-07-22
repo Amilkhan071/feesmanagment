@@ -26,7 +26,6 @@ export default function DisplayStudent() {
     let body = { organizationid: storedState?.organizationid };
     var list = await postData("studetail/displayAllRecord", body);
     setOrganization(list.data);
-    // alert(JSON.parse(list))
   };
 
   useEffect(function () {

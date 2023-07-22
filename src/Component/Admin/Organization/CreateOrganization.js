@@ -785,15 +785,15 @@ export default function CreateOrganization() {
           />
         </Grid>
 
-        <Grid item md={1} lg={1}>
+        <Grid item md={2} lg={1}>
           <Avatar
             alt="Category Icon"
             src={getOwnerPicturePath}
             variant="rounded"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth  >
            Upload Owner Picture
             <input
@@ -819,16 +819,16 @@ export default function CreateOrganization() {
           )}
 
         </Grid>
-        <Grid item md={1} lg={1}>
+        <Grid item md={2} lg={1}>
           <Avatar
           onFocus={()=>handleError("getLogoPicturePath", null)}
             alt="Category Icon"
             src={getLogoPicturePath}
             variant="rounded"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={3} lg={3} sm={12} xs={12}>
+        <Grid  style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
            Upload Organisation Logo
             <input

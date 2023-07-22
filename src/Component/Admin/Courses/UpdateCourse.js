@@ -348,15 +348,15 @@ export default function CreateCourse() {
             }}
           />
         </Grid>
-        <Grid item md={1} lg={1} sm={3} xs={3}>
+        <Grid item md={2} lg={1} sm={3} xs={3}>
           <Avatar
             alt="Course Logo"
             src={getCourseLogoPath}
             variant="circular"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid item md={5} lg={5} sm={12} xs={12}>
+        <Grid item md={3} lg={3} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
             Picture
             <input
