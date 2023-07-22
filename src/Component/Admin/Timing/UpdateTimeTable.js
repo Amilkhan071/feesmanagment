@@ -18,6 +18,8 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { postData } from "../../Services/FetchNodeServices";
 import Swal from "sweetalert2";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
+import moment from "moment";
 
 export default function UpdateTimeTable() {
   const params = useParams();
@@ -28,17 +30,43 @@ export default function UpdateTimeTable() {
   const [btend, setbtend] = useState("");
   const [error, setError] = useState({});
   var navigate = useNavigate();
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+
+  const handleStartTimeChange = (newStartTime) => {
+    var time = new Date(newStartTime);
+    var h = time.toLocaleString("en-us", {
+      hour: "numeric",
+      hour12: true,
+      minute: "numeric",
+    });
+    setStartTime(h);
+    setEndTime(calculateEndTime(newStartTime));
+  };
+
+  const calculateEndTime = (start) => {
+    if (start) {
+      const end = new Date(start);
+      end.setHours(end.getHours() + 1);
+      return end;
+    }
+    return null;
+  };
+  const handleEndTimeChange = (newEndTime) => {
+    setEndTime(newEndTime);
+  };
 
   const searchById = async () => {
     var body = { transactionid: params.trnsid };
     var record = await postData("timingtable/displayById", body);
-   // alert(JSON.stringify(record))
-if (record.data != null) {
+    // alert(JSON.stringify(record))
+    if (record.data != null) {
       setOrganizationId(record.data.organizationid);
-      var st = new Date("2019/01/01 " + record.data.btstart + " GMT+0530");
-      var et = new Date("2019/01/01 " + record.data.btend + " GMT+0530");
-      setSelectedDate1(st);
-      setSelectedDate2(et);
+      var st = new Date("2023/01/01 " + record.data.btstart + " GMT+0530");
+      var et = new Date("2023/01/01 " + record.data.btend + " GMT+0530");
+
+      setStartTime(st);
+      setEndTime(et);
     } else {
       Swal.fire({
         icon: "error",
@@ -73,13 +101,12 @@ if (record.data != null) {
   };
 
   const handleSubmitEdit = async () => {
-   
     if (validation()) {
-      alert('jii')
+      alert("jii");
       var body = {
         transactionid: params.trnsid,
-        btStart: btstart,
-        btEnd: btend,
+        btStart: startTime,
+        btEnd: moment(endTime).format("h:mm A"),
       };
       var result = await postData("timingtable/updateRecord", body);
       if (result.status) {
@@ -220,61 +247,37 @@ if (record.data != null) {
 
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={selectedDate1}
-              onChange={handleDateChange1}
-              label="Batch Time Start"
+            <MobileTimePicker
+              value={startTime}
+              onChange={handleStartTimeChange}
+              label="Batch Start Time"
               slotProps={{
                 textField: {
                   variant: "outlined",
                   fullWidth: "100%",
-                  helperText: error.btStart,
-                  error: !error.btStart ? false : true,
-                  onFocus: () => handleError("btStart", null),
+                  required: true,
                 },
               }}
             />
-            {/* <DatePicker
-                  label="Birth Date"
-                  //  value={getDob}
-                 // onChange={(item) => setDob(item)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      fullWidth: "100%",
-                    },
-                  }}
-                /> */}
           </LocalizationProvider>
         </Grid>
 
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={selectedDate2}
-              onChange={handleDateChange2}
-              label="Batch Time End"
+            <MobileTimePicker
+              label="Batch End Time"
+              value={endTime}
+              onChange={handleEndTimeChange}
+              disabled={!startTime}
+              onError={!error.selectedDate2 ? false : true}
               slotProps={{
                 textField: {
                   variant: "outlined",
                   fullWidth: "100%",
-                  helperText: error.selectedDate2,
-                  error: !error.selectedDate2 ? false : true,
-                  onFocus: () => handleError("selectedDate2", null),
+                  required: true,
                 },
               }}
             />
-            {/* <DatePicker
-                  label="Birth Date"
-                  //  value={getDob}
-                 // onChange={(item) => setDob(item)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      fullWidth: "100%",
-                    },
-                  }}
-                /> */}
           </LocalizationProvider>
         </Grid>
         <Grid

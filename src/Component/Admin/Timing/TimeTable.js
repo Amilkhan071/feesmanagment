@@ -18,7 +18,8 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { postData } from "../../Services/FetchNodeServices";
 import Swal from "sweetalert2";
-
+import moment from "moment/moment";
+import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 export default function TimeTable() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
   const [selectedDate1, setSelectedDate1] = useState(
@@ -27,41 +28,68 @@ export default function TimeTable() {
   const [selectedDate2, setSelectedDate2] = useState(
     new Date("2014-08-18T21:11:54")
   );
-  const [organizationId, setOrganizationId] = useState(storedState?.organizationid);
+  const [organizationId, setOrganizationId] = useState(
+    storedState?.organizationid
+  );
   const [btstart, setbtstart] = useState("");
   const [btend, setbtend] = useState("");
   const [error, setError] = useState({});
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+
   var navigate = useNavigate();
 
-  const handleDateChange1 = (date) => {
-    alert(date)
-    var time = new Date(date);
+  const handleStartTimeChange = (newStartTime) => {
+    var time = new Date(newStartTime);
     var h = time.toLocaleString("en-us", {
       hour: "numeric",
       hour12: true,
       minute: "numeric",
     });
-    setbtstart(h);
-    setSelectedDate1(date);
+    setStartTime(h);
+    setEndTime(calculateEndTime(newStartTime));
   };
 
-  const handleDateChange2 = (date) => {
-    var time = new Date(date);
-    var h = time.toLocaleString("en-us", {
-      hour: "numeric",
-      hour12: true,
-      minute: "numeric",
-    });
-    setbtend(h);
-    setSelectedDate2(date);
+  const calculateEndTime = (start) => {
+    if (start) {
+      const end = new Date(start);
+      end.setHours(end.getHours() + 1);
+      return end;
+    }
+    return null;
   };
+  const handleEndTimeChange = (newEndTime) => {
+    setEndTime(newEndTime);
+  };
+  // const handleDateChange1 = (date) => {
+  //  // alert(date)
+  //   var time = new Date(date);
+  //   var h = time.toLocaleString("en-us", {
+  //     hour: "numeric",
+  //     hour12: true,
+  //     minute: "numeric",
+  //   });
+  //   setbtstart(h);
+  //   setSelectedDate1(date);
+  // };
+
+  // const handleDateChange2 = (date) => {
+  // var time = new Date(date);
+  // var h = time.toLocaleString("en-us", {
+  //   hour: "numeric",
+  //   hour12: true,
+  //   minute: "numeric",
+  // });
+  // setbtend(h);
+  // setSelectedDate2(date);
+  // };
 
   const handleSubmit = async () => {
     if (validation()) {
       var body = {
-        organizationid: 1,
-        btStart: btstart,
-        btEnd: btend,
+        organizationid: storedState.organizationid,
+        btStart: startTime,
+        btEnd: moment(endTime).format("h:mm A"),
       };
 
       var result = await postData("timingtable/addNewRecord", body);
@@ -70,17 +98,14 @@ export default function TimeTable() {
           icon: "success",
           title: "Done",
           text: result.message,
-
         });
-      
-        navigate("/dashboard/displayTiming");
 
+        navigate("/dashboard/displayTiming");
       } else {
         Swal.fire({
           icon: "error",
           title: "Ooops....",
           text: result.message,
-
         });
       }
     }
@@ -93,13 +118,11 @@ export default function TimeTable() {
       handleError("organizationId", "Please Input organizationId");
       isValid = false;
     }
-   
+
     if (isNaN(organizationId)) {
       handleError("organizationId", "Please Input valid organization id");
       isValid = false;
     }
-
-   
 
     return isValid;
   };
@@ -184,11 +207,11 @@ export default function TimeTable() {
             error={!error.organizationId ? false : true}
             helperText={error.organizationId}
             onFocus={() => handleError("organizationId", null)}
-            inputProps={{maxLength:10, style: { color: "#000" }, }}
+            inputProps={{ maxLength: 10, style: { color: "#000" } }}
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={organizationId}
+            value={storedState.organizationid}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
               return {
@@ -205,60 +228,39 @@ export default function TimeTable() {
         </Grid>
 
         <Grid item md={4} lg={4} sm={12} xs={12}>
-          <LocalizationProvider dateAdapter={AdapterDayjs} >
-            <TimePicker
-            
-              //value={selectedDate1}
-              onChange={handleDateChange1}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <MobileTimePicker
+              value={startTime}
+              onChange={handleStartTimeChange}
               label="Batch Start Time"
               slotProps={{
                 textField: {
                   variant: "outlined",
                   fullWidth: "100%",
-                  required:true
+                  required: true,
                 },
               }}
             />
-            {/* <DatePicker
-                  label="Birth Date"
-                  //  value={getDob}
-                 // onChange={(item) => setDob(item)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      fullWidth: "100%",
-                    },
-                  }}
-                /> */}
           </LocalizationProvider>
         </Grid>
 
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              //   value={selectedDate2}
-              onChange={handleDateChange2}
+            <MobileTimePicker
               label="Batch End Time"
+              value={endTime}
+              onChange={handleEndTimeChange}
+              disabled={!startTime}
               onError={!error.selectedDate2 ? false : true}
               slotProps={{
                 textField: {
                   variant: "outlined",
                   fullWidth: "100%",
-                  required:true
+                  required: true,
                 },
               }}
             />
-            {/* <DatePicker
-                  label="Birth Date"
-                  //  value={getDob}
-                 // onChange={(item) => setDob(item)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      fullWidth: "100%",
-                    },
-                  }}
-                /> */}
+            
           </LocalizationProvider>
         </Grid>
         <Grid

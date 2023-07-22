@@ -70,42 +70,55 @@ export default function Dashboard() {
 
       <Grid item lg={10} md={9} xs={12} sm={12}>
         <Routes>
-          {/* <Route
-            element={<CreateOrganization />}
-            path={"/CreateOrganization"}
+          <Route
+            element={<AdminProtected Component={CreateCourse} />}
+            path={"/CreateCourse"}
           />
           <Route
-
-            element={<UpdateOrganization />}
-            path={"/UpdateOrganization/:orgid"}
+            element={<AdminProtected Component={DisplayCourse} />}
+            path={"/DisplayCourse"}
           />
-      
-           <Route
-            element={<DisplayOrganization />}
-            path={"/DisplayOrganization"}
-          /> */}
-
-          <Route element={<UpdateCourse />} path={"/UpdateCourse/:crsid"} />
+          <Route
+            element={<AdminProtected Component={UpdateCourse} />}
+            path={"/UpdateCourse/:crsid"}
+          />
+          {/* <Route element={<CreateCourse />} path={"/CreateCourse"} />
           <Route element={<DisplayCourse />} path={"/DisplayCourse"} />
-          <Route element={<CreateCourse />} path={"/CreateCourse"} />
+          <Route element={<UpdateCourse />} path={"/UpdateCourse/:crsid"} /> */}
 
           <Route
-            element={<UpdateOrganization />}
-            path={"/UpdateOrganization/:orgid"}
+            element={<AdminProtected Component={TimeTable} />}
+            path={"/TimeTable"}
           />
-          <Route element={<TimeTable />} path={"/TimeTable"} />
+          <Route
+            element={<AdminProtected Component={DisplayTiming} />}
+            path={"/DisplayTiming"}
+          />
+          <Route
+            element={<AdminProtected Component={UpdateTimeTable} />}
+            path={"/UpdateTimeTable/:trnsid"}
+          />
+          {/* <Route element={<TimeTable />} path={"/TimeTable"} />
           <Route element={<DisplayTiming />} path={"/DisplayTiming"} />
           <Route
             element={<UpdateTimeTable />}
             path={"/UpdateTimeTable/:trnsid"}
+          /> */}
+          <Route
+            element={<AdminProtected Component={CreateBatch} />}
+            path={"/CreateBatch"}
           />
-          <Route element={<CreateBatch />} path={"/CreateBatch"} />
+          <Route
+            element={<AdminProtected Component={DisplayBatch} />}
+            path={"/DisplayBatch"}
+          />
+          <Route
+            element={<AdminProtected Component={UpdateBatch} />}
+            path={"/UpdateBatch/:batchid"}
+          />
+          {/* <Route element={<CreateBatch />} path={"/CreateBatch"} />
           <Route element={<DisplayBatch />} path={"/DisplayBatch"} />
-          <Route element={<UpdateBatch />} path={"/UpdateBatch/:batchid"} />
-
-          {/* <Route element={<DisplayStudent />} path={"/DisplayStudent"} />
-          <Route element={<CreateStudent />} path={"/CreateStudent"} />
-          <Route element={<UpdateStudent />} path={"/UpdateStudent/:stdid"} /> */}
+          <Route element={<UpdateBatch />} path={"/UpdateBatch/:batchid"} /> */}
           <Route
             element={<AdminProtected Component={CreateStudent} />}
             path={"/CreateStudent"}
@@ -118,6 +131,9 @@ export default function Dashboard() {
             element={<AdminProtected Component={UpdateStudent} />}
             path={"/UpdateStudent/:stdid"}
           />
+          {/* <Route element={<DisplayStudent />} path={"/DisplayStudent"} />
+          <Route element={<CreateStudent />} path={"/CreateStudent"} />
+          <Route element={<UpdateStudent />} path={"/UpdateStudent/:stdid"} /> */}
         </Routes>
       </Grid>
     </Grid>

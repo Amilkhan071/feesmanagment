@@ -69,9 +69,8 @@ export default function CreateStudent() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+// alert(generateRandomPassword())
   const handleSubmit = async () => {
-    alert(batchId)
     if (validation()) {
       var formData = new FormData();
       formData.append("organizationid", storedState?.organizationid);
@@ -84,7 +83,7 @@ export default function CreateStudent() {
       formData.append("parentno", getparentmobile);
       formData.append("phoneno", getphoneno);
       formData.append("Whatsappnumber", getwhatsappnumber);
-      formData.append("password", getpassword);
+      formData.append("password", generateRandomPassword());
       formData.append("address", getaddress);
       formData.append("stustate", getState);
       formData.append("stucity", getCity);
@@ -93,7 +92,7 @@ export default function CreateStudent() {
       formData.append("qualificationremark", getqualificationremark);
       formData.append("institutename", getInstituename);
       formData.append("courseid", getCourseId);
-      formData.append("currentdate", getCurrentDate);
+      formData.append("currentdate", new Date().toLocaleString());
       formData.append("remark", getRemark);
       formData.append("batchid", batchId);
 
@@ -214,41 +213,90 @@ export default function CreateStudent() {
       isValid = false;
     }
 
+    
+    if (getmobile.length) {
+
+      if (!/^[6789]\d{9}$/.test(getmobile)) {
+
+        handleError("getmobile", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
     if (isNaN(getmobile) || getmobile.length < 10) {
       handleError("getmobile", "Please enter a valid mobile number");
       isValid = false;
     }
+
+    if (getparentmobile.length) {
+
+      if (!/^[6789]\d{9}$/.test(getparentmobile)) {
+
+        handleError("getparentmobile", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
     if (isNaN(getparentmobile) || getparentmobile.length < 10) {
       handleError("getparentmobile", "Please enter a valid mobile number");
       isValid = false;
     }
+
+    if (getwhatsappnumber.length) {
+
+      if (!/^[6789]\d{9}$/.test(getwhatsappnumber)) {
+
+        handleError("getwhatsappnumber", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
     if (isNaN(getwhatsappnumber) || getwhatsappnumber.length < 10) {
       handleError("getwhatsappnumber", "Please enter a valid mobile number");
       isValid = false;
     }
+
+    if (getphoneno.length) {
+
+      if (!/^[6789]\d{9}$/.test(getphoneno)) {
+
+        handleError("getphoneno", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
+
     if (isNaN(getphoneno) || getphoneno.length < 10) {
       handleError("getphoneno", "Please enter a valid mobile number");
       isValid = false;
     }
 
-    if (!getpassword) {
-      handleError("getpassword", "Please Input password");
-      isValid = false;
-    }
-    if (getpassword.length) {
-      if (
-        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
-          getpassword
-        )
-      ) {
-        handleError(
-          "getpassword",
-          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
-        );
+    // if (!getpassword) {
+    //   handleError("getpassword", "Please Input password");
+    //   isValid = false;
+    // }
+    // if (getpassword.length) {
+    //   if (
+    //     !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+    //       getpassword
+    //     )
+    //   ) {
+    //     handleError(
+    //       "getpassword",
+    //       "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+    //     );
 
-        isValid = false;
-      }
-    }
+    //     isValid = false;
+    //   }
+    // }
     if (!getaddress) {
       handleError("getaddress", "Please Input address");
       isValid = false;
@@ -291,14 +339,14 @@ export default function CreateStudent() {
       handleError("getCourseId", "Please Select coursename");
       isValid = false;
     }
-    // if (!batchId) {
-    //   handleError("batchId", "Please Select batchname");
-    //   isValid = false;
-    // }
-    if (!getCurrentDate) {
-      handleError("getCurrentDate", "Please select currentdate");
+    if (!batchId) {
+      handleError("batchId", "Please Select batchname");
       isValid = false;
     }
+    // if (!getCurrentDate) {
+    //   handleError("getCurrentDate", "Please select currentdate");
+    //   isValid = false;
+    // }
     if (!getRemark) {
       handleError("getRemark", "Please Input remark");
       isValid = false;
@@ -622,7 +670,7 @@ export default function CreateStudent() {
             }}
           />
         </Grid>
-        <Grid item md={6} lg={4} sm={12} xs={12}>
+        {/* <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
             label="Password"
@@ -660,7 +708,7 @@ export default function CreateStudent() {
               };
             }}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
@@ -833,6 +881,8 @@ export default function CreateStudent() {
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
+                       error={!error.batchId ? false : true}
+                       onFocus={() => handleError("batchId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
@@ -855,7 +905,7 @@ export default function CreateStudent() {
             </div>
           )}
         </Grid>
-        <Grid item md={6} lg={4} sm={12} xs={12}>
+        {/* <Grid item md={6} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Current Date"
@@ -873,7 +923,7 @@ export default function CreateStudent() {
               }}
             />
           </LocalizationProvider>
-        </Grid>
+        </Grid> */}
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
@@ -1019,3 +1069,20 @@ export default function CreateStudent() {
     </div>
   );
 }
+function generateRandomPassword() {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  const capitals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const specialChars = '@';
+  const passwordLength = 6;
+
+  let password = '';
+  password += capitals.charAt(Math.floor(Math.random() * capitals.length));
+  password += specialChars;
+  
+  for (let i = 0; i < passwordLength - 2; i++) {
+    const randomChar = characters.charAt(Math.floor(Math.random() * characters.length));
+    password += randomChar;
+  }
+password+=Math.floor(Math.random()*99)
+  return password;
+} 

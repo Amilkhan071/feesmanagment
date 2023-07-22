@@ -34,6 +34,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormHelperText } from "@material-ui/core";
 import Swal from "sweetalert2";
+import moment from "moment/moment";
+import dayjs from "dayjs";
 export default function UpdateStudent() {
   const storedState = JSON.parse(localStorage.getItem("admin"));
 
@@ -96,7 +98,7 @@ export default function UpdateStudent() {
         quaremark: getqualificationremark,
         institutename: getInstituename,
         courseid: getCourseId,
-        currentdate: getCurrentDate,
+        currentdate: new Date().toLocaleString(),
         remark: getRemark,
         batchid:batchId
       };
@@ -203,40 +205,93 @@ export default function UpdateStudent() {
       isValid = false;
     }
 
+    if (getmobile.length) {
+
+      if (!/^[6789]\d{9}$/.test(getmobile)) {
+
+        handleError("getmobile", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
+
     if (isNaN(getmobile) || getmobile.length < 10) {
       handleError("getmobile", "Please enter a valid mobile number");
       isValid = false;
     }
+  
+    if (getparentmobile.length) {
+
+      if (!/^[6789]\d{9}$/.test(getparentmobile)) {
+
+        handleError("getparentmobile", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
+  
     if (isNaN(getparentmobile) || getparentmobile.length < 10) {
       handleError("getparentmobile", "Please enter a valid mobile number");
       isValid = false;
     }
+
+    if (getwhatsappnumber.length) {
+
+      if (!/^[6789]\d{9}$/.test(getwhatsappnumber)) {
+
+        handleError("getwhatsappnumber", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
+
     if (isNaN(getwhatsappnumber) || getwhatsappnumber.length < 10) {
       handleError("getwhatsappnumber", "Please enter a valid mobile number");
       isValid = false;
     }
+
+    if (getphoneno.length) {
+
+      if (!/^[6789]\d{9}$/.test(getphoneno)) {
+
+        handleError("getphoneno", "Please enter a valid mobile number");
+        isValid = false;
+     
+      }
+   
+    }
+
+
     if (isNaN(getphoneno) || getphoneno.length < 10) {
       handleError("getphoneno", "Please enter a valid mobile number");
       isValid = false;
     }
-    if (!getpassword) {
-      handleError("getpassword", "Please Input password");
-      isValid = false;
-    }
-    if (getpassword.length) {
-      if (
-        !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
-          getpassword
-        )
-      ) {
-        handleError(
-          "getpassword",
-          "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
-        );
+    // if (!getpassword) {
+    //   handleError("getpassword", "Please Input password");
+    //   isValid = false;
+    // }
+   
+    // if (getpassword.length) {
+    //   if (
+    //     !/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(
+    //       getpassword
+    //     )
+    //   ) {
+    //     handleError(
+    //       "getpassword",
+    //       "Invalid Password,Password only contain 6 to 16 valid characters,have alphabets & at least a number, and one special character"
+    //     );
 
-        isValid = false;
-      }
-    }
+    //     isValid = false;
+    //   }
+    // }
+
     if (!getaddress) {
       handleError("getaddress", "Please Input address");
       isValid = false;
@@ -276,14 +331,16 @@ export default function UpdateStudent() {
       handleError("getCourseId", "Please Select coursename");
       isValid = false;
     }
-    // if (!batchId) {
-    //   handleError("batchId", "Please Select batchname");
-    //   isValid = false;
-    // }
-    if (!getCurrentDate) {
-      handleError("getCurrentDate", "Please Select currentdate");
+    if (!batchId) {
+      handleError("batchId", "Please Select batchname");
       isValid = false;
     }
+
+    // if (!getCurrentDate) {
+    //   handleError("getCurrentDate", "Please Select currentdate");
+    //   isValid = false;
+    // }
+
     if (!getRemark) {
       handleError("getRemark", "Please Input remark");
       isValid = false;
@@ -310,10 +367,11 @@ export default function UpdateStudent() {
     if (record.data != null) {
       setstuname(record.data.studentname); // database column name studentname like this
       setfathername(record.data.fathername);
-      var bd = new Date(record.data.birthdate);
-      var tbd =
-        bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
-      setdob(tbd);
+      // var bd = new Date(record.data.birthdate);
+      // var tbd =
+      //   bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
+      var dateModi=moment(record.data.birthdate).format("MM-DD-YYYY")
+        setdob(JSON.stringify(dateModi));
       setGender(record.data.gender);
       setemail(record.data.email);
       setmobile(record.data.mobile);
@@ -538,7 +596,7 @@ export default function UpdateStudent() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
-               //value={getdob}
+               value={dayjs(getdob)}
               onChange={(item) => setdob(item)}
               slotProps={{
                 textField: {
@@ -889,6 +947,8 @@ export default function UpdateStudent() {
         <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
+             error={!error.batchId ? false : true}
+             onFocus={() => handleError("batchId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
@@ -911,7 +971,7 @@ export default function UpdateStudent() {
             </div>
           )}
         </Grid>
-        <Grid item md={6} lg={4} sm={12} xs={12}>
+        {/* <Grid item md={6} lg={4} sm={12} xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Current Date"
@@ -929,7 +989,7 @@ export default function UpdateStudent() {
               }}
             />
           </LocalizationProvider>
-        </Grid>
+        </Grid> */}
         <Grid item md={6} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
