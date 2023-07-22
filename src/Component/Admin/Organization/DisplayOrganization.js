@@ -12,12 +12,11 @@ import moment from "moment/moment";
 export default function DisplayOrganization() {
   const [organization, setOrganization] = useState([]);
   const navigate = useNavigate();
-
+  var myMoment = moment();
 
 
   const fetchAllOrganization=async()=>{
     var list = await getData('organization/displayAll')
-    console.log(list.data)
      setOrganization(list.data)
    }
    useEffect(function(){
@@ -43,6 +42,7 @@ export default function DisplayOrganization() {
 
 
   const handleDelete=async(id)=>{
+    //alert(id)
     var body={'organizationid':id}
     var result=await postData('organization/deleteRecord',body)
     if(result.status)
@@ -108,7 +108,7 @@ export default function DisplayOrganization() {
                   title: "Birth_Date",
                   field: "birthdate",
                   render: (rowData) =>
-                    moment(rowData.date).format("MMM-DD-YYYY "),
+                    moment(rowData.birthdate).format("YYYY-MM-DD"),
                 },
 
                 { title: "Gendor", field: "gender", },
@@ -117,7 +117,6 @@ export default function DisplayOrganization() {
                 { title: "Address", field: "address",  },
                 { title: "Phone", field: "phone" },
                 { title: "Mobile", field: "mobile" },
-                // { title: "Email", field: "email" },
                 { title: 'Logo', field: 'logo',
               render:(rowData)=><Avatar src={`${ServerURL}/images/${rowData.logo}`} style={{width:60,height:40}} variant="rounded" /> },
             

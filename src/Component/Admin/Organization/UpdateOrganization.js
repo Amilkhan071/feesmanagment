@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-
-
 import {
   Avatar,
   Grid,
@@ -37,7 +35,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FormHelperText } from "@material-ui/core";
 import Swal from "sweetalert2";
+import moment from "moment/moment";
+import dayjs from "dayjs";
 export default function UpdateOrganization() {
+  var myMoment = moment();
   const params = useParams();
   const [getOrgName, setOrgName] = useState("");
   const [getOwnerName, setOwnerName] = useState("");
@@ -54,16 +55,15 @@ export default function UpdateOrganization() {
   const [getPassword, setPassword] = useState("");
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
-  const [getStatus,setStatus]=useState('')
-
+  const [getStatus, setStatus] = useState("");
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
   const [getRecord, setRecord] = useState("");
-  const[cnfmPassword,setCnfmPassword]=useState("")
-  const [showConfirm,setShowConfirm]=useState('')
+  const [cnfmPassword, setCnfmPassword] = useState("");
+  const [showConfirm, setShowConfirm] = useState("");
 
   const navigate = useNavigate();
 
@@ -77,53 +77,53 @@ export default function UpdateOrganization() {
   const stateCityData = Object.keys(StateCity);
 
   const handleSubmitEdit = async () => {
-    if(validation()){
-    var body = {
-      organizationid: params.orgid,
-      organizationName: getOrgName,
-      ownerName: getOwnerName,
-      birthDate: getDob,
-      gender: getGender,
-      address: getAddress,
-      state: getState,
-      city: getCity,
-      mobile: getMobile,
-      phone: getPhone,
-      email: getEmail,
-      password: getPassword,
-      status: getStatus
-    };
-    let result = await postData("organization/updateRecord", body);
-    if (result.status) {
-    
-      Swal.fire({
-        icon: "success",
-        title: "Done",
-        text: result.message,
-      });
-      navigate('/maindashboard/displayorganization')
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Ooops...",
-        text: result.message,
-      });
-    
+    // alert(getDob)
+    if (validation()) {
+      var body = {
+        organizationid: params.orgid,
+        organizationName: getOrgName,
+        ownerName: getOwnerName,
+        birthdate: getDob,
+        gender: getGender,
+        address: getAddress,
+        state: getState,
+        city: getCity,
+        mobile: getMobile,
+        phone: getPhone,
+        email: getEmail,
+        password: getPassword,
+        status: getStatus,
+      };
+      let result = await postData("organization/updateRecord", body);
+      if (result.status) {
+        Swal.fire({
+          icon: "success",
+          title: "Done",
+          text: result.message,
+        });
+        navigate("/maindashboard/displayorganization");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Ooops...",
+          text: result.message,
+        });
+      }
     }
-  }
   };
   const searchById = async () => {
     var body = { organizationid: params.orgid };
     var record = await postData("organization/displayById", body);
+    //alert(JSON.stringify(record))
     if (record.data != null) {
       setRecord(record.data);
       setOrgName(record.data.organizationname);
-
       setOwnerName(record.data.ownername);
-      var bd = new Date(record.data.birthdate);
-      var tbd = bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
-      setDob(tbd);
-      //alert(tbd)
+      var ttth = moment(record.data.birthdate).format("MM-DD-YYYY");
+      // var bd = new Date(record.data.birthdate);
+      // var tbd = bd.getFullYear() + "/" + (bd.getMonth() + 1) + "/" + bd.getDate();
+      setDob(JSON.stringify(ttth));
+      //alert(JSON.stringify(ttth))
       setGender(record.data.gender);
       setAddress(record.data.address);
       setState(record.data.orgstate);
@@ -133,20 +133,18 @@ export default function UpdateOrganization() {
       setPhone(record.data.phone);
       setEmail(record.data.email);
       setPassword(record.data.password);
-      setCnfmPassword(record.data.password)
-      setStatus(record.data.status)
+      setCnfmPassword(record.data.password);
+      setStatus(record.data.status);
       setOwnerPicturePath(`${ServerURL}/images/${record.data.picture}`);
       setLogoPicturePath(`${ServerURL}/images/${record.data.logo}`);
-      setLogoPicture(record.data.logo)
-      setOwnerPicture(record.data.picture)
-    } 
-    else {
+      setLogoPicture(record.data.logo);
+      setOwnerPicture(record.data.picture);
+    } else {
       Swal.fire({
         icon: "error",
         title: "Ooops....",
         text: record.message,
       });
-
     }
   };
 
@@ -186,11 +184,11 @@ export default function UpdateOrganization() {
     var formData = new FormData();
     formData.append("organizationid", params.orgid);
     formData.append("picture", getOwnerPicture);
-   // let config = { headers: { "content-type": "multipart/form-data" } };
+    // let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "organization/updatePicture",
-      formData,
-     // config
+      formData
+      // config
     );
     if (result.status) {
       Swal.fire({
@@ -198,8 +196,6 @@ export default function UpdateOrganization() {
         title: "Done",
         text: result.message,
       });
-      
-
     } else {
       Swal.fire({
         icon: "error",
@@ -213,11 +209,11 @@ export default function UpdateOrganization() {
     var formData = new FormData();
     formData.append("organizationid", params.orgid);
     formData.append("logo", getLogoPicture);
-   // let config = { headers: { "content-type": "multipart/form-data" } };
+    // let config = { headers: { "content-type": "multipart/form-data" } };
     let result = await postDataAndImage(
       "organization/updateLogo",
-      formData,
-     // config
+      formData
+      // config
     );
     if (result.status) {
       Swal.fire({
@@ -225,8 +221,6 @@ export default function UpdateOrganization() {
         title: "Done",
         text: result.message,
       });
-      
-
     } else {
       Swal.fire({
         icon: "error",
@@ -264,7 +258,6 @@ export default function UpdateOrganization() {
       isValid = false;
     }
 
-
     if (!/^[a-zA-Z0-9()\s.]*$/.test(getOrgName)) {
       handleError("getOrgName", "Please check organization name");
       isValid = false;
@@ -272,15 +265,10 @@ export default function UpdateOrganization() {
 
     if (getOrgName) {
       if (getOrgName.length > 20 || getOrgName.length < 5) {
-        handleError(
-          "getOrgName",
-          "Please Input Name Between 5 to 20 letters"
-        );
+        handleError("getOrgName", "Please Input Name Between 5 to 20 letters");
         isValid = false;
       }
     }
-
-
 
     if (!getPassword) {
       handleError("getPassword", "Please Input password");
@@ -315,7 +303,16 @@ export default function UpdateOrganization() {
         );
 
         isValid = false;
+      }
+    }
 
+    if (getMobile.length) {
+      if (!/^[6789]\d{9}$/.test(getMobile)) {
+        handleError(
+          "getMobile",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
+        isValid = false;
       }
     }
 
@@ -329,38 +326,41 @@ export default function UpdateOrganization() {
     if (!getMobile) {
       handleError("getMobile", "Please Input mobile number");
       isValid = false;
-      
     }
 
     if (getEmail.length) {
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(getEmail)) {
         handleError("getEmail", "Please enter a valid emailAddress");
         isValid = false;
-       
       }
     }
     if (!getDob) {
       handleError("getDob", "Please select birthdate");
       isValid = false;
-     
     }
 
     if (!getEmail) {
       handleError("getEmail", "Please Input Email Address");
       isValid = false;
-     
     }
     if (!getAddress) {
       handleError("getAddress", "Please Input address");
       isValid = false;
-      
+    }
+
+    if (getPhone.length) {
+      if (!/^[6789]\d{9}$/.test(getPhone)) {
+        handleError(
+          "getPhone",
+          "Please enter a valid phone no start with 6,7,8,9"
+        );
+        isValid = false;
+      }
     }
 
     if (getPhone.length < 10) {
       handleError("getPhone", "Please enter a valid Phone number");
       isValid = false;
-    
-
     }
 
     if (isNaN(getPhone)) {
@@ -371,41 +371,33 @@ export default function UpdateOrganization() {
     if (!getPhone) {
       handleError("getPhone", "Please enter a valid Phone number");
       isValid = false;
-     
     }
 
     if (!getGender) {
       handleError("getGender", "Please Select gender");
       isValid = false;
-      
-      
     }
     if (!getOwnerPicture) {
       handleError("getOwnerPicture", "Please Select ownerpicture");
       isValid = false;
-     
     }
 
     if (!getLogoPicture) {
       handleError("getLogoPicture", "Please Select logopicture");
       isValid = false;
-      
     }
 
-    if(cnfmPassword){ 
-      if( getPassword !== cnfmPassword ){
+    if (cnfmPassword) {
+      if (getPassword !== cnfmPassword) {
         handleError("cnfmPassword", "Password does not match");
         isValid = false;
       }
-  
     }
-  
-    if(!cnfmPassword){ 
-   
-        handleError("cnfmPassword", "Please Confirm Password");
-        isValid = false;
-      }
 
+    if (!cnfmPassword) {
+      handleError("cnfmPassword", "Please Confirm Password");
+      isValid = false;
+    }
 
     return isValid;
   };
@@ -435,7 +427,9 @@ export default function UpdateOrganization() {
                 </Grid>
                 <Grid item xs={2}>
                   <div
-                    onClick={() => navigate("/maindashboard/DisplayOrganization")}
+                    onClick={() =>
+                      navigate("/maindashboard/DisplayOrganization")
+                    }
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
@@ -534,6 +528,10 @@ export default function UpdateOrganization() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Birth Date"
+              //   defaultValue={dayjs('2023-07-01')}
+              value={dayjs(getDob)}
+              // value={getDob}
+
               onChange={(item) => setDob(item)}
               slotProps={{
                 textField: {
@@ -553,8 +551,7 @@ export default function UpdateOrganization() {
               Gender
             </FormLabel>
             <RadioGroup
-             onFocus={() => handleError("getGender", null)}
-
+              onFocus={() => handleError("getGender", null)}
               value={getGender}
               onChange={(event) => setGender(event.target.value)}
               row
@@ -578,14 +575,13 @@ export default function UpdateOrganization() {
             </FormHelperText>
           </FormControl>
         </Grid>
-    
 
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
             <Select
-             error={!error.getState ? false : true}
-             onFocus={() => handleError("getState", null)}
+              error={!error.getState ? false : true}
+              onFocus={() => handleError("getState", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={getState}
@@ -596,7 +592,7 @@ export default function UpdateOrganization() {
               {showState()}
             </Select>
           </FormControl>
-        
+
           {error && (
             <div
               style={{
@@ -626,8 +622,6 @@ export default function UpdateOrganization() {
             </Select>
           </FormControl>
 
-         
-
           {error && (
             <div
               style={{
@@ -640,25 +634,23 @@ export default function UpdateOrganization() {
             </div>
           )}
         </Grid>
-        <Grid item md={4}  lg={4}sm={12} xs={12}>
-        <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                                <Select
-                                 error={!error.getStatus ? false : true}
-                                 onFocus={() => handleError("getStatus", null)}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getStatus}
-                                    label="Select Status"
-                                    onChange={(event)=>setStatus(event.target.value)}
-                                >
-                                    <MenuItem value={'Valid'}>Valid</MenuItem>
-                                    <MenuItem value={'Invalid'}>Invalid</MenuItem>
+        <Grid item md={4} lg={4} sm={12} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+            <Select
+              error={!error.getStatus ? false : true}
+              onFocus={() => handleError("getStatus", null)}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={getStatus}
+              label="Select Status"
+              onChange={(event) => setStatus(event.target.value)}
+            >
+              <MenuItem value={"Valid"}>Valid</MenuItem>
+              <MenuItem value={"Invalid"}>Invalid</MenuItem>
+            </Select>
+          </FormControl>
 
-                                   
-                                </Select>
-                            </FormControl>
-          
           {error && (
             <div
               style={{
@@ -796,7 +788,7 @@ export default function UpdateOrganization() {
             helperText={error.cnfmPassword}
             onFocus={() => handleError("cnfmPassword", null)}
             value={cnfmPassword}
-            onChange={(e) => setCnfmPassword (e.target.value.trim())}
+            onChange={(e) => setCnfmPassword(e.target.value.trim())}
             type={showConfirm ? "text" : "password"}
             InputProps={{
               endAdornment: (
@@ -825,8 +817,6 @@ export default function UpdateOrganization() {
               };
             }}
           />
-
-          
         </Grid>
         <Grid item md={12} lg={12} sm={12} xs={12}>
           <TextField
@@ -855,30 +845,27 @@ export default function UpdateOrganization() {
           />
         </Grid>
 
-
-      
         <Grid item md={1} lg={1} sm={3} xs={3}>
-
           <Avatar
             alt="Picture"
             src={getOwnerPicturePath}
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-
-       
         </Grid>
 
         <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
-          Select Owner Picture
-            
+            Select Owner Picture
             <input
               hidden
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => {handleOwnerPicture(event);handleError("getOwnerPicture", null)}}
+              onChange={(event) => {
+                handleOwnerPicture(event);
+                handleError("getOwnerPicture", null);
+              }}
             />
           </Button>
           <Button
@@ -886,28 +873,24 @@ export default function UpdateOrganization() {
             variant="contained"
             color="primary"
             fullWidth
-            style={{marginTop:5}}
+            style={{ marginTop: 5 }}
           >
             Edit Owner Picture
           </Button>
           {error && (
             <div
-            style={{
-              color: "#d32f2f",
-              fontSize: 12,
-              marginTop: 5,
-              fontWeight: 400,
-            }}
+              style={{
+                color: "#d32f2f",
+                fontSize: 12,
+                marginTop: 5,
+                fontWeight: 400,
+              }}
             >
-             {error.getOwnerPicture}
+              {error.getOwnerPicture}
             </div>
           )}
-
         </Grid>
 
-
-
-       
         <Grid item md={1} lg={1} sm={3} xs={3}>
           <Avatar
             alt="Logo"
@@ -915,37 +898,42 @@ export default function UpdateOrganization() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-         
         </Grid>
         <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
-           Select Organization Logo
+            Select Organization Logo
             <input
               hidden
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => {handleLogoPicture(event);handleError("getLogoPicture", null)}}
+              onChange={(event) => {
+                handleLogoPicture(event);
+                handleError("getLogoPicture", null);
+              }}
             />
           </Button>
           <Button
-           style={{marginTop:5}}
-           onClick={handleEditLogo} variant="contained" color="primary" fullWidth>
+            style={{ marginTop: 5 }}
+            onClick={handleEditLogo}
+            variant="contained"
+            color="primary"
+            fullWidth
+          >
             Edit Organization Logo
           </Button>
           {error && (
             <div
-            style={{
-              color: "#d32f2f",
-              fontSize: 12,
-              marginTop: 5,
-              fontWeight: 400,
-            }}
+              style={{
+                color: "#d32f2f",
+                fontSize: 12,
+                marginTop: 5,
+                fontWeight: 400,
+              }}
             >
-             {error.getLogoPicture}
+              {error.getLogoPicture}
             </div>
           )}
-
         </Grid>
         <Grid
           item

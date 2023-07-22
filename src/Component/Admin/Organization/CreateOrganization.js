@@ -31,6 +31,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Password, Phone } from "@mui/icons-material";
 import { FormHelperText } from "@material-ui/core";
 import Swal from "sweetalert2";
+import moment from "moment/moment";
 export default function CreateOrganization() {
   const [getOrgName, setOrgName] = useState("");
   const [getOwnerName, setOwnerName] = useState("");
@@ -70,10 +71,11 @@ export default function CreateOrganization() {
 
   const handleSubmit = async () => {
     if (validation()) {
+      // const dattt = moment(getDob).format("YYYY-MM-DD")
       var formData = new FormData();
       formData.append("organizationName", getOrgName);
       formData.append("ownerName", getOwnerName);
-      formData.append("birthDate", getDob);
+      formData.append("birthdate", getDob);
       formData.append("gender", getGender);
       formData.append("address", getAddress);
       formData.append("state", getState);
@@ -206,6 +208,18 @@ export default function CreateOrganization() {
     }
 
     if (getMobile.length) {
+
+      if (!/^[6789]\d{9}$/.test(getMobile)) {
+        handleError("getMobile", "Please enter a valid mobile no start with 6,7,8,9");
+        isValid = false;
+       
+      }
+      
+    
+    }
+
+
+    if (getMobile.length) {
       if (isNaN(getMobile) || getMobile.length < 10) {
         handleError("getMobile", "Please enter a valid mobile number");
         isValid = false;
@@ -241,6 +255,19 @@ export default function CreateOrganization() {
       isValid = false;
       
     }
+
+
+    if (getPhone.length) {
+
+      if (!/^[6789]\d{9}$/.test(getPhone)) {
+        handleError("getPhone", "Please enter a valid phone no start with 6,7,8,9");
+        isValid = false;
+       
+      }
+      
+    
+    }
+
 
     if (getPhone.length < 10) {
       handleError("getPhone", "Please enter a valid Phone number");
