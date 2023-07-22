@@ -55,6 +55,7 @@ export default function UpdateBatch() {
   const [getFri, setFri] = useState({ value: "", state: false });
   const [getSat, setSat] = useState({ value: "", state: false });
   const [getReg, setReg] = useState({ value: "", state: false });
+  const [getSun, setSun] = useState({ value: "", state: false });
 
   const fillCourse = async () => {
     var body = { organizationid: storedState?.organizationid };
@@ -94,6 +95,8 @@ export default function UpdateBatch() {
           setFri({ value: "Fri", state: true });
         } else if (sts[i] == "Sat") {
           setSat({ value: "Sat", state: true });
+        } else if (sts[i] == "Sun") {
+          setSun({ value: "Sun", state: true });
         } else if (sts[i] == "R") {
           setReg({ value: "R", state: true });
         }
@@ -171,6 +174,13 @@ export default function UpdateBatch() {
     else setSat({ value: "", state: event.target.checked });
   };
 
+  const handleChangeSun = (event) => {
+    if (event.target.checked)
+      setSun({ value: "Sun", state: event.target.checked });
+    else setSun({ value: "", state: event.target.checked });
+  };
+
+
   const handleChangeReg = (event) => {
     if (event.target.checked) {
       setReg({ value: "R", state: event.target.checked });
@@ -180,6 +190,8 @@ export default function UpdateBatch() {
       setFri({ value: "", state: false });
       setSat({ value: "", state: false });
       setThu({ value: "", state: false });
+      setSun({ value: "", state: false });
+
     } else {
       setReg({ value: "", state: event.target.checked });
     }
@@ -224,6 +236,8 @@ export default function UpdateBatch() {
       getFri.value +
       "" +
       getSat.value +
+      "" +
+      getSun.value +
       "" +
       getReg.value;
     setStatus(status);
@@ -507,7 +521,16 @@ export default function UpdateBatch() {
               }
               label="Saturday"
             />
-
+ <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getSun.state}
+                  onChange={(event) => handleChangeSun(event)}
+                  value="Sun"
+                />
+              }
+              label="Sunday"
+            />
             <FormControlLabel
               control={
                 <Checkbox
@@ -521,7 +544,7 @@ export default function UpdateBatch() {
           </FormGroup>
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             // error={!error.inputBatchName ? false : true}
             // helperText={error.inputBatchName}
@@ -547,7 +570,8 @@ export default function UpdateBatch() {
         </Grid>
         <Grid
           item
-          md={2}
+          lg={2}
+          md={4}
           sm={6}
           xs={6}
           style={{

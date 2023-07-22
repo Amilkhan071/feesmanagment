@@ -38,21 +38,22 @@ export default function CreateCourse() {
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const storedState = JSON.parse(localStorage.getItem("admin"));
-
+  console.log("storeeeee", storedState);
   const navigate = useNavigate();
   const params = useParams();
 
+  console.log("bodyyyyyyy", params.crsid);
   const searchById = async () => {
-    let body = { courseId: params.crsid };
+    var body = { courseid: params.crsid };
     let record = await postData("course/displayById", body);
+    console.log(record.data);
     if (record.data != null) {
       setCourseName(record.data.coursename);
       setCourseDuration(record.data.courseduration);
       setCourseFees(record.data.coursefees);
       setDescription(record.data.description);
       setCourseLogoPath(`${ServerURL}/images/${record.data.courselogo}`);
-    } else
-     {
+    } else {
       Swal.fire({
         icon: "error",
         title: "Ooops....",
@@ -74,7 +75,7 @@ export default function CreateCourse() {
         organizationid: storedState?.organizationid,
       };
 
-     var  result = await postData("course/updateRecord", body);
+      var result = await postData("course/updateRecord", body);
       if (result.status) {
         Swal.fire({
           icon: "success",
@@ -103,8 +104,8 @@ export default function CreateCourse() {
 
     let result = await postDataAndImage(
       "course/updateCourseLogo",
-      formData,
-     // config
+      formData
+      // config
     );
     if (result.status) {
       Swal.fire({
@@ -148,7 +149,6 @@ export default function CreateCourse() {
     return isValid;
   };
   const RegexLetter = /^[A-Z@~`!@#$%^&*()_=+\\\\';:\"\\/?>.<,-\s]*$/i;
-
 
   return (
     <div className="store_form_1">
@@ -284,7 +284,7 @@ export default function CreateCourse() {
             helperText={error.getCourseDuration}
             onFocus={() => handleError("getCourseDuration", null)}
             value={getCourseDuration}
-            onChange={(e) => setCourseDuration(e.target.value.trim())}
+            onChange={(e) => setCourseDuration(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
@@ -355,7 +355,6 @@ export default function CreateCourse() {
             variant="circular"
             sx={{ width: 56, height: 56 }}
           />
-         
         </Grid>
         <Grid item md={5} lg={5} sm={12} xs={12}>
           <Button variant="contained" component="label" fullWidth>
@@ -369,8 +368,8 @@ export default function CreateCourse() {
             />
           </Button>
           <Button
-          style={{ marginTop: 5 }}
-          fullWidth
+            style={{ marginTop: 5 }}
+            fullWidth
             onClick={handleEditCourseLogo}
             variant="contained"
             color="primary"
@@ -388,7 +387,6 @@ export default function CreateCourse() {
             {error.getOwnerPicture}
           </div>
         </Grid>
-       
 
         <Grid
           item

@@ -46,6 +46,9 @@ export default function CreateBatch() {
   const [getThu, setThu] = useState({ value: "", state: false });
   const [getFri, setFri] = useState({ value: "", state: false });
   const [getSat, setSat] = useState({ value: "", state: false });
+
+  const [getSun, setSun] = useState({ value: "", state: false });
+
   const [getReg, setReg] = useState({ value: "", state: false });
 
   const handleChangeMon = (event) => {
@@ -84,6 +87,12 @@ export default function CreateBatch() {
     else setSat({ value: "", state: event.target.checked });
   };
 
+  const handleChangeSun = (event) => {
+    if (event.target.checked)
+      setSun({ value: "Sun", state: event.target.checked });
+    else setSun({ value: "", state: event.target.checked });
+  };
+
   const handleChangeReg = (event) => {
     if (event.target.checked) {
       setReg({ value: "R", state: event.target.checked });
@@ -93,6 +102,8 @@ export default function CreateBatch() {
       setFri({ value: "", state: false });
       setSat({ value: "", state: false });
       setThu({ value: "", state: false });
+      setSun({ value: "", state: false });
+
     } else {
       setReg({ value: "", state: event.target.checked });
     }
@@ -128,6 +139,8 @@ export default function CreateBatch() {
       "" +
       getSat.value +
       "" +
+      getSun.value +
+      "" +
       getReg.value;
     setStatus(status);
     var batchname =
@@ -144,31 +157,26 @@ export default function CreateBatch() {
   };
 
   const changeBatchTime = (event) => {
-    //var crst = event.target.value.split("to");
     setBatchTime(event.target.value);
-   // alert(JSON.stringify(crst[0]))
     setBatchStartTime(event.target.value);
   };
 
   const handleCourse = (event) => {
     setCourseId(event.target.value);
-    fillCourseById(event.target.value)
+    fillCourseById(event.target.value);
   };
 
   const fillCourseById = async (cid) => {
     var body = { courseid: cid };
     var list = await postData("course/displayById", body);
-  setCourseName(list.data.coursename);
+    setCourseName(list.data.coursename);
   };
+ 
+ 
   const handleSubmit = async () => {
     if (validation()) {
-      var time = batchTime.split(",");
-     // var crs = courseId.split(",");
-
-      var body = {
+  var body = {
         organizationid: storedState?.organizationid,
-        // coursename: crs[0],
-        // timing: time[1],
         coursename: courseId,
         timing: batchTime,
         status: getStatus,
@@ -227,9 +235,7 @@ export default function CreateBatch() {
 
   const showCourse = () => {
     return courseNameList?.map((item) => (
-      <MenuItem value={item.courseid}>
-        {item.coursename}
-      </MenuItem>
+      <MenuItem value={item.courseid}>{item.coursename}</MenuItem>
     ));
   };
 
@@ -254,7 +260,6 @@ export default function CreateBatch() {
       </MenuItem>
     ));
   };
-
 
   useEffect(() => {
     fillBatchTime();
@@ -496,6 +501,16 @@ export default function CreateBatch() {
               }
               label="Saturday"
             />
+             <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getSun.state}
+                  onChange={(event) => handleChangeSun(event)}
+                  value="Sun"
+                />
+              }
+              label="Sunday"
+            />
 
             <FormControlLabel
               control={
@@ -510,7 +525,7 @@ export default function CreateBatch() {
           </FormGroup>
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={6} lg={6} sm={12} xs={12}>
           <TextField
             error={!error.getBatchName ? false : true}
             helperText={error.getBatchName}

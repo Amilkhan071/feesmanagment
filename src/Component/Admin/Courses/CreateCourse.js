@@ -233,7 +233,7 @@ export default function CreateCourse() {
             helperText={error.getCourseDuration}
             onFocus={() => handleError("getCourseDuration", null)}
             value={getCourseDuration}
-            onChange={(e) => setCourseDuration(e.target.value.trim())}
+            onChange={(e) => setCourseDuration(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
