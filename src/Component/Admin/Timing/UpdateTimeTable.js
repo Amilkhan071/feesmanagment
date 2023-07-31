@@ -33,6 +33,8 @@ export default function UpdateTimeTable() {
   var navigate = useNavigate();
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const storedState = JSON.parse(localStorage.getItem("admin"));
+
 
   const handleStartTimeChange = (newStartTime) => {
     var time = new Date(newStartTime);
@@ -52,7 +54,7 @@ export default function UpdateTimeTable() {
   const handleEndTimeChange = (newEndTime) => {
     var time = new Date(newEndTime);
     var mtime = moment(time).format("YYYY-MM-DDTHH:mm");
-    alert(mtime)
+    //alert(mtime)
     setEndTime(mtime);
   };
 
@@ -62,8 +64,8 @@ export default function UpdateTimeTable() {
     // alert(JSON.stringify(record))
     if (record.data != null) {
       setOrganizationId(record.data.organizationid);
-      var st = new Date("2023/01/01 " + record.data.btstart + " GMT+0530");
-      var et = new Date("2023/01/01 " + record.data.btend + " GMT+0530");
+      var st = new Date("2023/01/01 " + record.data.batchstart + " GMT+0530");
+      var et = new Date("2023/01/01 " + record.data.batchend + " GMT+0530");
 
       setStartTime(st);
       setEndTime(et);
@@ -102,7 +104,7 @@ export default function UpdateTimeTable() {
 
   const handleSubmitEdit = async () => {
     if (validation()) {
-      alert("jii");
+      //alert("jii");
       var body = {
         transactionid: params.trnsid,
         btStart: moment(startTime).format("hh:mm A"),
@@ -114,6 +116,7 @@ export default function UpdateTimeTable() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/dashboard/DisplayTiming");
       } else {
@@ -229,7 +232,7 @@ export default function UpdateTimeTable() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={organizationId}
+            value={storedState.organizationid}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
               return {

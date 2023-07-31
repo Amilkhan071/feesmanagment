@@ -49,25 +49,23 @@ export default function CreateOrganization() {
   const [cityData, setCityData] = useState([]);
   const [error, setError] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm,setShowConfirm]=useState('')
+  const [showConfirm, setShowConfirm] = useState("");
   const [getStatus, setStatus] = useState("");
 
   const [getOwnerPicturePath, setOwnerPicturePath] = React.useState("");
   const [getLogoPicturePath, setLogoPicturePath] = React.useState("");
-  const[cnfmPassword,setCnfmPassword]=useState("")
+  const [cnfmPassword, setCnfmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  
+
   const handleClickConfirmPassword = () => setShowConfirm((sho) => !sho);
-  
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
   const stateCityData = Object.keys(StateCity);
-
- 
 
   const handleSubmit = async () => {
     if (validation()) {
@@ -88,29 +86,29 @@ export default function CreateOrganization() {
       formData.append("password", getPassword);
       formData.append("status", getStatus);
 
-     // var config = { headers: { "content-type": "multipart/form-data" } };
+      // var config = { headers: { "content-type": "multipart/form-data" } };
       var result = await postDataAndImage(
         "organization/addNewRecord",
-        formData,
+        formData
         //config
       );
       if (result.status) {
-       
         Swal.fire({
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
-       
+
         navigate("/maindashboard/displayorganization");
       } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops....",
+        Swal.fire({
+          icon: "error",
+          title: "Oops....",
           text: result.message,
         });
+      }
     }
-  }
   };
 
   const handleError = (inputs, value) => {
@@ -135,7 +133,7 @@ export default function CreateOrganization() {
     }
 
     if (getOwnerName) {
-      if (getOwnerName.length > 18 || getOwnerName.length < 4) {
+      if (getOwnerName.length > 30 || getOwnerName.length < 4) {
         handleError(
           "getOwnerName",
           "Please Input Name Between 4 to 18 letters"
@@ -154,21 +152,16 @@ export default function CreateOrganization() {
       isValid = false;
     }
 
-
     if (!/^[a-zA-Z0-9()\s.]*$/.test(getOrgName)) {
       handleError("getOrgName", "Please check organization name");
       isValid = false;
     }
     if (getOrgName) {
-      if (getOrgName.length > 20 || getOrgName.length < 5) {
-        handleError(
-          "getOrgName",
-          "Please Input Name Between 5 to 20 letters"
-        );
+      if (getOrgName.length < 5) {
+        handleError("getOrgName", "Please Input Name Between 5 to 20 letters");
         isValid = false;
       }
     }
-
 
     if (!getPassword) {
       handleError("getPassword", "Please Input password");
@@ -203,21 +196,18 @@ export default function CreateOrganization() {
         );
 
         isValid = false;
-
       }
     }
 
     if (getMobile.length) {
-
       if (!/^[6789]\d{9}$/.test(getMobile)) {
-        handleError("getMobile", "Please enter a valid mobile no start with 6,7,8,9");
+        handleError(
+          "getMobile",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-       
       }
-      
-    
     }
-
 
     if (getMobile.length) {
       if (isNaN(getMobile) || getMobile.length < 10) {
@@ -229,51 +219,41 @@ export default function CreateOrganization() {
     if (!getMobile) {
       handleError("getMobile", "Please Input mobile number");
       isValid = false;
-      
     }
 
     if (getEmail.length) {
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(getEmail)) {
         handleError("getEmail", "Please enter a valid emailAddress");
         isValid = false;
-       
       }
     }
     if (!getDob) {
       handleError("getDob", "Please select birthdate");
       isValid = false;
-     
     }
 
     if (!getEmail) {
       handleError("getEmail", "Please Input Email Address");
       isValid = false;
-     
     }
     if (!getAddress) {
       handleError("getAddress", "Please Input address");
       isValid = false;
-      
     }
-
 
     if (getPhone.length) {
-
       if (!/^[6789]\d{9}$/.test(getPhone)) {
-        handleError("getPhone", "Please enter a valid phone no start with 6,7,8,9");
+        handleError(
+          "getPhone",
+          "Please enter a valid phone no start with 6,7,8,9"
+        );
         isValid = false;
-       
       }
-      
-    
     }
-
 
     if (getPhone.length < 10) {
       handleError("getPhone", "Please enter a valid Phone number");
       isValid = false;
-    
-
     }
 
     if (isNaN(getPhone)) {
@@ -284,42 +264,33 @@ export default function CreateOrganization() {
     if (!getPhone) {
       handleError("getPhone", "Please enter a valid Phone number");
       isValid = false;
-     
     }
 
     if (!getGender) {
       handleError("getGender", "Please Select gender");
       isValid = false;
-      
-      
     }
     if (!getOwnerPicture) {
       handleError("getOwnerPicture", "Please Select ownerpicture");
       isValid = false;
-     
     }
 
     if (!getLogoPicture) {
       handleError("getLogoPicture", "Please Select logopicture");
       isValid = false;
-      }
-
-  if(cnfmPassword){ 
-    if( getPassword !== cnfmPassword ){
-      handleError("cnfmPassword", "Password does not match");
-      isValid = false;
     }
 
-  }
+    if (cnfmPassword) {
+      if (getPassword !== cnfmPassword) {
+        handleError("cnfmPassword", "Password does not match");
+        isValid = false;
+      }
+    }
 
-  if(!cnfmPassword){ 
- 
+    if (!cnfmPassword) {
       handleError("cnfmPassword", "Please Confirm Password");
       isValid = false;
     }
-
-  
-
 
     return isValid;
   };
@@ -509,7 +480,7 @@ export default function CreateOrganization() {
             </FormHelperText>
           </FormControl>
         </Grid>
-        
+
         <Grid item md={4} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">State</InputLabel>
@@ -711,10 +682,8 @@ export default function CreateOrganization() {
               };
             }}
           />
-
-
         </Grid>
-    
+
         <Grid item md={4} lg={4} sm={12} xs={12}>
           <TextField
             id="standard-basic"
@@ -724,7 +693,7 @@ export default function CreateOrganization() {
             helperText={error.cnfmPassword}
             onFocus={() => handleError("cnfmPassword", null)}
             value={cnfmPassword}
-            onChange={(e) => setCnfmPassword (e.target.value.trim())}
+            onChange={(e) => setCnfmPassword(e.target.value.trim())}
             type={showConfirm ? "text" : "password"}
             InputProps={{
               endAdornment: (
@@ -753,10 +722,7 @@ export default function CreateOrganization() {
               };
             }}
           />
-
-          
         </Grid>
-
 
         <Grid item md={12} lg={12} sm={12} xs={12}>
           <TextField
@@ -793,66 +759,84 @@ export default function CreateOrganization() {
             sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
-          <Button variant="contained" component="label" fullWidth  >
-           Upload Owner Picture
+        <Grid
+          style={{ display: "flex", alignItems: "end" }}
+          item
+          md={3}
+          lg={3}
+          sm={12}
+          xs={12}
+        >
+          <Button variant="contained" component="label" fullWidth>
+            Upload Owner Picture
             <input
               hidden
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => {handleOwnerPicture(event);handleError("getOwnerPicture", null)}}
+              onChange={(event) => {
+                handleOwnerPicture(event);
+                handleError("getOwnerPicture", null);
+              }}
             />
           </Button>
-         
- {error && (
+
+          {error && (
             <div
-            style={{
-              color: "#d32f2f",
-              fontSize: 12,
-              marginTop: 5,
-              fontWeight: 400,
-            }}
+              style={{
+                color: "#d32f2f",
+                fontSize: 12,
+                marginTop: 5,
+                fontWeight: 400,
+              }}
             >
-             {error.getOwnerPicture}
+              {error.getOwnerPicture}
             </div>
           )}
-
         </Grid>
         <Grid item md={2} lg={1}>
           <Avatar
-          onFocus={()=>handleError("getLogoPicturePath", null)}
+            onFocus={() => handleError("getLogoPicturePath", null)}
             alt="Category Icon"
             src={getLogoPicturePath}
             variant="rounded"
             sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid  style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
+        <Grid
+          style={{ display: "flex", alignItems: "end" }}
+          item
+          md={3}
+          lg={3}
+          sm={12}
+          xs={12}
+        >
           <Button variant="contained" component="label" fullWidth>
-           Upload Organisation Logo
+            Upload Organisation Logo
             <input
               hidden
               accept="image/*"
               multiple
               type="file"
-              onChange={(event) => {handleLogoPicture(event);handleError("getLogoPicture", null) } }
+              onChange={(event) => {
+                handleLogoPicture(event);
+                handleError("getLogoPicture", null);
+              }}
             />
           </Button>
           {error && (
             <div
-            style={{
-              color: "#d32f2f",
-              fontSize: 12,
-              marginTop: 5,
-              fontWeight: 400,
-            }}
+              style={{
+                color: "#d32f2f",
+                fontSize: 12,
+                marginTop: 5,
+                fontWeight: 400,
+              }}
             >
-             {error.getLogoPicture}
+              {error.getLogoPicture}
             </div>
           )}
         </Grid>
-        
 
         <Grid
           item

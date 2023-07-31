@@ -39,6 +39,7 @@ export default function CreateBatch() {
   const [inputBatchName, setInputBatchName] = useState("");
   const [getBatchName, setBatchName] = useState("");
   const [getStatus, setStatus] = useState("");
+  const [dayShift, setDayShift] = useState("");
 
   const [getMon, setMon] = useState({ value: "", state: false });
   const [getTue, setTue] = useState({ value: "", state: false });
@@ -103,7 +104,6 @@ export default function CreateBatch() {
       setSat({ value: "", state: false });
       setThu({ value: "", state: false });
       setSun({ value: "", state: false });
-
     } else {
       setReg({ value: "", state: event.target.checked });
     }
@@ -152,7 +152,9 @@ export default function CreateBatch() {
       ", " +
       batchStartTime +
       ", " +
-      status;
+      status +
+      ", " +
+      dayShift;
     setBatchName(batchname);
   };
 
@@ -171,13 +173,12 @@ export default function CreateBatch() {
     var list = await postData("course/displayById", body);
     setCourseName(list.data.coursename);
   };
- 
- 
+
   const handleSubmit = async () => {
     if (validation()) {
-  var body = {
+      var body = {
         organizationid: storedState?.organizationid,
-        coursename: courseId,
+        courseid: courseId,
         timing: batchTime,
         status: getStatus,
         batchname: getBatchName,
@@ -188,6 +189,7 @@ export default function CreateBatch() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/dashboard/DisplayBatch");
       } else {
@@ -217,12 +219,32 @@ export default function CreateBatch() {
     }
 
     if (!getBatchName) {
-      handleError("getBatchName", "Please Inpute Batch Name");
+      handleError("getBatchName", "Please Input Batch Name");
+      isValid = false;
+    }
+    if (!dayShift) {
+      handleError("dayShift", "Please Input Times of the day");
+      isValid = false;
+    }
+
+    if (dayShift) {
+      if (dayShift.length > 25 || dayShift.length < 3) {
+        handleError(
+          "dayShift",
+          "Please Input Times of the day Between 4 to 25 letters"
+        );
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(dayShift)) {
+      handleError("dayShift", "Please Input Valid Times of the day");
       isValid = false;
     }
 
     return isValid;
   };
+ 
   const handleError = (inputs, value) => {
     setError((prev) => ({ ...prev, [inputs]: value }));
   };
@@ -240,10 +262,10 @@ export default function CreateBatch() {
   };
 
   const fillBatchTime = async () => {
-    var body = { organizationid:storedState?.organizationid  };
-    var  list = await postData("timingtable/displayAll",body);
-    console.log(list);
+    var body = { organizationid: storedState?.organizationid };
+    var list = await postData("timingtable/displayAll", body);
     setBatchTimeList(list.data);
+    //alert(JSON.stringify(list.data))
   };
 
   // const showBatchTime = () => {
@@ -256,8 +278,8 @@ export default function CreateBatch() {
 
   const showBatchTime = () => {
     return batchTimeList?.map((item) => (
-      <MenuItem value={`${item.btstart} to ${item.btend}`}>
-        {item.btstart} to {item.btend}
+      <MenuItem value={`${item.batchstart} to ${item.batchend}`}>
+        {item.batchstart} to {item.batchend}
       </MenuItem>
     ));
   };
@@ -339,7 +361,7 @@ export default function CreateBatch() {
             <div style={{ marginLeft: 20 }}>Batch Register</div>
           </div>
         </Grid>
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <TextField
             error={!error.organizationId ? false : true}
             helperText={error.organizationId}
@@ -364,7 +386,7 @@ export default function CreateBatch() {
           />
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Course</InputLabel>
             <Select
@@ -393,7 +415,7 @@ export default function CreateBatch() {
           )}
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Time</InputLabel>
             <Select
@@ -422,8 +444,31 @@ export default function CreateBatch() {
             </div>
           )}
         </Grid>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
+          <TextField
+            error={!error.dayShift ? false : true}
+            helperText={error.dayShift}
+            onFocus={() => handleError("dayShift", null)}
+            inputProps={{ style: { color: "#000" } }}
+            id="standard-basic"
+            label="Times of the day"
+            variant="outlined"
+            value={dayShift}
+            onChange={(e) => setDayShift(e.target.value.trimStart())}
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+            fullWidth
+          />
+        </Grid>
         <Grid item xs={12}>
-          {" "}
           <div
             style={{
               colors: "#273c75",
@@ -435,7 +480,7 @@ export default function CreateBatch() {
             }}
           >
             Status
-          </div>{" "}
+          </div>
         </Grid>
         <Grid item xs={12}>
           <FormGroup row>
@@ -502,7 +547,7 @@ export default function CreateBatch() {
               }
               label="Saturday"
             />
-             <FormControlLabel
+            <FormControlLabel
               control={
                 <Checkbox
                   checked={getSun.state}
@@ -550,6 +595,7 @@ export default function CreateBatch() {
             fullWidth
           />
         </Grid>
+
         <Grid
           item
           md={4}

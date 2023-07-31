@@ -81,6 +81,7 @@ export default function CreateCourse() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/dashboard/DisplayCourse");
       } else {
@@ -112,6 +113,7 @@ export default function CreateCourse() {
         icon: "success",
         title: "Done",
         text: result.message,
+        timer: 2000,
       });
     } else {
       Swal.fire({

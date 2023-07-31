@@ -101,8 +101,8 @@ const storedState = JSON.parse(localStorage.getItem("admin"));
               title={false}
               columns={[
                 { title: "Transaction Id", field: "transactionid" },
-                { title: "Start Time", field: "btstart" },
-                { title: "End Time", field: "btend" },
+                { title: "Start Time", field: "batchstart" },
+                { title: "End Time", field: "batchend" },
                 { title: "Organisation Id", field: "organizationid" },
                
               ]}

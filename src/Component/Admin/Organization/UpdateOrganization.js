@@ -99,6 +99,7 @@ export default function UpdateOrganization() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/maindashboard/displayorganization");
       } else {
@@ -192,6 +193,7 @@ export default function UpdateOrganization() {
         icon: "success",
         title: "Done",
         text: result.message,
+        timer: 2000,
       });
     } else {
       Swal.fire({
@@ -217,6 +219,7 @@ export default function UpdateOrganization() {
         icon: "success",
         title: "Done",
         text: result.message,
+        timer: 2000,
       });
     } else {
       Swal.fire({
@@ -236,7 +239,7 @@ export default function UpdateOrganization() {
     }
 
     if (getOwnerName) {
-      if (getOwnerName.length > 18 || getOwnerName.length < 4) {
+      if (getOwnerName.length > 30 || getOwnerName.length < 4) {
         handleError(
           "getOwnerName",
           "Please Input Name Between 4 to 18 letters"
@@ -261,7 +264,7 @@ export default function UpdateOrganization() {
     }
 
     if (getOrgName) {
-      if (getOrgName.length > 20 || getOrgName.length < 5) {
+      if (getOrgName.length < 5) {
         handleError("getOrgName", "Please Input Name Between 5 to 20 letters");
         isValid = false;
       }

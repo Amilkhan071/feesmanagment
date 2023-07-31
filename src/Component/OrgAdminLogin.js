@@ -52,6 +52,7 @@ export default function OrgAdminLogin() {
           icon: "success",
           title: "Done",
           text: response.message,
+          timer: 2000,
         });
         
         navigate("/dashboard");

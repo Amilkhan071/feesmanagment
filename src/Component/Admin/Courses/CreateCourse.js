@@ -44,6 +44,7 @@ export default function CreateCourse() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate('/dashboard/displaycourse')
       } else {

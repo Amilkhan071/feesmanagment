@@ -69,7 +69,7 @@ export default function CreateStudent() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
- 
+
   const handleSubmit = async () => {
     if (validation()) {
       var formData = new FormData();
@@ -96,11 +96,11 @@ export default function CreateStudent() {
       formData.append("remark", getRemark);
       formData.append("batchid", batchId);
 
-     // let config = { headers: { "content-type": "multerpart / form-Data" } };
+      // let config = { headers: { "content-type": "multerpart / form-Data" } };
       let result = await postDataAndImage(
         "studetail/addNewRecord",
-        formData,
-       // config
+        formData
+        // config
       );
 
       if (result.status) {
@@ -108,8 +108,9 @@ export default function CreateStudent() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
-       // window.location.reload();
+        // window.location.reload();
         navigate("/dashboard/displayStudent");
       } else {
         Swal.fire({
@@ -146,15 +147,14 @@ export default function CreateStudent() {
   const handleCourse = (event) => {
     // var crs = event.target.value.split(",");
     setCourseId(event.target.value);
-    fillbatch(event.target.value)
+    fillbatch(event.target.value);
     // setCourseName(crs[1]);
   };
 
   const fillbatch = async (getCourseId) => {
     var body = { coursename: getCourseId };
     var result = await postData("studetail/getbtbcs", body);
-    setBatchIdList(result.data)
-   
+    setBatchIdList(result.data);
   };
   function showBatch() {
     return batchIdList.map((item) => (
@@ -175,8 +175,8 @@ export default function CreateStudent() {
       isValid = false;
     }
     if (getstuname) {
-      if (getstuname.length > 18 || getstuname.length < 4) {
-        handleError("getstuname", "Please Input Name Between 4 to 18 letters");
+      if (getstuname.length > 30 || getstuname.length < 4) {
+        handleError("getstuname", "Please Input Name Between 4 to 30 letters");
         isValid = false;
       }
     }
@@ -185,15 +185,17 @@ export default function CreateStudent() {
       handleError("getstuname", "Please Input Valid Name");
       isValid = false;
     }
+
+    
     if (!getfathername) {
       handleError("getfathername", "Please Input fathername");
       isValid = false;
     }
     if (getfathername) {
-      if (getfathername.length > 18 || getfathername.length < 4) {
+      if (getfathername.length > 30 || getfathername.length < 4) {
         handleError(
           "getfathername",
-          "Please Input Name Between 4 to 18 letters"
+          "Please Input Name Between 4 to 30 letters"
         );
         isValid = false;
       }
@@ -209,16 +211,14 @@ export default function CreateStudent() {
       isValid = false;
     }
 
-    
     if (getmobile.length) {
-
       if (!/^[6789]\d{9}$/.test(getmobile)) {
-
-        handleError("getmobile", "Please enter a valid mobile no start with 6,7,8,9");
+        handleError(
+          "getmobile",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
 
     if (isNaN(getmobile) || getmobile.length < 10) {
@@ -227,14 +227,13 @@ export default function CreateStudent() {
     }
 
     if (getparentmobile.length) {
-
       if (!/^[6789]\d{9}$/.test(getparentmobile)) {
-
-        handleError("getparentmobile", "Please enter a valid  mobile no start with 6,7,8,9");
+        handleError(
+          "getparentmobile",
+          "Please enter a valid  mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
 
     if (isNaN(getparentmobile) || getparentmobile.length < 10) {
@@ -243,14 +242,13 @@ export default function CreateStudent() {
     }
 
     if (getwhatsappnumber.length) {
-
       if (!/^[6789]\d{9}$/.test(getwhatsappnumber)) {
-
-        handleError("getwhatsappnumber", "Please enter a valid mobile no start with 6,7,8,9");
+        handleError(
+          "getwhatsappnumber",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
 
     if (isNaN(getwhatsappnumber) || getwhatsappnumber.length < 10) {
@@ -259,16 +257,14 @@ export default function CreateStudent() {
     }
 
     if (getphoneno.length) {
-
       if (!/^[6789]\d{9}$/.test(getphoneno)) {
-
-        handleError("getphoneno", "Please enter a valid mobile no start with 6,7,8,9");
+        handleError(
+          "getphoneno",
+          "Please enter a valid mobile no start with 6,7,8,9"
+        );
         isValid = false;
-     
       }
-   
     }
-
 
     if (isNaN(getphoneno) || getphoneno.length < 10) {
       handleError("getphoneno", "Please enter a valid mobile number");
@@ -318,7 +314,7 @@ export default function CreateStudent() {
       isValid = false;
     }
     if (getInstituename) {
-      if (getInstituename.length > 18 || getInstituename.length < 4) {
+      if (getInstituename.length > 30 || getInstituename.length < 4) {
         handleError(
           "getInstituename",
           "Please Input instituename Between 4 to 18 letters"
@@ -508,7 +504,7 @@ export default function CreateStudent() {
             helperText={error.getfathername}
             onFocus={() => handleError("getfathername", null)}
             value={getfathername}
-            onChange={(e) => setfathername(e.target.value.trim())}
+            onChange={(e) => setfathername(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
@@ -829,7 +825,7 @@ export default function CreateStudent() {
             onFocus={() => handleError("getInstituename", null)}
             fullWidth
             value={getInstituename}
-            onChange={(e) => setInstituename(e.target.value.trim())}
+            onChange={(e) => setInstituename(e.target.value.trimStart())}
             sx={(theme) => {
               return {
                 "& label.Mui-focused": {
@@ -877,8 +873,8 @@ export default function CreateStudent() {
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Name</InputLabel>
             <Select
-                       error={!error.batchId ? false : true}
-                       onFocus={() => handleError("batchId", null)}
+              error={!error.batchId ? false : true}
+              onFocus={() => handleError("batchId", null)}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={batchId}
@@ -1008,7 +1004,14 @@ export default function CreateStudent() {
             sx={{ width: 80, height: 80 }}
           />
         </Grid>
-        <Grid style={{display:'flex',alignItems:'end'}} item md={3} lg={3} sm={12} xs={12}>
+        <Grid
+          style={{ display: "flex", alignItems: "end" }}
+          item
+          md={3}
+          lg={3}
+          sm={12}
+          xs={12}
+        >
           <Button variant="contained" component="label" fullWidth>
             Photograph
             <input
@@ -1066,19 +1069,21 @@ export default function CreateStudent() {
   );
 }
 function generateRandomPassword() {
-  const characters = 'abcdefghijklmnopqrstuvwxyz';
-  const capitals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const specialChars = '@';
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  const capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const specialChars = "@";
   const passwordLength = 6;
 
-  let password = '';
+  let password = "";
   password += capitals.charAt(Math.floor(Math.random() * capitals.length));
   password += specialChars;
-  
+
   for (let i = 0; i < passwordLength - 2; i++) {
-    const randomChar = characters.charAt(Math.floor(Math.random() * characters.length));
+    const randomChar = characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
     password += randomChar;
   }
-password+=Math.floor(Math.random()*99)
+  password += Math.floor(Math.random() * 99);
   return password;
-} 
+}

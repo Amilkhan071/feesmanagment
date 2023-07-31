@@ -109,6 +109,7 @@ export default function UpdateStudent() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/dashboard/displayStudent");
       } else {
@@ -164,8 +165,8 @@ export default function UpdateStudent() {
       isValid = false;
     }
     if (getstuname) {
-      if (getstuname.length > 18 || getstuname.length < 4) {
-        handleError("getstuname", "Please Input Name Between 4 to 18 letters");
+      if (getstuname.length > 30 || getstuname.length < 4) {
+        handleError("getstuname", "Please Input Name Between 4 to 30 letters");
         isValid = false;
       }
     }
@@ -179,10 +180,10 @@ export default function UpdateStudent() {
       isValid = false;
     }
     if (getfathername) {
-      if (getfathername.length > 18 || getfathername.length < 4) {
+      if (getfathername.length > 30 || getfathername.length < 4) {
         handleError(
           "getfathername",
-          "Please Input Name Between 4 to 18 letters"
+          "Please Input Name Between 4 to 30 letters"
         );
         isValid = false;
       }
@@ -302,7 +303,7 @@ export default function UpdateStudent() {
       isValid = false;
     }
     if (getInstituename) {
-      if (getInstituename.length > 18 || getInstituename.length < 4) {
+      if (getInstituename.length > 40 || getInstituename.length < 4) {
         handleError(
           "getInstituename",
           "Please Input instituename Between 4 to 18 letters"
@@ -418,6 +419,7 @@ export default function UpdateStudent() {
         icon: "success",
         title: "Done",
         text: result.message,
+        timer: 2000,
       });
     } else {
       Swal.fire({
@@ -565,7 +567,7 @@ export default function UpdateStudent() {
             helperText={error.getfathername}
             onFocus={() => handleError("getfathername", null)}
             value={getfathername}
-            onChange={(e) => setfathername(e.target.value.trim())}
+            onChange={(e) => setfathername(e.target.value.trimStart())}
             fullWidth
             sx={(theme) => {
               return {
@@ -886,7 +888,7 @@ export default function UpdateStudent() {
             onFocus={() => handleError("getInstituename", null)}
             fullWidth
             value={getInstituename}
-            onChange={(e) => setInstituename(e.target.value.trim())}
+            onChange={(e) => setInstituename(e.target.value.trimStart())}
             sx={(theme) => {
               return {
                 "& label.Mui-focused": {

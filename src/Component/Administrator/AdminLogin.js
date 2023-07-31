@@ -17,7 +17,7 @@ export default function AdminLogin() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({});
-var navigate =useNavigate()
+  var navigate = useNavigate();
   const handleError = (inputs, value) => {
     setError((prev) => ({ ...prev, [inputs]: value }));
   };
@@ -49,8 +49,9 @@ var navigate =useNavigate()
           icon: "success",
           title: "Done",
           text: response.message,
+          timer: 2000,
         });
-        navigate('/maindashboard')
+        navigate("/maindashboard");
       } else {
         Swal.fire({
           icon: "error",

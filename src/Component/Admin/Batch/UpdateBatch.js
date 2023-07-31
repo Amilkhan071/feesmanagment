@@ -47,6 +47,8 @@ export default function UpdateBatch() {
   const [getBatchName, setBatchName] = useState("");
   const [getStatus, setStatus] = useState("");
   const [getBST, setBST] = useState("");
+  const [dayShift, setDayShift] = useState("");
+
 
   const [getMon, setMon] = useState({ value: "", state: false });
   const [getTue, setTue] = useState({ value: "", state: false });
@@ -74,13 +76,13 @@ export default function UpdateBatch() {
 
     if (record.data != null) {
       setOrganizationId(record.data.organizationid);
-      setCourseId(record.data.coursename);
+      setCourseId(record.data.courseid);
       setCourseName(record.data.tempcoursename);
       // setBST(record.data.starttime + " to " + record.data.endtime);
       setBST(record.data.starttime);
       setBatchTime(record.data.batchtime);
       setStatus(record.data.status);
-      setBatchStartTime(record.data.batchtime)
+      setBatchStartTime(record.data.batchtime);
       var sts = record.data.status.split(/(?<=^(?:.{3})+)(?!$)/);
 
       for (var i = 0; i < sts.length; i++) {
@@ -104,6 +106,7 @@ export default function UpdateBatch() {
       }
 
       setBatchName(record.data.batchname);
+      
     } else {
       Swal.fire({
         icon: "error",
@@ -112,6 +115,11 @@ export default function UpdateBatch() {
       });
     }
   };
+  useEffect(()=>{
+    var timeday = getBatchName.split(",")
+    var timeddd = timeday[timeday.length-1]
+    setDayShift(timeddd)
+  },[getBatchName])
   const showCourse = () => {
     return courseNameList?.map((item) => (
       <MenuItem value={item.courseid}>{item.coursename}</MenuItem>
@@ -119,17 +127,15 @@ export default function UpdateBatch() {
   };
 
   const fillBatchTime = async () => {
-    var body = { organizationid:storedState?.organizationid  };
-    var  list = await postData("timingtable/displayAll",body);
+    var body = { organizationid: storedState?.organizationid };
+    var list = await postData("timingtable/displayAll", body);
     setBatchTimeList(list.data);
   };
 
- 
-
   const showBatchTime = () => {
     return batchTimeList?.map((item) => (
-      <MenuItem value={`${item.btstart} to ${item.btend}`}>
-        {item.btstart} to {item.btend}
+      <MenuItem value={`${item.batchstart} to ${item.batchend}`}>
+        {item.batchstart} to {item.batchend}
       </MenuItem>
     ));
   };
@@ -176,7 +182,6 @@ export default function UpdateBatch() {
     else setSun({ value: "", state: event.target.checked });
   };
 
-
   const handleChangeReg = (event) => {
     if (event.target.checked) {
       setReg({ value: "R", state: event.target.checked });
@@ -187,7 +192,6 @@ export default function UpdateBatch() {
       setSat({ value: "", state: false });
       setThu({ value: "", state: false });
       setSun({ value: "", state: false });
-
     } else {
       setReg({ value: "", state: event.target.checked });
     }
@@ -247,10 +251,11 @@ export default function UpdateBatch() {
       ", " +
       batchStartTime +
       ", " +
-      status;
+      status +
+      ", " +
+      dayShift;
     setBatchName(batchname);
   };
-
   const validation = () => {
     var isValid = true;
 
@@ -269,6 +274,25 @@ export default function UpdateBatch() {
 
     if (!getBatchName) {
       handleError("getBatchName", "Please Inpute Batch Name");
+      isValid = false;
+    }
+    if (!dayShift) {
+      handleError("dayShift", "Please Input Times of the day");
+      isValid = false;
+    }
+
+    if (dayShift) {
+      if (dayShift.length > 25 || dayShift.length < 3) {
+        handleError(
+          "dayShift",
+          "Please Input Times of the day Between 4 to 25 letters"
+        );
+        isValid = false;
+      }
+    }
+
+    if (!/^[a-zA-Z()\s.]*$/.test(dayShift)) {
+      handleError("dayShift", "Please Input Valid Times of the day");
       isValid = false;
     }
 
@@ -299,6 +323,7 @@ export default function UpdateBatch() {
           icon: "success",
           title: "Done",
           text: result.message,
+          timer: 2000,
         });
         navigate("/dashboard/displaybatch");
       } else {
@@ -310,6 +335,8 @@ export default function UpdateBatch() {
       }
     }
   };
+
+ 
 
   return (
     <div className="store_form_1">
@@ -383,7 +410,7 @@ export default function UpdateBatch() {
             <div style={{ marginLeft: 20 }}>Batch Update</div>
           </div>
         </Grid>
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <TextField
             error={!error.organizationId ? false : true}
             helperText={error.organizationId}
@@ -392,7 +419,7 @@ export default function UpdateBatch() {
             id="standard-basic"
             label="Organization Id"
             variant="outlined"
-            value={organizationId}
+            value={storedState?.organizationid}
             onChange={(e) => setOrganizationId(e.target.value.trim())}
             sx={(theme) => {
               return {
@@ -408,7 +435,7 @@ export default function UpdateBatch() {
           />
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Course</InputLabel>
             <Select
@@ -423,7 +450,7 @@ export default function UpdateBatch() {
           </FormControl>
         </Grid>
 
-        <Grid item md={4} lg={4} sm={12} xs={12}>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Batch Time</InputLabel>
             <Select
@@ -437,8 +464,32 @@ export default function UpdateBatch() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item md={4} lg={3} sm={12} xs={12}>
+          <TextField
+            error={!error.dayShift ? false : true}
+            helperText={error.dayShift}
+            onFocus={() => handleError("dayShift", null)}
+            inputProps={{ style: { color: "#000" } }}
+            id="standard-basic"
+            label="Times of the day"
+            variant="outlined"
+            value={dayShift}
+            onChange={(e) => setDayShift(e.target.value.trimStart())}
+            sx={(theme) => {
+              return {
+                "& label.Mui-focused": {
+                  color: "#000",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#000",
+                },
+              };
+            }}
+            fullWidth
+          />
+        </Grid>
         <Grid item xs={12}>
-          {" "}
+          
           <div
             style={{
               colors: "#273c75",
@@ -517,7 +568,7 @@ export default function UpdateBatch() {
               }
               label="Saturday"
             />
- <FormControlLabel
+            <FormControlLabel
               control={
                 <Checkbox
                   checked={getSun.state}

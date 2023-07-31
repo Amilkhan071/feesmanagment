@@ -25,6 +25,7 @@ export default function DisplayBatch() {
     var body = { organizationid: storedState?.organizationid };
     var result = await postData("batch/displayAll", body);
     setTimeTable(result.data);
+    //alert(JSON.stringify(result.data))
   };
 
   useEffect(function () {
